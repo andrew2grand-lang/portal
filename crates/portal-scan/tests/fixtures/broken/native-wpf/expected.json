@@ -1,0 +1,10 @@
+{
+  "target": "macos",
+  "expect": [
+    {
+      "rule": "native-windows",
+      "file": "Ledger.csproj",
+      "state": "blocker"
+    }
+  ]
+}

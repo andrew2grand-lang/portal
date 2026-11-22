@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "portal-scan",
+    "version": "0.3.0"
+  },
+  "scannedAt": "2026-10-28T09:41:00Z",
+  "project": {
+    "name": "Sketchbook",
+    "path": "~/Developer/Sketchbook"
+  },
+  "source": "macos",
+  "target": "windows",
+  "network": {
+    "online": false,
+    "hosts": []
+  },
+  "durationMs": 4,
+  "stats": {
+    "files": 7,
+    "bytes": 1829,
+    "parsedFiles": 0,
+    "skippedFiles": 0,
+    "unreadable": []
+  },
+  "tier": {
+    "tier": "native",
+    "reason": "Native: an Xcode app for Apple systems, built for one OS"
+  },
+  "headline": "This needs a rebuild for Windows: it's an Xcode app for Apple systems.",
+  "counts": {
+    "blocker": 1,
+    "willNeedAFix": 0,
+    "needsYou": 0,
+    "couldntCheck": 0,
+    "info": 0,
+    "occurrences": 1,
+    "omitted": 0
+  },
+  "aiUsage": {
+    "level": "planOnly",
+    "estimate": true,
+    "reason": "A rebuild isn't a conversion: the AI would draft the migration plan, not change the code."
+  },
+  "ecosystems": [
+    {
+      "kind": "swift",
+      "name": "Swift / Xcode",
+      "evidence": [],
+      "files": 5,
+      "support": "summary"
+    }
+  ],
+  "runtimes": [],
+  "packages": [],
+  "runCommands": [],
+  "leftOut": {
+    "bytes": 42991616,
+    "files": 1,
+    "items": [
+      {
+        "path": "DerivedData",
+        "kind": "buildOutput",
+        "bytes": 42991616,
+        "files": 1,
+        "rebuildable": true
+      }
+    ]
+  },
+  "secrets": [],
+  "services": [],
+  "findings": [
+    {
+      "id": "native-apple:Sketchbook.xcodeproj:-",
+      "rule": "native-apple",
+      "title": "Xcode app: Apple systems only",
+      "category": "nativeApps",
+      "state": "blocker",
+      "severity": "high",
+      "file": "Sketchbook.xcodeproj",
+      "line": null,
+      "evidence": "Sketchbook.xcodeproj",
+      "why": "Xcode projects and SwiftUI or AppKit apps only build and run on Apple systems.",
+      "fixPattern": "Rebuild: keep the logic, rewrite the interface for Windows (for example with .NET MAUI, Avalonia, Flutter or a web UI). The hand-off note lists the steps.",
+      "autoFixable": false,
+      "targets": [
+        "windows"
+      ]
+    }
+  ],
+  "handoff": "# Moving Sketchbook to Windows\n\nWritten by SeamDrop's scanner, which read the project and ran nothing. Everything below is what it found, not a promise that anything works.\n\n## What this project is\n\n- Native: an Xcode app for Apple systems, built for one OS\n- Languages and tools: Swift / Xcode (5 files)\n\n## What blocks it on Windows\n\n- **Xcode app: Apple systems only** (`Sketchbook.xcodeproj`): Xcode projects and SwiftUI or AppKit apps only build and run on Apple systems. Suggested fix: Rebuild: keep the logic, rewrite the interface for Windows (for example with .NET MAUI, Avalonia, Flutter or a web UI). The hand-off note lists the steps.\n\n## Suggested steps\n\n1. Separate what doesn't depend on the OS (data models, networking, business logic) from the interface.\n2. Choose an interface toolkit that runs on Windows (for example .NET MAUI, Avalonia, Flutter or a web UI) and rebuild the screens one by one.\n3. Replace OS-only services (keychain, notifications, file pickers, menus) with Windows equivalents.\n4. Port the tests first, so each step can be checked.\n\n43.0 MB of rebuildable or ignored files weren't included.\n",
+  "notes": [
+    "Nothing in the project was run: no code, scripts, notebooks or package managers.",
+    "Offline: nothing was looked up on the internet."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "env-var",
+      "file": "config.py",
+      "line": 3
+    },
+    {
+      "rule": "env-var",
+      "file": "config.py",
+      "line": 4
+    }
+  ]
+}

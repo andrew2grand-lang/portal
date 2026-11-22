@@ -1,0 +1,88 @@
+{
+  "aiUsage": {
+    "estimate": true,
+    "level": "planOnly",
+    "reason": "A rebuild isn't a conversion: the AI would draft the migration plan, not change the code."
+  },
+  "counts": {
+    "blocker": 1,
+    "couldntCheck": 0,
+    "info": 0,
+    "needsYou": 0,
+    "occurrences": 1,
+    "omitted": 0,
+    "willNeedAFix": 0
+  },
+  "durationMs": 0,
+  "ecosystems": [
+    {
+      "evidence": [],
+      "files": 2,
+      "kind": "swift",
+      "name": "Swift / Xcode",
+      "support": "summary"
+    }
+  ],
+  "findings": [
+    {
+      "autoFixable": false,
+      "category": "nativeApps",
+      "evidence": "Notes.xcodeproj",
+      "file": "Notes.xcodeproj",
+      "fixPattern": "Rebuild: keep the logic, rewrite the interface for Windows (for example with .NET MAUI, Avalonia, Flutter or a web UI). The hand-off note lists the steps.",
+      "id": "native-apple:Notes.xcodeproj:-",
+      "line": null,
+      "rule": "native-apple",
+      "severity": "high",
+      "state": "blocker",
+      "targets": [
+        "windows"
+      ],
+      "title": "Xcode app: Apple systems only",
+      "why": "Xcode projects and SwiftUI or AppKit apps only build and run on Apple systems."
+    }
+  ],
+  "handoff": "# Moving native-xcode to Windows\n\nWritten by SeamDrop's scanner, which read the project and ran nothing. Everything below is what it found, not a promise that anything works.\n\n## What this project is\n\n- Native: an Xcode app for Apple systems, built for one OS\n- Languages and tools: Swift / Xcode (2 files)\n\n## What blocks it on Windows\n\n- **Xcode app: Apple systems only** (`Notes.xcodeproj`): Xcode projects and SwiftUI or AppKit apps only build and run on Apple systems. Suggested fix: Rebuild: keep the logic, rewrite the interface for Windows (for example with .NET MAUI, Avalonia, Flutter or a web UI). The hand-off note lists the steps.\n\n## Suggested steps\n\n1. Separate what doesn't depend on the OS (data models, networking, business logic) from the interface.\n2. Choose an interface toolkit that runs on Windows (for example .NET MAUI, Avalonia, Flutter or a web UI) and rebuild the screens one by one.\n3. Replace OS-only services (keychain, notifications, file pickers, menus) with Windows equivalents.\n4. Port the tests first, so each step can be checked.\n",
+  "headline": "This needs a rebuild for Windows: it's an Xcode app for Apple systems.",
+  "leftOut": {
+    "bytes": 0,
+    "files": 0,
+    "items": []
+  },
+  "network": {
+    "hosts": [],
+    "online": false
+  },
+  "notes": [
+    "Nothing in the project was run: no code, scripts, notebooks or package managers.",
+    "Offline: nothing was looked up on the internet."
+  ],
+  "packages": [],
+  "project": {
+    "name": "native-xcode",
+    "path": "<root>"
+  },
+  "runCommands": [],
+  "runtimes": [],
+  "scannedAt": "<time>",
+  "schemaVersion": 1,
+  "secrets": [],
+  "services": [],
+  "source": "other",
+  "stats": {
+    "bytes": 0,
+    "files": 3,
+    "parsedFiles": 0,
+    "skippedFiles": 0,
+    "unreadable": []
+  },
+  "target": "windows",
+  "tier": {
+    "reason": "Native: an Xcode app for Apple systems, built for one OS",
+    "tier": "native"
+  },
+  "tool": {
+    "name": "portal-scan",
+    "version": "<version>"
+  }
+}

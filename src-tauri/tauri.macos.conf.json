@@ -1,0 +1,24 @@
+{
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "SeamDrop",
+        "width": 552,
+        "height": 780,
+        "minWidth": 420,
+        "minHeight": 640,
+        "center": true,
+        "visible": false,
+        "dragDropEnabled": true,
+        "backgroundColor": "#e7e9ee",
+        "titleBarStyle": "Overlay",
+        "hiddenTitle": true,
+        "trafficLightPosition": {
+          "x": 20,
+          "y": 20
+        }
+      }
+    ]
+  }
+}

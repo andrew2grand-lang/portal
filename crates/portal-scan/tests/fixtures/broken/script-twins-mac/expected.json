@@ -1,0 +1,9 @@
+{
+  "target": "macos",
+  "expect": [
+    {
+      "rule": "script-without-mac-twin",
+      "file": "run.bat"
+    }
+  ]
+}

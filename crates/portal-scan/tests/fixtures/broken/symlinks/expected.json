@@ -1,0 +1,13 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "symlink",
+      "file": "latest"
+    },
+    {
+      "rule": "symlink",
+      "file": "shared"
+    }
+  ]
+}

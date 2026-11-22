@@ -1,0 +1,15 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "absolute-path",
+      "file": "analysis.ipynb",
+      "line": 3
+    },
+    {
+      "rule": "open-encoding",
+      "file": "analysis.ipynb",
+      "line": 1
+    }
+  ]
+}

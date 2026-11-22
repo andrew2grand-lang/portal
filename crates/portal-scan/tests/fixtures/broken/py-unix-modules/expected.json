@@ -1,0 +1,17 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "unix-module",
+      "file": "lock.py",
+      "line": 1,
+      "state": "blocker"
+    },
+    {
+      "rule": "unix-module",
+      "file": "lock.py",
+      "line": 13,
+      "state": "willNeedAFix"
+    }
+  ]
+}

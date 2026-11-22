@@ -1,0 +1,59 @@
+# The project scanner (crates/portal-scan) on both OSes: tests, clippy, a
+# release build of the CLI and a smoke scan of this repo. Runs only when the
+# scanner changes (macOS minutes count 10× on private repos). The built CLIs
+# are attached to the run.
+name: scan
+
+on:
+  push:
+    paths:
+      - "crates/portal-scan/**"
+      - "crates/portal-core/src/fsafe.rs"
+      - "Cargo.lock"
+      - ".github/workflows/scan.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: scan-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scanner:
+    name: portal-scan (${{ matrix.name }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS
+            runner: macos-latest
+            exe: portal-scan
+          - name: Windows
+            runner: windows-latest
+            exe: portal-scan.exe
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: scan
+      - name: Tests (fixtures, clean projects, safety, golden reports, speed)
+        run: cargo test -p portal-scan --locked -- --nocapture
+      - name: Clippy
+        run: cargo clippy -p portal-scan --all-targets --locked -- -D warnings
+      - name: Release build
+        run: cargo build -p portal-scan --release --locked
+      - name: Smoke scan of this repo
+        shell: bash
+        run: |
+          ./target/release/${{ matrix.exe }} . > scan.txt
+          head -5 scan.txt
+          ./target/release/${{ matrix.exe }} . --json > scan.json
+          grep -q '"schemaVersion": 1' scan.json
+      - uses: actions/upload-artifact@v7
+        with:
+          name: portal-scan-${{ matrix.name }}
+          path: target/release/${{ matrix.exe }}

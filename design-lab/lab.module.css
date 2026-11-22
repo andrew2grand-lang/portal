@@ -1,0 +1,294 @@
+/* The lab's own chrome: a quiet tool panel beside the windows. It uses the
+   app's tokens so it follows the theme, and stays out of the windows' way. */
+.lab {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  min-height: 100dvh;
+  background: var(--canvas);
+  color: var(--text-1);
+}
+.lab:not([data-panel]) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.panel {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  height: 100dvh;
+  padding: var(--space-5) var(--space-5) var(--space-8);
+  overflow-y: auto;
+  box-shadow: 1px 0 0 var(--hairline);
+  font-size: var(--text-sm);
+}
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.labTitle {
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+  font-stretch: var(--stretch-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.blockTitle {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+.hint {
+  color: var(--text-3);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+/* Segmented switch in the mode switch's tray */
+.segment {
+  display: flex;
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--switch-track);
+  box-shadow: var(--tray-shadow);
+}
+.segmentOption {
+  flex: 1;
+  height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-2);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+}
+.segmentOption[aria-checked='true'] {
+  background: var(--switch-thumb);
+  box-shadow: var(--switch-thumb-shadow);
+  color: var(--text-1);
+}
+.segmentOption:focus-visible,
+.select:focus-visible,
+.input:focus-visible,
+.indexState:focus-visible,
+.browserItem:focus-visible,
+.reveal:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.select,
+.input {
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-key-sm);
+  background: var(--surface-sunken);
+  box-shadow:
+    var(--inset-shadow),
+    inset 0 0 0 1px var(--hairline);
+  color: var(--text-1);
+  font: inherit;
+  font-size: var(--text-sm);
+}
+.input {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+/* Screen index: screens in mission order, each with its states */
+.index {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: screen;
+}
+.index > li {
+  counter-increment: screen;
+}
+.indexScreen {
+  display: flex;
+  gap: 8px;
+  font-weight: var(--weight-semibold);
+}
+.indexScreen::before {
+  content: counter(screen);
+  min-width: 14px;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+.indexStates {
+  display: flex;
+  flex-direction: column;
+  margin: 4px 0 0 14px;
+  padding: 0;
+  list-style: none;
+}
+.indexState {
+  width: 100%;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: var(--radius-focus);
+  background: transparent;
+  color: var(--text-2);
+  font: inherit;
+  font-size: var(--text-sm);
+  text-align: left;
+  cursor: pointer;
+}
+.indexState:hover {
+  background: var(--surface-sunken);
+}
+.indexState[aria-current] {
+  background: var(--surface-sunken);
+  color: var(--text-1);
+  font-weight: var(--weight-semibold);
+}
+.indexState:disabled {
+  color: var(--text-3);
+  opacity: 0.6;
+  cursor: default;
+}
+
+.pathRow {
+  display: flex;
+  gap: var(--space-2);
+}
+.browser {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-radius: var(--radius-tile);
+  background: var(--surface-sunken);
+}
+.browserHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.browserPath {
+  overflow: hidden;
+  color: var(--text-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  direction: rtl;
+  text-align: left;
+}
+.browserList {
+  max-height: 180px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+.browserItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-1);
+  font: inherit;
+  font-size: var(--text-sm);
+  text-align: left;
+  cursor: pointer;
+}
+.browserItem:hover {
+  background: var(--surface-glass-strong);
+}
+.browserItem svg {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  color: var(--text-3);
+}
+
+/* The canvas: one window, or both side by side like the app's design canvas */
+.canvas {
+  display: grid;
+  grid-template-columns: minmax(0, var(--window-width));
+  align-content: center;
+  justify-content: center;
+  gap: var(--canvas-gap);
+  min-height: 100dvh;
+  padding: var(--space-12) var(--space-10);
+}
+.canvas[data-count='2'] {
+  grid-template-columns: repeat(2, minmax(0, var(--window-width)));
+}
+@media (max-width: 1540px) {
+  .lab[data-panel] .canvas[data-count='2'] {
+    grid-template-columns: minmax(0, var(--window-width));
+    align-content: start;
+  }
+}
+@media (max-width: 1240px) {
+  .canvas[data-count='2'] {
+    grid-template-columns: minmax(0, var(--window-width));
+    align-content: start;
+  }
+}
+
+/* Hidden panel: a handle you only see when you look for it */
+.reveal {
+  position: fixed;
+  z-index: 10;
+  top: 12px;
+  left: 12px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: var(--radius-key-sm);
+  background: var(--surface-glass-strong);
+  color: var(--text-2);
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+.reveal:hover,
+.reveal:focus-visible {
+  opacity: 1;
+}
+.reveal svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 860px) {
+  .lab {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .panel {
+    position: static;
+    height: auto;
+    box-shadow: 0 1px 0 var(--hairline);
+  }
+  .canvas {
+    padding: var(--space-6) var(--space-4);
+  }
+}

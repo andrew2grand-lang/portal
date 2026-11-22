@@ -1,0 +1,63 @@
+.check {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  color: var(--text-1);
+  font-size: var(--text-base);
+  cursor: pointer;
+}
+
+.input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+/* A tiny keycap: raised when empty, filled ink when checked */
+.box {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-check);
+  background: var(--key-face);
+  box-shadow:
+    var(--key-bevel),
+    0 1px 0 0 var(--key-skirt),
+    var(--check-drop);
+  color: transparent;
+  transition:
+    background var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+.box svg {
+  width: 12px;
+  height: 12px;
+}
+
+.input:checked + .box {
+  background: var(--key-ink-face);
+  box-shadow:
+    var(--key-ink-bevel),
+    0 1px 0 0 var(--key-ink-skirt);
+  color: var(--key-ink-text);
+}
+.input:active + .box {
+  transform: translateY(1px);
+}
+.input:focus-visible + .box {
+  box-shadow:
+    var(--key-bevel),
+    var(--focus-ring);
+}
+.input:checked:focus-visible + .box {
+  box-shadow:
+    var(--key-ink-bevel),
+    var(--focus-ring);
+}

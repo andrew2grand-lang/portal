@@ -1,0 +1,103 @@
+/* A device's picture: a disc, 1em across, so each place sizes it with its font */
+.picture {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  background: var(--pic, var(--ink-3));
+  color: #fff;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+/* Beats the places' own "svg" sizes: the icon is a part of the disc */
+span.picture[data-picture] > svg {
+  width: 60%;
+  height: 60%;
+}
+
+.picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Settings → This computer → Picture */
+.chooser {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.chooserLabel {
+  margin: 0;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium, 500);
+}
+.chooserRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+.chooserNow .picture {
+  width: 56px;
+  height: 56px;
+}
+.chooserParts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  align-self: flex-start;
+  gap: 6px;
+}
+.swatch,
+.iconChoice {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.swatch[aria-checked='true'] {
+  box-shadow:
+    0 0 0 2px var(--surface-glass),
+    0 0 0 4px var(--text-1);
+}
+.iconChoice {
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--surface-sunken);
+  color: var(--text-2);
+}
+.iconChoice svg {
+  width: 16px;
+  height: 16px;
+}
+.iconChoice[aria-checked='true'] {
+  background: var(--text-1);
+  color: var(--surface-glass);
+}
+.swatch:focus-visible,
+.iconChoice:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+.chooserKeys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.chooserError {
+  margin: 0;
+  color: var(--text-danger);
+  font-size: var(--text-sm);
+}

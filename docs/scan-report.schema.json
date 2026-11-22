@@ -1,0 +1,745 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Report",
+  "type": "object",
+  "properties": {
+    "aiUsage": {
+      "$ref": "#/$defs/AiUsage"
+    },
+    "counts": {
+      "$ref": "#/$defs/Counts"
+    },
+    "durationMs": {
+      "type": "integer",
+      "format": "uint64",
+      "minimum": 0
+    },
+    "ecosystems": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Ecosystem"
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Finding"
+      }
+    },
+    "handoff": {
+      "description": "Markdown for the user's own coding AI, when the app can't go deeper.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "headline": {
+      "description": "The answer first, in one sentence (\"3 things block this on Windows, 7 need a fix.\").",
+      "type": "string"
+    },
+    "leftOut": {
+      "$ref": "#/$defs/LeftOut"
+    },
+    "network": {
+      "$ref": "#/$defs/Network"
+    },
+    "notes": {
+      "description": "Plain notes about the scan itself (\"Nothing was run.\", \"Offline: …\").",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "packages": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/PackageSet"
+      }
+    },
+    "project": {
+      "$ref": "#/$defs/ProjectInfo"
+    },
+    "runCommands": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/RunCommand"
+      }
+    },
+    "runtimes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Runtime"
+      }
+    },
+    "scannedAt": {
+      "description": "RFC 3339, UTC.",
+      "type": "string"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "format": "uint32",
+      "minimum": 0
+    },
+    "secrets": {
+      "description": "Files that hold secrets. Key names only, never values.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/SecretFile"
+      }
+    },
+    "services": {
+      "description": "Databases and other services the project expects to be running.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Service"
+      }
+    },
+    "source": {
+      "description": "The OS the scan ran on.",
+      "$ref": "#/$defs/Os"
+    },
+    "stats": {
+      "$ref": "#/$defs/Stats"
+    },
+    "target": {
+      "description": "The OS the project is meant to run on next.",
+      "$ref": "#/$defs/TargetOs"
+    },
+    "tier": {
+      "$ref": "#/$defs/TierInfo"
+    },
+    "tool": {
+      "$ref": "#/$defs/Tool"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "tool",
+    "scannedAt",
+    "project",
+    "source",
+    "target",
+    "network",
+    "durationMs",
+    "stats",
+    "tier",
+    "headline",
+    "counts",
+    "aiUsage",
+    "ecosystems",
+    "runtimes",
+    "packages",
+    "runCommands",
+    "leftOut",
+    "secrets",
+    "services",
+    "findings",
+    "notes"
+  ],
+  "$defs": {
+    "AiLevel": {
+      "description": "How much a paid conversion would likely lean on the AI. Always an estimate.",
+      "type": "string",
+      "enum": [
+        "none",
+        "rare",
+        "sometimes",
+        "often",
+        "planOnly"
+      ]
+    },
+    "AiUsage": {
+      "type": "object",
+      "properties": {
+        "estimate": {
+          "description": "Always true: this is an estimate, not a measurement.",
+          "type": "boolean"
+        },
+        "level": {
+          "$ref": "#/$defs/AiLevel"
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "level",
+        "estimate",
+        "reason"
+      ]
+    },
+    "Category": {
+      "description": "After the MSR 2026 study of cross-OS issues in Python projects (see\ndocs/THIRD_PARTY.md), plus the app's own.",
+      "type": "string",
+      "enum": [
+        "filesPaths",
+        "processesSignals",
+        "libraryDependencies",
+        "apiAvailability",
+        "environmentDisplay",
+        "permissionsLimits",
+        "systemInformation",
+        "copiedEnvironments",
+        "scriptsLineEndings",
+        "localAiHardware",
+        "docker",
+        "interpreterOnWindows",
+        "nativeApps",
+        "secrets",
+        "services"
+      ]
+    },
+    "Counts": {
+      "description": "Distinct issues (one per rule and state) and how often they occur.",
+      "type": "object",
+      "properties": {
+        "blocker": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "couldntCheck": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "info": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "needsYou": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "occurrences": {
+          "description": "All findings, counting each place separately.",
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "omitted": {
+          "description": "Places not listed because a rule hit its cap.",
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "willNeedAFix": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "blocker",
+        "willNeedAFix",
+        "needsYou",
+        "couldntCheck",
+        "info",
+        "occurrences",
+        "omitted"
+      ]
+    },
+    "Ecosystem": {
+      "type": "object",
+      "properties": {
+        "evidence": {
+          "description": "Files that showed it, relative.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "files": {
+          "description": "Source files of this kind in the project.",
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "kind": {
+          "description": "\"python\", \"node\", \"shell\", \"docker\", \"swift\", \"dotnet\", \"go\"…",
+          "type": "string"
+        },
+        "name": {
+          "description": "Human name: \"Python\", \"Node.js\", \"Shell scripts\"…",
+          "type": "string"
+        },
+        "support": {
+          "description": "The app's depth of support: \"deep\" (rules run) or \"summary\" (detected, hand-off note).",
+          "$ref": "#/$defs/Support"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "evidence",
+        "files",
+        "support"
+      ]
+    },
+    "Finding": {
+      "type": "object",
+      "properties": {
+        "autoFixable": {
+          "description": "A paid conversion could apply the fix without asking (for later).",
+          "type": "boolean"
+        },
+        "category": {
+          "$ref": "#/$defs/Category"
+        },
+        "evidence": {
+          "description": "A short snippet of what was found (never a secret value).",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "file": {
+          "description": "Relative, with forward slashes.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fixPattern": {
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable: rule, file and line.",
+          "type": "string"
+        },
+        "line": {
+          "description": "1-based.",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint32",
+          "minimum": 0
+        },
+        "rule": {
+          "type": "string"
+        },
+        "severity": {
+          "$ref": "#/$defs/Severity"
+        },
+        "state": {
+          "$ref": "#/$defs/State"
+        },
+        "targets": {
+          "description": "Which directions it affects.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TargetOs"
+          }
+        },
+        "title": {
+          "description": "Short and plain: \"Opens files without saying they're UTF-8\".",
+          "type": "string"
+        },
+        "why": {
+          "description": "One plain sentence.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "rule",
+        "title",
+        "category",
+        "state",
+        "severity",
+        "why",
+        "fixPattern",
+        "autoFixable",
+        "targets"
+      ]
+    },
+    "LeftOut": {
+      "type": "object",
+      "properties": {
+        "bytes": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "files": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LeftOutItem"
+          }
+        }
+      },
+      "required": [
+        "bytes",
+        "files",
+        "items"
+      ]
+    },
+    "LeftOutItem": {
+      "type": "object",
+      "properties": {
+        "bytes": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "files": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "kind": {
+          "description": "\"pythonEnv\", \"nodeModules\", \"cache\", \"buildOutput\", \"gitignored\", \"osJunk\".",
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "rebuildable": {
+          "description": "Rebuilt on the other side (environments, caches, build output).",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "path",
+        "kind",
+        "bytes",
+        "files",
+        "rebuildable"
+      ]
+    },
+    "Network": {
+      "type": "object",
+      "properties": {
+        "hosts": {
+          "description": "Hosts actually contacted (empty when offline).",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "online": {
+          "description": "`--online` was given.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "online",
+        "hosts"
+      ]
+    },
+    "Os": {
+      "type": "string",
+      "enum": [
+        "macos",
+        "windows",
+        "linux",
+        "other"
+      ]
+    },
+    "Package": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "PackageSet": {
+      "type": "object",
+      "properties": {
+        "declared": {
+          "description": "Packages declared in manifests.",
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "installed": {
+          "description": "Packages installed here (read statically from metadata).",
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "items": {
+          "description": "Up to 200 installed (or declared) packages.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Package"
+          }
+        },
+        "kind": {
+          "description": "\"python\" or \"node\".",
+          "type": "string"
+        },
+        "lockfile": {
+          "description": "The lockfile, if there is one. None: this snapshot becomes the lock.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source": {
+          "description": "Where they were read from: \".venv\", \"node_modules\", or a manifest.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "source",
+        "declared",
+        "installed",
+        "items"
+      ]
+    },
+    "ProjectInfo": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The folder's name.",
+          "type": "string"
+        },
+        "path": {
+          "description": "Absolute path on the scanning machine.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "path"
+      ]
+    },
+    "RunCommand": {
+      "type": "object",
+      "properties": {
+        "command": {
+          "description": "The command as written (never run).",
+          "type": "string"
+        },
+        "file": {
+          "type": "string"
+        },
+        "kind": {
+          "description": "\"pyproject-script\", \"npm-script\", \"make\", \"procfile\", \"vscode\", \"main-guard\", \"readme\".",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "command",
+        "file"
+      ]
+    },
+    "Runtime": {
+      "type": "object",
+      "properties": {
+        "installedHere": {
+          "description": "What `python --version` / `node --version` said on this machine.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "description": "\"python\" or \"node\".",
+          "type": "string"
+        },
+        "requested": {
+          "description": "What the project asks for (\">=3.11\", \"20\"), if it says.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "requestedFrom": {
+          "description": "Where that came from (\"pyproject.toml\", \".nvmrc\").",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "kind"
+      ]
+    },
+    "SecretFile": {
+      "type": "object",
+      "properties": {
+        "keys": {
+          "description": "Variable names only (for .env files); never values.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "kind": {
+          "description": "\"env\", \"key\", \"credentials\".",
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "kind",
+        "keys"
+      ]
+    },
+    "Service": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "kind": {
+          "description": "\"postgres\", \"redis\", \"mysql\", \"mongodb\", \"ollama\"…",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "from"
+      ]
+    },
+    "Severity": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "State": {
+      "type": "string",
+      "enum": [
+        "blocker",
+        "willNeedAFix",
+        "needsYou",
+        "couldntCheck",
+        "info"
+      ]
+    },
+    "Stats": {
+      "type": "object",
+      "properties": {
+        "bytes": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "files": {
+          "description": "Files that count as the project (after .gitignore and left-out folders).",
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "parsedFiles": {
+          "description": "Source files parsed for code rules.",
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "skippedFiles": {
+          "description": "Code files skipped: too large, binary or not text.",
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "unreadable": {
+          "description": "Files or folders that couldn't be read.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "files",
+        "bytes",
+        "parsedFiles",
+        "skippedFiles",
+        "unreadable"
+      ]
+    },
+    "Support": {
+      "type": "string",
+      "enum": [
+        "deep",
+        "summary"
+      ]
+    },
+    "TargetOs": {
+      "type": "string",
+      "enum": [
+        "windows",
+        "macos"
+      ]
+    },
+    "Tier": {
+      "type": "string",
+      "enum": [
+        "static",
+        "scripts",
+        "apps",
+        "systems",
+        "native"
+      ]
+    },
+    "TierInfo": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "description": "One line: \"Apps: a FastAPI server plus a local model via Ollama\".",
+          "type": "string"
+        },
+        "tier": {
+          "$ref": "#/$defs/Tier"
+        }
+      },
+      "required": [
+        "tier",
+        "reason"
+      ]
+    },
+    "Tool": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "version"
+      ]
+    }
+  }
+}

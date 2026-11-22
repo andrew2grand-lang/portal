@@ -1,0 +1,1641 @@
+/* ==========================================================================
+   Stage: the window's main area. A frosted plate (core) sitting in a
+   translucent tray (shell): the one double-bezel surface in the app.
+   ========================================================================== */
+.shell {
+  flex: 1;
+  display: flex;
+  /* Room for the drop zone's title, its line and its keys; what's above the
+     stage scrolls first */
+  min-height: 200px;
+  padding: var(--radius-stage-inset);
+  border-radius: var(--radius-stage);
+  background: var(--surface-shell);
+  box-shadow:
+    inset 0 0 0 1px var(--surface-shell-ring),
+    var(--shadow-stage);
+}
+
+.core {
+  position: relative;
+  flex: 1;
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: calc(var(--radius-stage) - var(--radius-stage-inset));
+  background: var(--surface-glass);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow:
+    inset 0 1px 0 var(--highlight),
+    0 0 0 1px var(--hairline),
+    var(--shadow-1);
+}
+
+.view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* ---- Pane layout ----------------------------------------------------------- */
+/* The window frame never resizes: a long state scrolls inside the plate
+   (fading at its lower edge) while the action row stays docked below. */
+.pane {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.paneBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-5);
+  min-height: 0;
+  padding: var(--space-7) var(--space-7) var(--space-5);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-mask: linear-gradient(180deg, #000 calc(100% - 22px), transparent);
+  mask: linear-gradient(180deg, #000 calc(100% - 22px), transparent);
+}
+/* Content never squashes when the plate is short; it scrolls instead */
+.paneBody > * {
+  flex-shrink: 0;
+}
+.paneBody > :where(span, p) {
+  align-self: flex-start;
+}
+.paneFooter {
+  flex: none;
+  padding: 0 var(--space-7) var(--space-6);
+}
+.paneFooter .actions {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+/* Short states sit in the middle of the stage, like the drop zone */
+.pane[data-align='center'] .paneBody {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.pane[data-align='center'] .paneBody > :where(span, p) {
+  align-self: center;
+}
+.pane[data-align='center'] .head {
+  justify-content: center;
+}
+.pane[data-align='center'] .headText {
+  align-items: center;
+}
+.pane[data-align='center'] .actions {
+  margin-top: var(--space-2);
+}
+.pane[data-align='center'] .keys {
+  justify-content: center;
+  margin-left: 0;
+}
+
+/* Scoped to .pane so it outranks Key's own `position: relative` whatever
+   order the two stylesheets load in */
+.pane > .close {
+  position: absolute;
+  z-index: 2;
+  top: 18px;
+  right: 18px;
+}
+/* A panel's heading and ✕ stay in place; the rest scrolls below them */
+.paneTop {
+  display: flex;
+  flex: none;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-7) var(--space-6) var(--space-3) var(--space-7);
+}
+.paneTop > .head {
+  flex: 1;
+  min-width: 0;
+  padding-right: 0;
+}
+.pane[data-top] .paneBody {
+  padding-top: var(--space-2);
+}
+.pane[data-closable] .head {
+  padding-right: var(--space-10);
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.headText {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  font-stretch: var(--stretch-heading);
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--leading-snug);
+  text-wrap: balance;
+}
+
+.sub {
+  max-width: 46ch;
+  color: var(--text-2);
+  font-size: var(--text-base);
+  text-wrap: pretty;
+}
+
+.aside {
+  color: var(--text-3);
+  font-size: var(--text-sm);
+}
+
+/* A question above the keys that answer it (Cancel: what stays, what goes) */
+.actions:has(.ask) {
+  flex-wrap: wrap;
+}
+.ask {
+  flex: 1 1 100%;
+  min-width: 0;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  text-wrap: pretty;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: auto;
+  padding-top: var(--space-1);
+}
+.keys {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.stateTile {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-tile);
+  background: var(--surface-tile);
+  box-shadow: var(--shadow-tile);
+  color: var(--text-2);
+}
+.stateTile svg {
+  width: 22px;
+  height: 22px;
+}
+.stateTile [data-picture] {
+  width: 28px;
+  height: 28px;
+}
+.stateTile[data-tone='send'] {
+  color: var(--text-send);
+}
+.stateTile[data-tone='land'] {
+  color: var(--text-land);
+}
+
+.waiting {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+
+/* ---- Drop zone -------------------------------------------------------------- */
+.drop {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-8);
+  border: 0;
+  border-radius: calc(var(--radius-stage) - var(--radius-stage-inset));
+  background: transparent;
+  color: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+.drop:focus-visible {
+  box-shadow: var(--focus-inset);
+  border-radius: calc(var(--radius-stage) - var(--radius-stage-inset));
+}
+
+.dropMark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin-bottom: var(--space-4);
+}
+/* Soft light inside the portal: blue on the sending side, warming to orange */
+.dropMark::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 260px;
+  height: 200px;
+  border-radius: 50%;
+  background: var(--portal-glow);
+  filter: blur(8px);
+  opacity: 0.7;
+  translate: -50% -50%;
+  transition:
+    opacity var(--dur-glow) var(--ease-out),
+    scale var(--dur-glow) var(--ease-out);
+}
+.drop:hover .dropMark::before {
+  opacity: 1;
+}
+.drop[data-over] .dropMark::before {
+  opacity: 1;
+  scale: 1.15;
+}
+.drop[data-muted] .dropMark::before {
+  opacity: 0.2;
+}
+
+/* Faint concentric rings: the portal, widening when something is dragged over.
+   Masked out below the tile so they never run through the text. */
+.rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  translate: -50% -50%;
+  -webkit-mask: linear-gradient(180deg, #000 34%, transparent 62%);
+  mask: linear-gradient(180deg, #000 34%, transparent 62%);
+}
+.rings span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 50%;
+  translate: -50% -50%;
+  transition:
+    scale var(--dur-glow) var(--ease-out),
+    border-color var(--dur-slow) var(--ease-out);
+}
+.rings span:nth-child(1) {
+  width: 116px;
+  height: 116px;
+  opacity: 0.85;
+}
+.rings span:nth-child(2) {
+  width: 188px;
+  height: 188px;
+  opacity: 0.5;
+  transition-delay: 30ms;
+}
+.rings span:nth-child(3) {
+  width: 270px;
+  height: 270px;
+  opacity: 0.24;
+  transition-delay: 60ms;
+}
+.drop:hover .rings span {
+  scale: 1.04;
+}
+.drop[data-over] .rings span {
+  scale: 1.1;
+  border-color: var(--send-ring-strong);
+}
+
+.dropTile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border-radius: var(--radius-drop-tile);
+  background: var(--surface-tile);
+  box-shadow: var(--shadow-tile);
+  color: var(--text-1);
+  transition:
+    translate var(--dur-slow) var(--ease-out),
+    color var(--dur-slow) var(--ease-out);
+}
+.dropTile svg {
+  width: 32px;
+  height: 32px;
+}
+.drop:hover .dropTile {
+  translate: 0 -2px;
+}
+.drop[data-over] .dropTile {
+  translate: 0 -4px;
+  color: var(--text-send);
+}
+
+.dropTitle {
+  position: relative;
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  font-stretch: var(--stretch-heading);
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--leading-snug);
+}
+.dropSub {
+  position: relative;
+  max-width: 34ch;
+  color: var(--text-2);
+  font-size: var(--text-base);
+  text-wrap: balance;
+}
+
+.drop[data-muted] .dropTile {
+  color: var(--text-3);
+}
+.drop[data-muted] .rings {
+  opacity: 0.5;
+}
+
+/* ---- Items --------------------------------------------------------------------- */
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.itemTile {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-tile-sm);
+  background: var(--surface-tile);
+  box-shadow: var(--shadow-tile);
+  color: var(--text-2);
+}
+.itemTile svg {
+  width: 19px;
+  height: 19px;
+}
+.itemTile [data-picture] {
+  width: 24px;
+  height: 24px;
+}
+.itemName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: var(--weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.itemMeta {
+  flex: none;
+  color: var(--text-3);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+.items[data-dim] .itemName {
+  color: var(--text-2);
+}
+.item[data-state] {
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+.item[data-state='queued'] {
+  opacity: 0.5;
+}
+.itemStatus {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 18px;
+  color: var(--text-2);
+}
+.itemStatus svg {
+  width: 13px;
+  height: 13px;
+}
+.item[data-state='active'] .itemStatus {
+  color: var(--text-send);
+}
+
+/* ---- Send list ---------------------------------------------------------------- */
+.itemMeta[data-busy] {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.unqueue {
+  flex: none;
+}
+/* Where more can be dropped: a quiet sunken strip that lights up like the
+   drop zone while something is dragged over the window */
+.addMore {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin-top: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-tile);
+  background: var(--surface-sunken);
+  box-shadow: var(--inset-shadow);
+  color: var(--text-3);
+  font-size: var(--text-sm);
+  transition:
+    background var(--dur-glow) var(--ease-out),
+    color var(--dur-glow) var(--ease-out);
+}
+.addMore > span {
+  margin-right: auto;
+}
+.addMore[data-over] {
+  background: var(--send-soft);
+  color: var(--text-send);
+}
+
+/* ---- Transfer --------------------------------------------------------------- */
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* The percentage, with the thinking orb keeping it company */
+.percentRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.percent {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  font-size: var(--text-display);
+  font-weight: var(--weight-heavy);
+  font-stretch: var(--stretch-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-display);
+  line-height: 1;
+}
+.percentUnit {
+  color: var(--text-3);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+}
+
+.bar {
+  position: relative;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--progress-track);
+  box-shadow: var(--inset-shadow);
+}
+.fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--progress-fill);
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+.eta {
+  min-width: 9ch;
+  text-align: right;
+}
+
+.notice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px 9px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--send-soft);
+  color: var(--text-send);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+.notice svg {
+  width: 15px;
+  height: 15px;
+}
+.notice[data-tone='fallback'],
+.notice[data-tone='stalled'] {
+  background: var(--surface-sunken);
+  color: var(--text-2);
+}
+
+/* ---- Conversion ---------------------------------------------------------------- */
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.check {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: var(--text-base);
+}
+.checkIcon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--surface-sunken);
+  color: var(--text-1);
+}
+.checkIcon svg {
+  width: 12px;
+  height: 12px;
+}
+.check[data-tone='pending'] {
+  color: var(--text-3);
+}
+.check[data-tone='pending'] .checkIcon {
+  background: transparent;
+  color: var(--text-land);
+}
+.check[data-tone='skip'] {
+  color: var(--text-2);
+}
+.check[data-tone='skip'] .checkIcon {
+  color: var(--text-3);
+}
+.check[data-tone='fix'] .checkIcon {
+  background: var(--land-soft);
+  color: var(--text-land);
+}
+.check[data-tone='block'] .checkIcon {
+  background: var(--danger-soft);
+  color: var(--text-danger);
+}
+.check[data-tone='pass'] .checkIcon {
+  background: var(--send-soft);
+  color: var(--text-send);
+}
+.check[data-tone='pass'] .checkIcon svg {
+  width: 15px;
+  height: 15px;
+}
+.checklist[data-compact] {
+  gap: 7px;
+}
+.checklist[data-compact] .check {
+  gap: 9px;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+.checklist[data-compact] .checkIcon {
+  width: 18px;
+  height: 18px;
+}
+.checklist[data-compact] .checkIcon svg {
+  width: 10px;
+  height: 10px;
+}
+
+.routeArrow {
+  width: 13px;
+  height: 13px;
+  margin: 0 4px;
+  vertical-align: -2px;
+}
+
+@keyframes breathe {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* ---- Done ------------------------------------------------------------------- */
+.path {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  overflow-wrap: anywhere;
+}
+
+.running {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--text-send);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.liveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--send);
+  box-shadow: 0 0 0 4px var(--send-soft);
+  animation: breathe 1.8s var(--ease-in-out) infinite;
+}
+
+.blockers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.blocker {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  column-gap: 11px;
+  row-gap: 3px;
+}
+.blockerIcon {
+  display: grid;
+  grid-row: span 2;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--danger-soft);
+  color: var(--text-danger);
+}
+.blockerIcon svg {
+  width: 11px;
+  height: 11px;
+}
+.blockerTitle {
+  font-weight: var(--weight-semibold);
+  line-height: 22px;
+}
+.blockerReason {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+
+.confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+.confirm svg {
+  width: 14px;
+  height: 14px;
+  color: var(--text-send);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .liveDot {
+    animation: none;
+  }
+}
+:root[data-reduced-motion] .liveDot {
+  animation: none;
+}
+
+@media (max-width: 520px) {
+  .paneBody {
+    padding: var(--space-5) var(--space-5) var(--space-4);
+  }
+  .paneTop {
+    padding: var(--space-5) var(--space-4) var(--space-2) var(--space-5);
+  }
+  .pane[data-top] .paneBody {
+    padding-top: var(--space-2);
+  }
+  .paneFooter {
+    padding: 0 var(--space-5) var(--space-5);
+  }
+  .drop {
+    padding: var(--space-6) var(--space-4);
+  }
+  .meta {
+    flex-wrap: wrap;
+  }
+  /* Side by side while they fit, so the keys never cover what they act on */
+  .keys {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .keys > * {
+    flex: 1 1 auto;
+  }
+  section:not([data-native]) .shell {
+    min-height: 352px;
+  }
+}
+
+/* ---- Connection, pairing, settings ----------------------------------------- */
+
+.stateTile[data-tone='danger'] {
+  color: var(--text-danger);
+}
+
+.doctor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.doctorIcon {
+  display: grid;
+  grid-row: span 2;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--surface-sunken);
+  color: var(--text-2);
+}
+.doctorAction {
+  grid-column: 2;
+  margin-top: 6px;
+}
+.doctorIcon svg {
+  width: 11px;
+  height: 11px;
+}
+[data-status='pass'] > .doctorIcon {
+  background: var(--send-soft);
+  color: var(--text-send);
+}
+[data-status='fail'] > .doctorIcon {
+  background: var(--danger-soft);
+  color: var(--text-danger);
+}
+[data-status='likely'] > .doctorIcon {
+  background: var(--land-soft);
+  color: var(--text-land);
+}
+
+/* Pairing code: big, even digits, two groups of three */
+.code {
+  display: flex;
+  gap: 0.42em;
+  justify-content: center;
+  margin: var(--space-2) 0;
+  color: var(--text-1);
+  font-size: 46px;
+  font-weight: var(--weight-heavy);
+  font-stretch: var(--stretch-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.code[data-dim] {
+  color: var(--text-3);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.section + .section {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--hairline);
+}
+.sectionTitle {
+  margin: 0;
+  color: var(--text-3);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.fieldRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.fieldRow > :first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.device {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  column-gap: var(--space-3);
+  row-gap: var(--space-2);
+}
+.deviceName {
+  overflow: hidden;
+  font-weight: var(--weight-semibold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.deviceMeta {
+  color: var(--text-3);
+  font-size: var(--text-sm);
+}
+.deviceKeys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.deviceMore {
+  grid-column: 2 / -1;
+}
+.deviceOptions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+/* "Files from <device>": what this computer does with its files */
+.incoming {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.incomingLabel {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.addresses {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px var(--space-4);
+  margin: 0;
+  font-size: var(--text-sm);
+}
+.addresses dt {
+  color: var(--text-3);
+}
+.addresses dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-mono);
+  color: var(--text-2);
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding-left: 1.3em;
+  color: var(--text-2);
+  list-style: decimal;
+}
+.steps li {
+  padding-left: 0.2em;
+}
+.steps li::marker {
+  color: var(--text-3);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Secondary pick under the drop zone (folders: the native picker can't mix) */
+.chooser {
+  position: absolute;
+  bottom: var(--space-5);
+  left: 50%;
+  z-index: 2;
+  translate: -50% 0;
+}
+
+/* Done screen notes: renames, skipped links, long paths */
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+.notes li {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: 8px;
+  align-items: start;
+}
+.notes svg {
+  width: 15px;
+  height: 15px;
+  margin-top: 2px;
+  color: var(--text-3);
+}
+
+/* Which items a note means: one click away, in full */
+.which {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+.which > summary {
+  width: fit-content;
+  padding-left: 24px;
+  color: var(--text-1);
+  font-weight: var(--weight-medium, 500);
+  cursor: pointer;
+}
+.which > summary:focus-visible {
+  border-radius: 4px;
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+.which ul {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-tile);
+  background: var(--surface-sunken);
+  list-style: none;
+}
+.which li {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.whichPath {
+  color: var(--text-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  overflow-wrap: anywhere;
+}
+.whichWhy {
+  color: var(--text-2);
+  font-size: var(--text-xs);
+}
+
+/* The file moving right now (real transfers) */
+.current {
+  margin: -6px 0 0;
+  overflow: hidden;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Settings → About: the app and its version */
+.aboutName {
+  color: var(--text-1);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+/* ---- Clipboard ----------------------------------------------------------- */
+.clips {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.clip {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.clipIcon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-tile-sm);
+  background: var(--surface-tile);
+  box-shadow: var(--shadow-tile);
+  color: var(--text-2);
+}
+.clipIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.clipText {
+  min-width: 0;
+}
+
+/* Previews are short already (the core cuts them to a line's worth): they
+   wrap rather than lose their end on a narrow window */
+.clipPreview {
+  color: var(--text-1);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  overflow-wrap: anywhere;
+}
+
+.clipMeta {
+  color: var(--text-3);
+  font-size: var(--text-xs);
+}
+
+.clipResult {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+.clipResult[data-tone='warn'] {
+  color: var(--text-1);
+}
+
+/* How to receive: a quiet second line under the drop zone's own */
+.dropHint {
+  max-width: 40ch;
+  margin-top: var(--space-1);
+  color: var(--text-3);
+  font-size: var(--text-sm);
+  text-wrap: pretty;
+}
+
+/* Idle: the drop zone above, its keys below, in one column. Nothing sits on
+   top of anything; as the plate gets shorter the drop zone sheds its picture,
+   then the receiving hint (Mission 04 §1.5). */
+.idle {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  container: idle / size;
+}
+.idle > .drop {
+  min-height: 0;
+}
+
+/* Add a folder, Send clipboard, what arrived; sends that didn't start */
+.idleFoot {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-5) var(--space-5);
+}
+.idleKeys {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.sendErrors {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: 46ch;
+  color: var(--text-1);
+  font-size: var(--text-sm);
+}
+
+/* Mission 05 §5: helper text goes first, the drop icon last */
+@container idle (max-height: 430px) {
+  .rings,
+  .dropSub {
+    display: none;
+  }
+}
+@container idle (max-height: 330px) {
+  .dropHint,
+  .dropTitle {
+    display: none;
+  }
+  .drop {
+    padding-block: var(--space-4);
+  }
+}
+/* Very short (a notice above six tiles in the smallest window): the title
+   and the keys; the ticked tiles above already say where files go */
+@container idle (max-height: 260px) {
+  .dropSub {
+    display: none;
+  }
+  .drop {
+    padding-block: var(--space-2);
+  }
+}
+
+/* Paused or waiting: a still mark where the orb was. Movement means work is
+   happening; nothing here moves. */
+.stillMark {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  color: var(--text-2);
+  background: var(--surface-sunken);
+}
+.stillMark svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ---- Several transfers (Mission 04 §3) ---------------------------------- */
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-card);
+  background: var(--surface-sunken);
+}
+.rowText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.rowTitle {
+  overflow: hidden;
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.rowMeta {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+.rowKeys {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+.rowProgress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: 4px;
+}
+.rowBar {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--hairline);
+}
+.rowNumbers {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-2);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.rowNumbers svg {
+  width: 11px;
+  height: 11px;
+}
+
+@media (max-width: 520px) {
+  .row {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .rowKeys {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Pairing: the code typed where Pair was pressed, as big as it's shown */
+.codeInput {
+  width: min(100%, 9ch);
+  margin: var(--space-2) auto;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: var(--radius-tile);
+  background: var(--surface-sunken);
+  box-shadow: var(--inset-shadow);
+  color: var(--text-1);
+  font: inherit;
+  font-size: 36px;
+  font-weight: var(--weight-heavy);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+/* Blanks to fill, never digits that could pass for a code */
+.codeInput::placeholder {
+  color: var(--text-3);
+  font-weight: var(--weight-regular, 400);
+  opacity: 0.6;
+}
+/* What went wrong with the code, next to the box */
+.codeError {
+  max-width: 40ch;
+  margin: 0 auto;
+  color: var(--text-land);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium, 500);
+  text-align: center;
+  text-wrap: pretty;
+}
+.countdown {
+  margin: 0;
+  color: var(--text-2);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+.codeInput:focus-visible {
+  outline: none;
+  box-shadow: var(--inset-shadow), var(--focus-ring);
+}
+.codeInput[aria-invalid] {
+  box-shadow: var(--inset-shadow), 0 0 0 1.5px var(--land);
+}
+.codeInput:disabled {
+  color: var(--text-3);
+}
+
+.locked {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-card);
+  background: var(--land-soft);
+  color: var(--text-1);
+  font-size: var(--text-sm);
+}
+.locked p {
+  flex: 1 1 24ch;
+}
+
+/* The Shelf's text box: compact, two lines to start */
+.sendText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.sendTextBox {
+  width: 100%;
+  min-height: calc(var(--text-base) * var(--leading-body) * 2 + 20px);
+  max-height: 160px;
+  padding: 10px 12px;
+  resize: vertical;
+  border: 0;
+  border-radius: var(--radius-tile-sm);
+  background: var(--surface-sunken);
+  box-shadow: var(--inset-shadow);
+  color: var(--text-1);
+  font: inherit;
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+}
+.sendTextBox::placeholder {
+  color: var(--text-3);
+}
+/* Private: hidden while typed, like a password field */
+.sendTextBox[data-secret] {
+  -webkit-text-security: disc;
+}
+.sendTextBox:focus-visible {
+  outline: none;
+  box-shadow: var(--inset-shadow), var(--focus-ring);
+}
+.sendTextFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+}
+.sendTextFoot > p {
+  flex: 1 1 18ch;
+  margin: 0;
+}
+.clipKeys {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.feedback {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.feedback .deviceKeys {
+  align-items: center;
+}
+
+/* What goes next to a busy device (Mission 05 §1.5) */
+.nextList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.nextRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: var(--surface-sunken);
+}
+.nextText {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.35;
+  color: var(--text-2);
+}
+.nextText strong {
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+/* "✓ Paired" in the nearby list (Mission 05 §2.2) */
+.pairedMark {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+/* ---- Clipboard and Shelf (Mission 05 §3) --------------------------------- */
+
+/* A copy that wasn't synced: said once, with the fix beside it */
+.clipNotice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 10px 12px;
+  border-radius: var(--radius-tile-sm);
+  background: var(--danger-soft);
+}
+.clipNoticeIcon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--text-danger);
+}
+.clipNoticeText {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  color: var(--text-1);
+  font-size: var(--text-sm);
+}
+
+/* Send clipboard: the place's one big key, with its shortcut beside it */
+.sendClip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+.sendClipKey {
+  color: var(--text-3);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.syncRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-3);
+}
+.syncWord {
+  color: var(--text-3);
+  font-size: var(--text-sm);
+}
+
+.clipThumb {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-tile-sm);
+  object-fit: cover;
+}
+
+/* "? How the Shelf works": the way to Help from a place */
+.helpLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-3);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.helpLink:hover {
+  color: var(--text-1);
+}
+.helpLink svg {
+  width: 15px;
+  height: 15px;
+}
+
+.shareAsk,
+.undoBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+  padding: 10px 12px;
+  border-radius: var(--radius-tile-sm);
+  background: var(--surface-sunken);
+  font-size: var(--text-sm);
+}
+.shareAsk p,
+.undoBar p {
+  margin: 0;
+  color: var(--text-2);
+}
+.shareAsk strong {
+  color: var(--text-1);
+  font-weight: var(--weight-semibold);
+}
+
+.shelfAdd {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.shelfItems {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.shelfRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: 10px 12px;
+  border-radius: var(--radius-tile-sm);
+  background: var(--surface-sunken);
+}
+.shelfText {
+  flex: 1;
+  min-width: 0;
+}
+.shelfTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--text-1);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  overflow-wrap: anywhere;
+}
+.shelfTitle svg {
+  flex: none;
+  width: 13px;
+  height: 13px;
+  color: var(--text-3);
+}
+.shelfBody {
+  margin: 2px 0 0;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+.shelfBody[data-secret] {
+  letter-spacing: 0.12em;
+  color: var(--text-3);
+}
+.shelfRow .clipMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin: 4px 0 0;
+}
+.shelfRow .clipMeta svg {
+  width: 12px;
+  height: 12px;
+}
+.shelfRow .clipMeta [data-picture] {
+  width: 14px;
+  height: 14px;
+}
+.shelfAsk {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+}
+.shelfAsk p {
+  margin: 0;
+  color: var(--text-1);
+}
+.shelfShared {
+  margin: 0;
+  color: var(--text-3);
+  font-size: var(--text-sm);
+}
+.shelfSharing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+.shelfFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+/* Help (Mission 05 §6): the only place with paragraphs */
+.helpTopic {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.helpTitle {
+  margin: 0;
+  color: var(--text-1);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+}
+.helpPara {
+  margin: 0;
+  max-width: 60ch;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  line-height: var(--leading-body);
+}
+
+/* Settings → Received files (Mission 05 §4) */
+.receivedFiles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.receivedFiles .path {
+  font-family: inherit;
+}

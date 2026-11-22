@@ -1,0 +1,10 @@
+{
+  "target": "macos",
+  "expect": [
+    {
+      "rule": "python-version",
+      "file": "pyproject.toml",
+      "state": "couldntCheck"
+    }
+  ]
+}

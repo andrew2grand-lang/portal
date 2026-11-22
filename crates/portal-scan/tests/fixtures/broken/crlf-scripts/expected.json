@@ -1,0 +1,15 @@
+{
+  "target": "macos",
+  "expect": [
+    {
+      "rule": "crlf-script",
+      "file": "setup.sh",
+      "line": 1
+    },
+    {
+      "rule": "crlf-script",
+      "file": "tool",
+      "line": 1
+    }
+  ]
+}

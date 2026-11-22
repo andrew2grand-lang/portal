@@ -1,0 +1,12 @@
+<Window x:Class="InvoiceDesk.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="InvoiceDesk" Width="900" Height="600">
+  <DockPanel>
+    <ToolBar DockPanel.Dock="Top">
+      <Button Content="New invoice" Click="OnNew" />
+      <Button Content="Print" Click="OnPrint" />
+    </ToolBar>
+    <DataGrid x:Name="Invoices" AutoGenerateColumns="False" />
+  </DockPanel>
+</Window>

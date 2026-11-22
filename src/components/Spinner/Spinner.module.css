@@ -1,0 +1,31 @@
+.spinner {
+  display: inline-block;
+  flex: none;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0deg 70deg, currentColor 360deg);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px));
+  animation: spin 0.9s linear infinite;
+  opacity: 0.85;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes breathe {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: breathe 2.4s ease-in-out infinite;
+  }
+}
+:root[data-reduced-motion] .spinner {
+  animation: breathe 2.4s ease-in-out infinite;
+}

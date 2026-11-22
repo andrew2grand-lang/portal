@@ -1,0 +1,189 @@
+.shell {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--window-width);
+  border-radius: var(--win-radius);
+}
+.shell[data-os='mac'] {
+  --win-radius: var(--radius-window-mac);
+}
+.shell[data-os='win'] {
+  --win-radius: var(--radius-window-win);
+}
+
+.window {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  height: var(--window-height);
+  border-radius: var(--win-radius);
+  background: var(--window-ground);
+  box-shadow: var(--window-shadow);
+  overflow: hidden;
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-height: 0;
+  padding: var(--space-2) var(--window-pad) var(--space-5);
+}
+
+/* ---- macOS ---------------------------------------------------------------- */
+.macBar {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+}
+
+.traffic {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  display: flex;
+  gap: 8px;
+  translate: 0 -50%;
+}
+.traffic span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.5px var(--traffic-ring);
+}
+.traffic [data-light='close'] {
+  background: var(--traffic-close);
+}
+.traffic [data-light='minimise'] {
+  background: var(--traffic-min);
+}
+.traffic [data-light='zoom'] {
+  background: var(--traffic-zoom);
+}
+
+.macAccessory {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  translate: 0 -50%;
+}
+
+.macTitle {
+  color: var(--titlebar-text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.005em;
+}
+
+/* ---- Windows -------------------------------------------------------------- */
+.winBar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding-left: 14px;
+}
+
+.winIcon {
+  display: inline-flex;
+}
+
+.winTitle {
+  color: var(--titlebar-text);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+}
+
+.winAccessory {
+  display: inline-flex;
+  margin-left: auto;
+  padding-right: 6px;
+}
+
+.captions {
+  display: flex;
+  align-self: stretch;
+  margin-left: auto;
+}
+.winAccessory + .captions {
+  margin-left: 0;
+}
+.captions span,
+.captions button {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  color: var(--text-1);
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+.captions svg {
+  width: 14px;
+  height: 14px;
+}
+.captions button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font: inherit;
+  cursor: default;
+}
+.captions span:hover,
+.captions button:hover {
+  background: var(--caption-hover);
+}
+.captions span[data-close]:hover,
+.captions button[data-close]:hover {
+  background: var(--caption-close-hover);
+  color: var(--caption-close-text);
+}
+.captions button:focus-visible {
+  border-radius: 0;
+  box-shadow: var(--focus-inset);
+}
+.captions > :nth-child(2) svg {
+  width: 11px;
+  height: 11px;
+}
+
+/* ---- Real OS window (Tauri) ---------------------------------------------- */
+/* The OS draws the frame and clips the corners; the window fills the view. */
+.shell[data-native] {
+  max-width: none;
+  height: 100dvh;
+  border-radius: var(--win-radius);
+}
+.shell[data-native][data-os='mac'] {
+  --win-radius: var(--radius-window-native-mac);
+}
+.shell[data-native][data-os='win'] {
+  --win-radius: var(--radius-window-native-win);
+}
+.shell[data-native] .window {
+  height: 100%;
+  box-shadow: none;
+}
+/* Native traffic lights sit over the bar; keep the title clear of them */
+.shell[data-native] .macBar {
+  height: 52px;
+}
+
+@media (max-width: 520px) {
+  .shell {
+    --window-pad: var(--space-4);
+  }
+  .shell:not([data-native]) .window {
+    height: auto;
+  }
+}

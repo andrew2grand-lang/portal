@@ -1,0 +1,26 @@
+{
+  "target": "macos",
+  "expect": [
+    {
+      "rule": "cuda-only-library",
+      "file": "train.py",
+      "line": 2,
+      "state": "blocker"
+    },
+    {
+      "rule": "cuda",
+      "file": "train.py",
+      "line": 4
+    },
+    {
+      "rule": "cuda",
+      "file": "train.py",
+      "line": 5
+    },
+    {
+      "rule": "cuda",
+      "file": "train.py",
+      "line": 6
+    }
+  ]
+}

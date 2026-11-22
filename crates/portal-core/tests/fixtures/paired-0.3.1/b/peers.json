@@ -1,0 +1,17 @@
+[
+  {
+    "addrs": [
+      "127.0.0.1:62111"
+    ],
+    "always_accept": false,
+    "disconnected": false,
+    "fingerprint": "798bf3d715ce9f09559d902fdd9a340b3831946918016d5d2bd64266d1561b4d",
+    "id": "83bd3312f09f0abf5f11f71eda6f9abf",
+    "incoming": "ask",
+    "name": "Fixture Mac",
+    "os": "macos",
+    "paired_at": 1794688731,
+    "renamed": false,
+    "trusted": true
+  }
+]

@@ -1,0 +1,3 @@
+OPENAI_API_KEY=sk-demo-not-a-real-key
+HF_TOKEN=hf_demo_not_a_real_token
+CHAT_MODEL=llama3.2

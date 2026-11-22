@@ -1,0 +1,31 @@
+/* A small set of mutually exclusive choices, in the mode switch's tray */
+.track {
+  composes: track from '../ModeSwitch/ModeSwitch.module.css';
+  /* Never a second row: short of room, each option wraps its own words */
+  flex-wrap: nowrap;
+  /* One rule for every segmented control (Mission 05 §1.7): it hugs its
+     options. As a flex or grid item it would otherwise be stretched across
+     the row, with the options left and an empty track to the right. */
+  align-self: flex-start;
+  justify-self: start;
+  width: fit-content;
+  max-width: 100%;
+}
+.option {
+  composes: option from '../ModeSwitch/ModeSwitch.module.css';
+  flex: 0 1 auto;
+  min-width: 0;
+  height: auto;
+  min-height: 28px;
+  padding: 4px 12px;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.2;
+}
+.thumb {
+  composes: thumb from '../ModeSwitch/ModeSwitch.module.css';
+}
+.label {
+  position: relative;
+  text-wrap: balance;
+}

@@ -1,0 +1,45 @@
+[package]
+name = "portal-app"
+description = "Portal desktop app: thin Tauri bridge over portal-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lib]
+name = "portal_app_lib"
+
+[build-dependencies]
+tauri-build = { version = "=2.7.1", features = [] }
+
+[dependencies]
+portal-core.workspace = true
+portal-sys.workspace = true
+tauri = { version = "=2.12.2", features = ["tray-icon", "image-png"] }
+tauri-plugin-single-instance = "=2.5.2"
+tauri-plugin-autostart = "=2.7.0"
+tauri-plugin-notification = "=2.5.1"
+tauri-plugin-dialog = "=2.8.1"
+tauri-plugin-opener = "=2.7.0"
+tauri-plugin-global-shortcut = "=2.4.1"
+tauri-plugin-updater = { version = "=2.14.0", default-features = false, features = ["rustls-tls", "zip"] }
+tokio.workspace = true
+# Which of two feeds' versions is higher (Mission 05 §8.2); already in the
+# tree through tauri-plugin-updater
+semver = "1"
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "=0.6.5"
+objc2-foundation = { version = "=0.3.2", features = ["NSNotification", "NSOperation", "NSString", "block2"] }
+objc2-app-kit = { version = "=0.3.2", features = ["NSApplication"] }
+block2 = "=0.6.2"
+
+[target.'cfg(windows)'.dependencies]
+tauri-winrt-notification = "=0.8.1"
+
+[dev-dependencies]
+tauri = { version = "=2.12.2", features = ["tray-icon", "image-png", "test"] }

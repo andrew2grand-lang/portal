@@ -1,0 +1,17 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "invalid-name",
+      "file": "report: Q3?.md"
+    },
+    {
+      "rule": "invalid-name",
+      "file": "aux.py"
+    },
+    {
+      "rule": "long-path",
+      "file": "a-very-long-folder-name-for-testing-windows-paths/a-very-long-folder-name-for-testing-windows-paths/a-very-long-folder-name-for-testing-windows-paths/a-very-long-folder-name-for-testing-windows-paths/a-very-long-folder-name-for-testing-windows-paths/deep-file-name.txt"
+    }
+  ]
+}

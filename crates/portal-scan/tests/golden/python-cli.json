@@ -1,0 +1,126 @@
+{
+  "aiUsage": {
+    "estimate": true,
+    "level": "none",
+    "reason": "Nothing to change, so no AI should be needed."
+  },
+  "counts": {
+    "blocker": 0,
+    "couldntCheck": 1,
+    "info": 0,
+    "needsYou": 0,
+    "occurrences": 1,
+    "omitted": 0,
+    "willNeedAFix": 0
+  },
+  "durationMs": 0,
+  "ecosystems": [
+    {
+      "evidence": [
+        "pyproject.toml",
+        "uv.lock"
+      ],
+      "files": 2,
+      "kind": "python",
+      "name": "Python",
+      "support": "deep"
+    }
+  ],
+  "findings": [
+    {
+      "autoFixable": false,
+      "category": "libraryDependencies",
+      "evidence": "1 Python package",
+      "file": null,
+      "fixPattern": "Scan again with the online package check, or watch for compile errors when installing on Windows.",
+      "id": "wheels-unchecked:-:-",
+      "line": null,
+      "rule": "wheels-unchecked",
+      "severity": "low",
+      "state": "couldntCheck",
+      "targets": [
+        "windows",
+        "macos"
+      ],
+      "title": "Package builds for Windows weren't checked",
+      "why": "Some Python packages ship no ready-made build for every OS and have to be compiled. Checking means asking PyPI, and this scan stayed offline."
+    }
+  ],
+  "handoff": null,
+  "headline": "No problems found for Windows, but 1 thing couldn't be checked.",
+  "leftOut": {
+    "bytes": 0,
+    "files": 0,
+    "items": []
+  },
+  "network": {
+    "hosts": [],
+    "online": false
+  },
+  "notes": [
+    "Nothing in the project was run: no code, scripts, notebooks or package managers.",
+    "Offline: nothing was looked up on the internet."
+  ],
+  "packages": [
+    {
+      "declared": 1,
+      "installed": 0,
+      "items": [
+        {
+          "name": "rich",
+          "version": ">=13"
+        }
+      ],
+      "kind": "python",
+      "lockfile": "uv.lock",
+      "source": "manifests"
+    }
+  ],
+  "project": {
+    "name": "python-cli",
+    "path": "<root>"
+  },
+  "runCommands": [
+    {
+      "command": "tidy.cli:main",
+      "file": "pyproject.toml",
+      "kind": "pyproject-script",
+      "name": "tidy"
+    },
+    {
+      "command": "uv run tidy notes/",
+      "file": "README.md",
+      "kind": "readme",
+      "name": "README"
+    }
+  ],
+  "runtimes": [
+    {
+      "installedHere": null,
+      "kind": "python",
+      "requested": ">=3.11",
+      "requestedFrom": "pyproject.toml"
+    }
+  ],
+  "scannedAt": "<time>",
+  "schemaVersion": 1,
+  "secrets": [],
+  "services": [],
+  "source": "other",
+  "stats": {
+    "bytes": 0,
+    "files": 5,
+    "parsedFiles": 2,
+    "skippedFiles": 0,
+    "unreadable": []
+  },
+  "target": "windows",
+  "tier": {
+    "reason": "Scripts: 2 Python scripts",
+    "tier": "scripts"
+  },
+  "tool": {
+    "name": "portal-scan",
+    "version": "<version>"
+  }
+}

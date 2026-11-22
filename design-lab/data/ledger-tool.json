@@ -1,0 +1,239 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "portal-scan",
+    "version": "0.3.0"
+  },
+  "scannedAt": "2026-10-28T09:41:00Z",
+  "project": {
+    "name": "ledger-tool",
+    "path": "C:\\Users\\sam\\Projects\\ledger-tool"
+  },
+  "source": "windows",
+  "target": "macos",
+  "network": {
+    "online": false,
+    "hosts": []
+  },
+  "durationMs": 55,
+  "stats": {
+    "files": 7,
+    "bytes": 1731,
+    "parsedFiles": 1,
+    "skippedFiles": 0,
+    "unreadable": []
+  },
+  "tier": {
+    "tier": "scripts",
+    "reason": "Scripts: 1 Python script and 3 command scripts"
+  },
+  "headline": "1 thing blocks this on macOS and 5 need a fix.",
+  "counts": {
+    "blocker": 1,
+    "willNeedAFix": 5,
+    "needsYou": 0,
+    "couldntCheck": 1,
+    "info": 0,
+    "occurrences": 7,
+    "omitted": 0
+  },
+  "aiUsage": {
+    "level": "sometimes",
+    "estimate": true,
+    "reason": "Some fixes need judgement (a library swap, a different API), so expect some AI use."
+  },
+  "ecosystems": [
+    {
+      "kind": "python",
+      "name": "Python",
+      "evidence": [
+        "requirements.txt"
+      ],
+      "files": 1,
+      "support": "deep"
+    },
+    {
+      "kind": "shell",
+      "name": "Shell scripts",
+      "evidence": [],
+      "files": 1,
+      "support": "deep"
+    },
+    {
+      "kind": "windows-scripts",
+      "name": "Windows scripts",
+      "evidence": [],
+      "files": 2,
+      "support": "deep"
+    }
+  ],
+  "runtimes": [
+    {
+      "kind": "python",
+      "requested": null,
+      "requestedFrom": null,
+      "installedHere": "3.9.6"
+    }
+  ],
+  "packages": [
+    {
+      "kind": "python",
+      "source": "manifests",
+      "lockfile": "requirements.txt",
+      "declared": 2,
+      "installed": 0,
+      "items": [
+        {
+          "name": "openpyxl",
+          "version": "==3.1.5"
+        },
+        {
+          "name": "rich",
+          "version": "==13.9.4"
+        }
+      ]
+    }
+  ],
+  "runCommands": [
+    {
+      "kind": "readme",
+      "name": "README",
+      "command": "start.bat",
+      "file": "README.md"
+    }
+  ],
+  "leftOut": {
+    "bytes": 0,
+    "files": 0,
+    "items": []
+  },
+  "secrets": [],
+  "services": [],
+  "findings": [
+    {
+      "id": "windows-module:ledger.py:5",
+      "rule": "windows-module",
+      "title": "Uses a module that only exists on Windows",
+      "category": "apiAvailability",
+      "state": "blocker",
+      "severity": "high",
+      "file": "ledger.py",
+      "line": 5,
+      "evidence": "import winreg",
+      "why": "winreg only exists on Windows; on a Mac the import fails.",
+      "fixPattern": "Import it only on Windows (if sys.platform == \"win32\":) and use a settings file (json, plistlib) or the platformdirs package on a Mac.",
+      "autoFixable": false,
+      "targets": [
+        "macos"
+      ]
+    },
+    {
+      "id": "crlf-script:tools/fetch_rates.sh:1",
+      "rule": "crlf-script",
+      "title": "Script has Windows line endings",
+      "category": "scriptsLineEndings",
+      "state": "willNeedAFix",
+      "severity": "high",
+      "file": "tools/fetch_rates.sh",
+      "line": 1,
+      "evidence": "#!/bin/sh  (lines end in \\r\\n)",
+      "why": "A Mac reads the extra carriage return at the end of each line as part of the command, so the script fails with \"command not found\" or \"bad interpreter\".",
+      "fixPattern": "Convert to LF line endings, and add `*.sh text eol=lf` to .gitattributes so they stay that way.",
+      "autoFixable": true,
+      "targets": [
+        "macos"
+      ]
+    },
+    {
+      "id": "absolute-path:ledger.py:9",
+      "rule": "absolute-path",
+      "title": "Uses a path that only exists on this computer",
+      "category": "filesPaths",
+      "state": "willNeedAFix",
+      "severity": "medium",
+      "file": "ledger.py",
+      "line": 9,
+      "evidence": "EXPORTS = \"C:\\\\Users\\\\sam\\\\Documents\\\\Bank exports\"",
+      "why": "C:\\Users\\sam\\Documents\\Bank exports is a folder on the computer this was written on; it won't exist on macOS.",
+      "fixPattern": "Build the path from the project folder or the user's home instead: Path(__file__).parent / \"data\", Path.home(), or path.join(__dirname, \"data\") in Node.",
+      "autoFixable": true,
+      "targets": [
+        "macos"
+      ]
+    },
+    {
+      "id": "path-concat-backslash:ledger.py:20",
+      "rule": "path-concat-backslash",
+      "title": "Builds paths with backslashes",
+      "category": "filesPaths",
+      "state": "willNeedAFix",
+      "severity": "medium",
+      "file": "ledger.py",
+      "line": 20,
+      "evidence": "with open(EXPORTS + \"\\\\\" + month + \".csv\", newline=\"\", encoding=\"utf-8\") as f:",
+      "why": "Backslashes only separate folders on Windows; on a Mac they become part of the file name.",
+      "fixPattern": "Join paths with pathlib (Path(base) / name) or os.path.join; in Node, path.join.",
+      "autoFixable": true,
+      "targets": [
+        "macos"
+      ]
+    },
+    {
+      "id": "script-without-mac-twin:start.bat:-",
+      "rule": "script-without-mac-twin",
+      "title": "Run script has no Mac version",
+      "category": "scriptsLineEndings",
+      "state": "willNeedAFix",
+      "severity": "medium",
+      "file": "start.bat",
+      "line": null,
+      "evidence": "start.bat (in README.md)",
+      "why": "start.bat only runs on Windows.",
+      "fixPattern": "Add a shell script version next to it (start.sh), or replace it with a Python or Node script that runs on both.",
+      "autoFixable": true,
+      "targets": [
+        "macos"
+      ]
+    },
+    {
+      "id": "windows-api:ledger.py:32",
+      "rule": "windows-api",
+      "title": "Calls a function that only exists on Windows",
+      "category": "apiAvailability",
+      "state": "willNeedAFix",
+      "severity": "medium",
+      "file": "ledger.py",
+      "line": 32,
+      "evidence": "os.startfile(target)",
+      "why": "os.startfile only exists on Windows, so this line fails on a Mac.",
+      "fixPattern": "Open files with subprocess.run([\"open\", path]) on a Mac, behind a platform check.",
+      "autoFixable": false,
+      "targets": [
+        "macos"
+      ]
+    },
+    {
+      "id": "wheels-unchecked:-:-",
+      "rule": "wheels-unchecked",
+      "title": "Package builds for macOS weren't checked",
+      "category": "libraryDependencies",
+      "state": "couldntCheck",
+      "severity": "low",
+      "file": null,
+      "line": null,
+      "evidence": "2 Python packages",
+      "why": "Some Python packages ship no ready-made build for every OS and have to be compiled. Checking means asking PyPI, and this scan stayed offline.",
+      "fixPattern": "Scan again with the online package check, or watch for compile errors when installing on macOS.",
+      "autoFixable": false,
+      "targets": [
+        "windows",
+        "macos"
+      ]
+    }
+  ],
+  "handoff": null,
+  "notes": [
+    "Nothing in the project was run: no code, scripts, notebooks or package managers.",
+    "Offline: nothing was looked up on the internet."
+  ]
+}

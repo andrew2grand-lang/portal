@@ -1,0 +1,151 @@
+# Installable test builds for macOS (Apple Silicon + Intel, one universal app)
+# and Windows x64. Runs on every push to main and on demand (Actions → build →
+# Run workflow). Bundles are attached to the run as downloadable artifacts.
+#
+# Free-minutes note: macOS runners count 10×, Windows 2×, Linux 1× on private
+# repos, so the cheap checks run on Linux and macOS builds only run here.
+name: build
+
+on:
+  push:
+    branches: [main]
+    # Only when the app itself changes: the design lab, the scanner and the
+    # docs have their own cheap checks (ui.yml, scan.yml).
+    paths:
+      - "src/**"
+      - "src-tauri/**"
+      - "crates/portal-core/**"
+      - "crates/portal-sys/**"
+      - "public/**"
+      - "index.html"
+      - "package.json"
+      - "package-lock.json"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "vite.config.ts"
+      - "tsconfig*.json"
+      - "scripts/ci-signing.mjs"
+      - ".github/workflows/build.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ui:
+    name: UI checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Types, lint, unit tests, UI ↔ Rust command contract
+        run: |
+          npx tsc -b
+          npm run lint
+          npx vitest run
+          npm run check:bridge
+
+  app:
+    name: ${{ matrix.name }}
+    needs: ui
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS (universal)
+            runner: macos-latest
+            args: --target universal-apple-darwin --bundles app,dmg
+            rust-targets: aarch64-apple-darwin,x86_64-apple-darwin
+          - name: Windows x64
+            runner: windows-latest
+            args: --bundles nsis
+            rust-targets: ""
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    env:
+      # Update packages are signed on every build (createUpdaterArtifacts).
+      TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+      TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust-targets }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: build
+      - run: npm ci
+      - name: Code signing, when its secrets exist (docs/SIGNING.md)
+        shell: bash
+        env:
+          S_APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          S_APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          S_APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          S_APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+          S_APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+          S_APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}
+          S_APPLE_ID: ${{ secrets.APPLE_ID }}
+          S_APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          S_APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          S_AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          S_AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          S_AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          S_AZURE_SIGNING_ENDPOINT: ${{ secrets.AZURE_SIGNING_ENDPOINT }}
+          S_AZURE_SIGNING_ACCOUNT: ${{ secrets.AZURE_SIGNING_ACCOUNT }}
+          S_AZURE_CERT_PROFILE: ${{ secrets.AZURE_CERT_PROFILE }}
+          S_WINDOWS_SIGN_COMMAND: ${{ secrets.WINDOWS_SIGN_COMMAND }}
+          S_WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
+          S_WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+          S_WINDOWS_TIMESTAMP_URL: ${{ secrets.WINDOWS_TIMESTAMP_URL }}
+        run: node scripts/ci-signing.mjs
+      - name: Azure Artifact Signing tool
+        if: env.SEAMDROP_SIGNED == 'azure'
+        run: cargo install artifact-signing-cli --version 0.11.0 --locked
+      - name: Build and bundle
+        uses: tauri-apps/tauri-action@v1
+        with:
+          tauriScript: npx tauri
+          args: ${{ matrix.args }} ${{ env.SIGN_ARGS }}
+          uploadWorkflowArtifacts: true
+          workflowArtifactNamePattern: "SeamDrop-[platform]-[arch]-[bundle]"
+      - name: Check the Mac bundle (Local Network keys, signature, LC_UUID, update package)
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          APP=target/universal-apple-darwin/release/bundle/macos/SeamDrop.app
+          /usr/libexec/PlistBuddy -c "Print :NSLocalNetworkUsageDescription" "$APP/Contents/Info.plist"
+          services=$(/usr/libexec/PlistBuddy -c "Print :NSBonjourServices" "$APP/Contents/Info.plist"); echo "$services"; grep -q "_seamdrop._tcp" <<<"$services"
+          grep -q "_portal._tcp" <<<"$services"
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/Contents/Info.plist")" = "com.seamdrop.desktop"
+          if [ -n "$SEAMDROP_SIGNED" ]; then
+            codesign --verify --deep --strict "$APP"
+            sig=$(codesign -dv --verbose=2 "$APP" 2>&1); echo "$sig"; grep -q "Authority=Developer ID Application" <<<"$sig"
+            xcrun stapler validate "$APP" || echo "::warning::Not notarised (add the notarisation secrets, docs/SIGNING.md)"
+          else
+            sig=$(codesign -dv "$APP" 2>&1); echo "$sig"; grep -q "Signature=adhoc" <<<"$sig"
+          fi
+          dwarfdump --uuid "$APP/Contents/MacOS/SeamDrop"
+          lipo -archs "$APP/Contents/MacOS/SeamDrop"
+          test -s "$APP.tar.gz" && test -s "$APP.tar.gz.sig"
+      - name: Check the Windows installer's signature (when signing is set up)
+        if: runner.os == 'Windows' && env.SEAMDROP_SIGNED != ''
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem target/release/bundle/nsis/*-setup.exe | Select-Object -First 1
+          $sig = Get-AuthenticodeSignature $exe.FullName
+          $sig | Format-List Status, SignerCertificate
+          if ($sig.Status -ne 'Valid') { throw "The installer isn't validly signed: $($sig.Status)" }
+      - name: Check the Windows update package is signed
+        if: runner.os == 'Windows'
+        shell: bash
+        run: ls target/release/bundle/nsis/*-setup.exe.sig

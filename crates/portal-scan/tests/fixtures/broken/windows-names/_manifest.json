@@ -1,0 +1,8 @@
+{
+  "unixOnly": true,
+  "renames": {
+    "stored-aux.py": "aux.py",
+    "stored-report.md": "report: Q3?.md",
+    "stored-deep-file.txt": "a-very-long-folder-name-for-testing-windows-paths/a-very-long-folder-name-for-testing-windows-paths/a-very-long-folder-name-for-testing-windows-paths/a-very-long-folder-name-for-testing-windows-paths/a-very-long-folder-name-for-testing-windows-paths/deep-file-name.txt"
+  }
+}

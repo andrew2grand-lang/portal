@@ -1,0 +1,402 @@
+/* ==========================================================================
+   SeamDrop design tokens
+   Every colour, type, spacing, radius, shadow, key and motion value lives
+   here. Components read the semantic tokens (--surface-*, --text-*, --key-*,
+   --glow-*), never raw hex, so the look changes from this one file.
+   Light is the primary theme; [data-theme='dark'] overrides below.
+   ========================================================================== */
+
+:root {
+  /* ---- Raw palette ------------------------------------------------------ */
+  /* The two ends of a transfer */
+  --blue-300: #93b4ff;
+  --blue-500: #2f6bff;
+  --blue-600: #1f55e0;
+  --orange-300: #ffbf94;
+  --orange-400: #ff9452;
+  --orange-500: #ff7a2e;
+  --orange-700: #b84a0c;
+
+  /* Cool neutrals */
+  --gray-600: #4a5160;
+  --gray-700: #3a404c;
+  --gray-900: #141824;
+
+  /* Deep navies (dark theme) */
+  --navy-900: #080a11;
+  --navy-850: #0c0f18;
+  --navy-800: #11151f;
+
+  /* ---- Type ------------------------------------------------------------- */
+  --font-sans: 'Mona Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --text-2xs: 0.6875rem; /* 11 */
+  --text-xs: 0.75rem; /* 12 */
+  --text-sm: 0.8125rem; /* 13 */
+  --text-base: 0.875rem; /* 14 */
+  --text-md: 0.9375rem; /* 15 */
+  --text-lg: 1.0625rem; /* 17 */
+  --text-xl: 1.375rem; /* 22 */
+  --text-2xl: 1.75rem; /* 28 */
+  --text-display: 3.25rem; /* 52, transfer percentage */
+
+  --weight-regular: 430;
+  --weight-medium: 520;
+  --weight-semibold: 620;
+  --weight-bold: 720;
+  --weight-heavy: 800;
+
+  /* Width axis: headings run wide, body stays normal */
+  --stretch-display: 115%;
+  --stretch-heading: 108%;
+  --stretch-body: 100%;
+
+  --leading-tight: 1.06;
+  --leading-snug: 1.22;
+  --leading-body: 1.45;
+
+  --tracking-display: -0.035em;
+  --tracking-heading: -0.022em;
+  --tracking-body: -0.004em;
+
+  /* ---- Spacing (4px grid) ---------------------------------------------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-14: 56px;
+
+  /* ---- Radii ----------------------------------------------------------
+     Rule: windows follow their OS; the stage is the largest app radius;
+     keys and tiles share one step; chips and tags are full pills.        */
+  --radius-window-mac: 20px;
+  --radius-window-win: 10px;
+  /* Real windows: match the corner the OS draws so the edge glow follows it */
+  --radius-window-native-mac: 16px;
+  --radius-window-native-win: 8px;
+  --radius-stage: 28px;
+  --radius-stage-inset: 6px; /* double-bezel gap: inner = stage - inset */
+  --radius-card: 16px;
+  --radius-key: 12px;
+  --radius-key-sm: 10px;
+  --radius-tray: 15px;
+  --radius-tile: 12px;
+  --radius-check: 6px;
+  --radius-tile-sm: 10px;
+  --radius-drop-tile: 20px;
+  --radius-focus: 8px;
+  --radius-pill: 999px;
+
+  /* ---- Layout ----------------------------------------------------------- */
+  --window-width: 552px;
+  --window-height: 780px;
+  --window-pad: var(--space-6);
+  --canvas-gap: var(--space-14);
+
+  /* ---- Motion ----------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 360ms;
+  --dur-glow: 600ms;
+
+  /* ======================================================================
+     LIGHT THEME (primary)
+     ====================================================================== */
+  color-scheme: light;
+
+  --canvas: #e7e9ee;
+
+  --text-1: var(--gray-900);
+  --text-2: var(--gray-600);
+  --text-3: #656c7b;
+  --text-on-ink: #f7f8fb;
+  --text-send: var(--blue-600);
+  --text-land: var(--orange-700);
+  --text-danger: #c22f35;
+
+  /* Window ground: airy, cool white with a blue-to-orange wash that settles
+     into a rose-lilac horizon at the bottom */
+  --window-ground:
+    radial-gradient(80% 50% at 0% 0%, rgb(94 143 255 / 0.3), transparent 64%),
+    radial-gradient(75% 55% at 100% 100%, rgb(255 148 82 / 0.3), transparent 64%),
+    radial-gradient(70% 40% at 100% 0%, rgb(203 190 240 / 0.32), transparent 70%),
+    radial-gradient(120% 45% at 30% 110%, rgb(231 201 218 / 0.55), transparent 72%),
+    linear-gradient(180deg, #f8f9fc 0%, #f6f3f8 62%, #f2ecf4 100%);
+  --window-ring: rgb(20 26 40 / 0.1);
+  --window-shadow:
+    0 0 0 0.5px rgb(20 26 40 / 0.12), 0 1px 1px rgb(16 22 40 / 0.04),
+    0 14px 28px -10px rgb(16 22 40 / 0.14), 0 44px 90px -30px rgb(16 22 40 / 0.28);
+  --titlebar-text: var(--gray-600);
+  --titlebar-divider: rgb(20 26 40 / 0.06);
+
+  /* Frosted surfaces */
+  --surface-shell: rgb(255 255 255 / 0.3);
+  --surface-shell-ring: rgb(255 255 255 / 0.7);
+  --surface-glass: rgb(255 255 255 / 0.56);
+  --surface-glass-strong: rgb(255 255 255 / 0.86);
+  --surface-sunken: rgb(20 26 40 / 0.04);
+  --surface-tile: linear-gradient(180deg, #ffffff 0%, #f2f4f8 100%);
+  --glass-blur: blur(22px) saturate(160%);
+  --hairline: rgb(20 26 40 / 0.08);
+  --hairline-strong: rgb(20 26 40 / 0.14);
+  --highlight: rgb(255 255 255 / 0.95);
+
+  --shadow-1: 0 1px 2px rgb(23 32 60 / 0.06), 0 1px 1px rgb(23 32 60 / 0.03);
+  --shadow-2: 0 1px 2px rgb(23 32 60 / 0.05), 0 10px 26px -12px rgb(23 32 60 / 0.16);
+  --shadow-stage: 0 1px 1px rgb(23 32 60 / 0.03), 0 18px 40px -22px rgb(23 32 60 / 0.22);
+  --shadow-tile:
+    inset 0 1px 0 rgb(255 255 255 / 0.95), 0 0 0 1px rgb(20 26 40 / 0.07),
+    0 2px 0 0 #dfe3ea, 0 6px 14px -6px rgb(20 30 60 / 0.18);
+
+  /* Accent fields */
+  --send: var(--blue-500);
+  --send-soft: rgb(47 107 255 / 0.1);
+  --land: var(--orange-500);
+  --land-soft: rgb(255 122 46 / 0.11);
+  --danger-soft: rgb(217 61 66 / 0.09);
+  --progress-track: rgb(20 26 40 / 0.07);
+  --progress-fill: linear-gradient(90deg, var(--blue-500), #9b7cf0 55%, var(--orange-500));
+  --gradient-outline: linear-gradient(100deg, var(--blue-500), #a77fe6 52%, var(--orange-500));
+
+  --focus-ring: 0 0 0 2px var(--canvas), 0 0 0 4px rgb(47 107 255 / 0.7);
+  --focus-inset: inset 0 0 0 2px rgb(47 107 255 / 0.55);
+  --send-ring: rgb(47 107 255 / 0.16);
+  --send-ring-strong: rgb(47 107 255 / 0.4);
+  --land-ring: rgb(255 122 46 / 0.2);
+  --danger-ring: rgb(217 61 66 / 0.18);
+  --inset-shadow: inset 0 1px 2px rgb(20 26 40 / 0.07);
+  --check-drop: 0 2px 4px -1px rgb(20 30 60 / 0.14);
+  /* Soft light inside the drop zone: blue warming to orange */
+  --portal-glow:
+    radial-gradient(closest-side at 38% 50%, rgb(94 143 255 / 0.2), transparent),
+    radial-gradient(closest-side at 64% 54%, rgb(255 148 82 / 0.16), transparent);
+  --selection: rgb(47 107 255 / 0.18);
+
+  /* ---- Keys (mechanical keycaps, softened) ------------------------------ */
+  --tray-bg: rgb(20 26 40 / 0.05);
+  --tray-shadow:
+    inset 0 1px 2px rgb(20 26 40 / 0.1), inset 0 0 0 1px rgb(20 26 40 / 0.05),
+    0 1px 0 rgb(255 255 255 / 0.85);
+
+  --key-face: linear-gradient(180deg, #ffffff 0%, #f3f5f9 100%);
+  --key-skirt: #d3d9e3;
+  --key-skirt-edge: 0 0 0 1px rgb(20 26 40 / 0.07);
+  --key-bevel: inset 0 1px 0 rgb(255 255 255 / 1), inset 0 -1px 0 rgb(20 26 40 / 0.04),
+    0 0 0 1px rgb(20 26 40 / 0.07);
+  --key-drop: 0 3px 6px -1px rgb(20 30 60 / 0.16), 0 10px 18px -10px rgb(20 30 60 / 0.22);
+  --key-text: var(--text-1);
+  --key-hover: brightness(1.015);
+  --key-drop-latched: 0 1px 2px rgb(20 30 60 / 0.14);
+
+  --key-ink-face: linear-gradient(180deg, #2b3142 0%, #161a25 100%);
+  --key-ink-skirt: #05070c;
+  --key-ink-bevel: inset 0 1px 0 rgb(255 255 255 / 0.16), inset 0 -1px 0 rgb(0 0 0 / 0.3),
+    0 0 0 1px rgb(5 7 12 / 0.9);
+  --key-ink-drop: 0 4px 8px -2px rgb(10 14 30 / 0.3), 0 12px 22px -12px rgb(10 14 30 / 0.45);
+  --key-ink-text: var(--text-on-ink);
+
+  /* Backlight: light rises from under the cap */
+  --key-lit-face-blue: radial-gradient(120% 95% at 50% 125%, rgb(47 107 255 / 0.34), transparent 64%),
+    linear-gradient(180deg, #ffffff 0%, #eef3ff 100%);
+  --key-lit-face-orange: radial-gradient(120% 95% at 50% 125%, rgb(255 122 46 / 0.32), transparent 64%),
+    linear-gradient(180deg, #ffffff 0%, #fff3eb 100%);
+  --key-lit-face-dual: radial-gradient(75% 95% at 12% 125%, rgb(47 107 255 / 0.3), transparent 70%),
+    radial-gradient(75% 95% at 88% 125%, rgb(255 122 46 / 0.3), transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, #f5f3fb 100%);
+  --key-lit-glow-blue: rgb(47 107 255 / 0.5);
+  --key-lit-glow-orange: rgb(255 122 46 / 0.48);
+  --key-lit-glow-dual: linear-gradient(90deg, rgb(47 107 255 / 0.48), rgb(255 122 46 / 0.48));
+  --key-lit-text-blue: var(--blue-600);
+  --key-lit-text-orange: var(--orange-700);
+  --key-lit-text-dual: var(--gray-900);
+  --key-led-blue: var(--blue-500);
+  --key-led-orange: var(--orange-500);
+
+  /* Segmented switch */
+  --switch-track: rgb(20 26 40 / 0.05);
+  --switch-thumb: linear-gradient(180deg, #ffffff 0%, #f6f7fa 100%);
+  --switch-thumb-shadow: 0 0 0 1px rgb(20 26 40 / 0.07), 0 1px 2px rgb(20 30 60 / 0.1),
+    0 4px 10px -4px rgb(20 30 60 / 0.16);
+
+  /* ---- Edge glow (signature) -------------------------------------------- */
+  --glow-send: var(--blue-500);
+  --glow-head: #c9dbff;
+  --glow-tail: var(--orange-400);
+  --glow-land: var(--orange-500);
+  --glow-land-tip: #ffe7d4;
+  --glow-ring-width: 2.2px;
+  --glow-halo-blur: 18px;
+  --glow-halo-strength: 0.95;
+  --glow-inner-send: rgb(47 107 255 / 0.3);
+  --glow-inner-land: rgb(255 122 46 / 0.32);
+
+  /* ---- Log (mini terminal) ---------------------------------------------- */
+  --log-bg: rgb(20 26 40 / 0.045);
+  --log-ring: rgb(20 26 40 / 0.06);
+  --log-text: var(--gray-700);
+  --log-time: #8a91a0;
+  --log-tag: var(--gray-900);
+  --log-ok: var(--blue-600);
+  --log-warn: var(--orange-700);
+  --log-err: var(--text-danger);
+
+  /* ---- macOS chrome ----------------------------------------------------- */
+  --traffic-close: #ff5f57;
+  --traffic-min: #febc2e;
+  --traffic-zoom: #28c840;
+  --traffic-ring: rgb(0 0 0 / 0.12);
+
+  /* ---- Windows chrome --------------------------------------------------- */
+  --caption-hover: rgb(20 26 40 / 0.06);
+  --caption-close-hover: #c42b1c;
+  --caption-close-text: #ffffff;
+}
+
+/* ==========================================================================
+   DARK THEME: near-black and deep navy, light glowing from the edges
+   ========================================================================== */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --canvas: #030407;
+
+  --text-1: #eceff5;
+  --text-2: #a3abbc;
+  --text-3: #808899;
+  --text-on-ink: #0f131c;
+  --text-send: var(--blue-300);
+  --text-land: var(--orange-300);
+  --text-danger: #ff8a8e;
+
+  --window-ground:
+    radial-gradient(70% 16% at 50% 103%, rgb(130 160 255 / 0.42), transparent 72%),
+    radial-gradient(130% 55% at 50% 118%, rgb(66 104 255 / 0.5), transparent 66%),
+    radial-gradient(55% 28% at 88% 106%, rgb(255 128 56 / 0.16), transparent 72%),
+    radial-gradient(70% 40% at 0% 0%, rgb(66 104 255 / 0.08), transparent 70%),
+    linear-gradient(180deg, #0b0e17 0%, #080a12 100%);
+  --window-ring: rgb(255 255 255 / 0.08);
+  --window-shadow:
+    0 0 0 0.5px rgb(255 255 255 / 0.1), 0 1px 1px rgb(0 0 0 / 0.5),
+    0 24px 48px -16px rgb(0 0 0 / 0.7), 0 60px 120px -40px rgb(0 0 0 / 0.9);
+  --titlebar-text: var(--text-2);
+  --titlebar-divider: rgb(255 255 255 / 0.05);
+
+  --surface-shell: rgb(255 255 255 / 0.025);
+  --surface-shell-ring: rgb(255 255 255 / 0.06);
+  --surface-glass: rgb(17 21 31 / 0.82);
+  --surface-glass-strong: rgb(22 27 39 / 0.94);
+  --surface-sunken: rgb(0 0 0 / 0.25);
+  --surface-tile: linear-gradient(180deg, #232938 0%, #191e2a 100%);
+  --hairline: rgb(255 255 255 / 0.07);
+  --hairline-strong: rgb(255 255 255 / 0.12);
+  --highlight: rgb(255 255 255 / 0.06);
+
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.5);
+  --shadow-2: 0 1px 2px rgb(0 0 0 / 0.5), 0 12px 28px -12px rgb(0 0 0 / 0.7);
+  --shadow-stage: 0 1px 1px rgb(0 0 0 / 0.4), 0 24px 50px -24px rgb(0 0 0 / 0.8);
+  --shadow-tile:
+    inset 0 1px 0 rgb(255 255 255 / 0.08), 0 0 0 1px rgb(0 0 0 / 0.55), 0 2px 0 0 #07090e,
+    0 8px 16px -6px rgb(0 0 0 / 0.6);
+
+  --send-soft: rgb(94 143 255 / 0.14);
+  --land-soft: rgb(255 148 82 / 0.13);
+  --danger-soft: rgb(255 110 115 / 0.1);
+  --progress-track: rgb(255 255 255 / 0.07);
+
+  --focus-ring: 0 0 0 2px var(--navy-900), 0 0 0 4px rgb(110 155 255 / 0.85);
+  --focus-inset: inset 0 0 0 2px rgb(110 155 255 / 0.7);
+  --send-ring: rgb(94 143 255 / 0.22);
+  --send-ring-strong: rgb(110 155 255 / 0.5);
+  --land-ring: rgb(255 148 82 / 0.24);
+  --danger-ring: rgb(255 110 115 / 0.22);
+  --inset-shadow: inset 0 1px 2px rgb(0 0 0 / 0.45);
+  --check-drop: 0 2px 4px -1px rgb(0 0 0 / 0.5);
+  --selection: rgb(94 143 255 / 0.3);
+
+  --tray-bg: rgb(0 0 0 / 0.35);
+  --tray-shadow:
+    inset 0 1px 2px rgb(0 0 0 / 0.6), inset 0 0 0 1px rgb(0 0 0 / 0.4),
+    0 1px 0 rgb(255 255 255 / 0.05);
+
+  --key-face: linear-gradient(180deg, #2a303d 0%, #1d222c 100%);
+  --key-skirt: #07090e;
+  --key-skirt-edge: 0 0 0 1px rgb(0 0 0 / 0.6);
+  --key-bevel: inset 0 1px 0 rgb(255 255 255 / 0.09), inset 0 -1px 0 rgb(0 0 0 / 0.35),
+    0 0 0 1px rgb(0 0 0 / 0.55);
+  --key-drop: 0 4px 8px -2px rgb(0 0 0 / 0.6), 0 12px 22px -12px rgb(0 0 0 / 0.8);
+  --key-text: #e3e7ef;
+  --key-hover: brightness(1.12);
+
+  --key-ink-face: linear-gradient(180deg, #f3f5f9 0%, #d9dee7 100%);
+  --key-ink-skirt: #8a93a4;
+  --key-ink-bevel: inset 0 1px 0 rgb(255 255 255 / 0.9), inset 0 -1px 0 rgb(0 0 0 / 0.12),
+    0 0 0 1px rgb(0 0 0 / 0.4);
+  --key-ink-drop: 0 4px 10px -2px rgb(0 0 0 / 0.6), 0 12px 24px -12px rgb(0 0 0 / 0.8);
+  --key-ink-text: #0f131c;
+
+  --key-lit-face-blue: radial-gradient(120% 100% at 50% 130%, rgb(76 141 255 / 0.75), transparent 66%),
+    linear-gradient(180deg, #1f2b4f 0%, #141d3b 100%);
+  --key-lit-face-orange: radial-gradient(120% 100% at 50% 130%, rgb(255 138 61 / 0.72), transparent 66%),
+    linear-gradient(180deg, #3d2618 0%, #2a170c 100%);
+  --key-lit-face-dual: radial-gradient(80% 100% at 10% 130%, rgb(76 141 255 / 0.62), transparent 70%),
+    radial-gradient(80% 100% at 90% 130%, rgb(255 138 61 / 0.6), transparent 70%),
+    linear-gradient(180deg, #2a2a42 0%, #1c1b2e 100%);
+  --key-lit-glow-blue: rgb(76 141 255 / 0.62);
+  --key-lit-glow-orange: rgb(255 138 61 / 0.58);
+  --key-lit-glow-dual: linear-gradient(90deg, rgb(76 141 255 / 0.58), rgb(255 138 61 / 0.58));
+  --key-lit-text-blue: #dbe6ff;
+  --key-lit-text-orange: #ffe4d1;
+  --key-lit-text-dual: #f1eef9;
+  --key-led-blue: #8db2ff;
+  --key-led-orange: #ffb17d;
+
+  --switch-track: rgb(0 0 0 / 0.35);
+  --switch-thumb: linear-gradient(180deg, #2c3240 0%, #222733 100%);
+  --switch-thumb-shadow: 0 0 0 1px rgb(0 0 0 / 0.5), inset 0 1px 0 rgb(255 255 255 / 0.08),
+    0 4px 10px -4px rgb(0 0 0 / 0.7);
+
+  --glow-send: #4c8dff;
+  --glow-head: #d8e5ff;
+  --glow-tail: #ff9452;
+  --glow-land: #ff8a3d;
+  --glow-land-tip: #fff0e3;
+  --glow-ring-width: 1.6px;
+  --glow-halo-blur: 22px;
+  --glow-halo-strength: 0.95;
+  --glow-inner-send: rgb(76 141 255 / 0.3);
+  --glow-inner-land: rgb(255 138 61 / 0.3);
+
+  --log-bg: rgb(0 0 0 / 0.35);
+  --log-ring: rgb(255 255 255 / 0.05);
+  --log-text: #c3c9d6;
+  --log-time: #6f7788;
+  --log-tag: #eef1f7;
+  --log-ok: var(--blue-300);
+  --log-warn: var(--orange-300);
+  --log-err: #ff8a8e;
+
+  --traffic-ring: rgb(0 0 0 / 0.35);
+  --caption-hover: rgb(255 255 255 / 0.07);
+}
+
+/* Reduced transparency: frosted surfaces go solid */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --surface-glass: #ffffff;
+    --surface-shell: #f1f3f7;
+    --glass-blur: none;
+  }
+  :root[data-theme='dark'] {
+    --surface-glass: var(--navy-800);
+    --surface-shell: var(--navy-850);
+  }
+}

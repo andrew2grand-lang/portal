@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "portal-scan",
+    "version": "0.3.0"
+  },
+  "scannedAt": "2026-10-28T09:41:00Z",
+  "project": {
+    "name": "shop-web",
+    "path": "~/Code/shop-web"
+  },
+  "source": "macos",
+  "target": "windows",
+  "network": {
+    "online": false,
+    "hosts": []
+  },
+  "durationMs": 385,
+  "stats": {
+    "files": 12,
+    "bytes": 2295,
+    "parsedFiles": 4,
+    "skippedFiles": 0,
+    "unreadable": []
+  },
+  "tier": {
+    "tier": "apps",
+    "reason": "Apps: an Express server"
+  },
+  "headline": "No blockers found. 2 things will need a fix.",
+  "counts": {
+    "blocker": 0,
+    "willNeedAFix": 2,
+    "needsYou": 0,
+    "couldntCheck": 0,
+    "info": 2,
+    "occurrences": 6,
+    "omitted": 0
+  },
+  "aiUsage": {
+    "level": "rare",
+    "estimate": true,
+    "reason": "Every fix found follows a known pattern; the AI would step in only if a check failed."
+  },
+  "ecosystems": [
+    {
+      "kind": "node",
+      "name": "JavaScript / TypeScript",
+      "evidence": [
+        ".nvmrc",
+        "package-lock.json",
+        "package.json"
+      ],
+      "files": 4,
+      "support": "deep"
+    },
+    {
+      "kind": "shell",
+      "name": "Shell scripts",
+      "evidence": [],
+      "files": 1,
+      "support": "deep"
+    }
+  ],
+  "runtimes": [
+    {
+      "kind": "node",
+      "requested": ">=20",
+      "requestedFrom": "package.json",
+      "installedHere": "24.21.0"
+    }
+  ],
+  "packages": [
+    {
+      "kind": "node",
+      "source": "node_modules",
+      "lockfile": "package-lock.json",
+      "declared": 8,
+      "installed": 4,
+      "items": [
+        {
+          "name": "compression",
+          "version": "1.7.5"
+        },
+        {
+          "name": "express",
+          "version": "4.21.2"
+        },
+        {
+          "name": "react",
+          "version": "19.0.0"
+        },
+        {
+          "name": "vite",
+          "version": "6.0.7"
+        }
+      ]
+    }
+  ],
+  "runCommands": [
+    {
+      "kind": "npm-script",
+      "name": "build",
+      "command": "rm -rf dist && vite build && cp -r public/fonts dist/fonts",
+      "file": "package.json"
+    },
+    {
+      "kind": "npm-script",
+      "name": "deploy",
+      "command": "./scripts/deploy.sh",
+      "file": "package.json"
+    },
+    {
+      "kind": "npm-script",
+      "name": "dev",
+      "command": "NODE_ENV=development vite",
+      "file": "package.json"
+    },
+    {
+      "kind": "npm-script",
+      "name": "lint",
+      "command": "eslint 'src/**/*.{ts,tsx}'",
+      "file": "package.json"
+    },
+    {
+      "kind": "npm-script",
+      "name": "start",
+      "command": "node server/index.js",
+      "file": "package.json"
+    },
+    {
+      "kind": "npm-script",
+      "name": "test",
+      "command": "vitest run",
+      "file": "package.json"
+    },
+    {
+      "kind": "readme",
+      "name": "README",
+      "command": "npm install",
+      "file": "README.md"
+    },
+    {
+      "kind": "readme",
+      "name": "README",
+      "command": "npm run dev",
+      "file": "README.md"
+    }
+  ],
+  "leftOut": {
+    "bytes": 322961569,
+    "files": 12,
+    "items": [
+      {
+        "path": "node_modules",
+        "kind": "nodeModules",
+        "bytes": 321912993,
+        "files": 11,
+        "rebuildable": true
+      },
+      {
+        "path": "dist/",
+        "kind": "gitignored",
+        "bytes": 1048576,
+        "files": 1,
+        "rebuildable": false
+      }
+    ]
+  },
+  "secrets": [],
+  "services": [],
+  "findings": [
+    {
+      "id": "npm-script-unix:package.json:10",
+      "rule": "npm-script-unix",
+      "title": "npm script uses Unix shell features",
+      "category": "scriptsLineEndings",
+      "state": "willNeedAFix",
+      "severity": "medium",
+      "file": "package.json",
+      "line": 10,
+      "evidence": "\"dev\": \"NODE_ENV=development vite\"",
+      "why": "On Windows, npm runs scripts with cmd.exe, which doesn't understand `VAR=value` in front of a command.",
+      "fixPattern": "Use cross-env: `cross-env NODE_ENV=production node server.js`.",
+      "autoFixable": true,
+      "targets": [
+        "windows"
+      ]
+    },
+    {
+      "id": "npm-script-unix:package.json:11",
+      "rule": "npm-script-unix",
+      "title": "npm script uses Unix shell features",
+      "category": "scriptsLineEndings",
+      "state": "willNeedAFix",
+      "severity": "medium",
+      "file": "package.json",
+      "line": 11,
+      "evidence": "\"build\": \"rm -rf dist && vite build && cp -r public/fonts dist/fonts\"",
+      "why": "On Windows, npm runs scripts with cmd.exe, which has no `rm` command.",
+      "fixPattern": "Use rimraf (or `node -e \"fs.rmSync(…)\"`) instead.",
+      "autoFixable": true,
+      "targets": [
+        "windows"
+      ]
+    },
+    {
+      "id": "npm-script-unix:package.json:13",
+      "rule": "npm-script-unix",
+      "title": "npm script uses Unix shell features",
+      "category": "scriptsLineEndings",
+      "state": "willNeedAFix",
+      "severity": "medium",
+      "file": "package.json",
+      "line": 13,
+      "evidence": "\"lint\": \"eslint 'src/**/*.{ts,tsx}'\"",
+      "why": "On Windows, npm runs scripts with cmd.exe, which doesn't treat single quotes as quotes.",
+      "fixPattern": "Use double quotes (escaped as \\\" inside package.json).",
+      "autoFixable": true,
+      "targets": [
+        "windows"
+      ]
+    },
+    {
+      "id": "script-without-windows-twin:scripts/deploy.sh:-",
+      "rule": "script-without-windows-twin",
+      "title": "Run script has no Windows version",
+      "category": "scriptsLineEndings",
+      "state": "willNeedAFix",
+      "severity": "medium",
+      "file": "scripts/deploy.sh",
+      "line": null,
+      "evidence": "./scripts/deploy.sh (in package.json)",
+      "why": "scripts/deploy.sh is a shell script, and Windows can't run it without Git Bash or WSL.",
+      "fixPattern": "Add a PowerShell version next to it (deploy.ps1), or replace it with a Python or Node script that runs on both.",
+      "autoFixable": true,
+      "targets": [
+        "windows"
+      ]
+    },
+    {
+      "id": "env-folder:node_modules:-",
+      "rule": "env-folder",
+      "title": "node_modules won't be sent",
+      "category": "copiedEnvironments",
+      "state": "info",
+      "severity": "low",
+      "file": "node_modules",
+      "line": null,
+      "evidence": "node_modules: 11 files, 322 MB",
+      "why": "node_modules holds packages installed for this computer (322 MB); it's rebuilt on the other side from the project's dependencies.",
+      "fixPattern": "Nothing to do: the receiving side rebuilds it (npm install).",
+      "autoFixable": true,
+      "targets": [
+        "windows",
+        "macos"
+      ]
+    },
+    {
+      "id": "executable-bit:scripts/deploy.sh:-",
+      "rule": "executable-bit",
+      "title": "Scripts marked executable",
+      "category": "permissionsLimits",
+      "state": "info",
+      "severity": "low",
+      "file": "scripts/deploy.sh",
+      "line": null,
+      "evidence": "scripts/deploy.sh",
+      "why": "Windows doesn't keep the Unix \"executable\" flag. Nothing breaks on Windows, but if these come back to a Mac they may need chmod +x.",
+      "fixPattern": "Nothing to do now. Coming back: chmod +x scripts/deploy.sh.",
+      "autoFixable": true,
+      "targets": [
+        "windows"
+      ]
+    }
+  ],
+  "handoff": null,
+  "notes": [
+    "Nothing in the project was run: no code, scripts, notebooks or package managers.",
+    "Offline: nothing was looked up on the internet."
+  ]
+}

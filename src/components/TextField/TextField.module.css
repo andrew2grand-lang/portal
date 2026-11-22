@@ -1,0 +1,63 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.label {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+/* Sunken like the key tray, so it reads as a place to type into */
+.input {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-tile);
+  background: var(--surface-sunken);
+  box-shadow:
+    var(--inset-shadow),
+    inset 0 0 0 1px var(--hairline);
+  color: var(--text-1);
+  font: inherit;
+  font-size: var(--text-base);
+  transition: box-shadow var(--dur-fast) var(--ease-out);
+}
+.input[data-mono] {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+.input::placeholder {
+  color: var(--text-3);
+}
+.input:hover {
+  box-shadow:
+    var(--inset-shadow),
+    inset 0 0 0 1px var(--hairline-strong);
+}
+.input:focus-visible {
+  outline: none;
+  border-radius: var(--radius-tile);
+  box-shadow:
+    var(--inset-shadow),
+    inset 0 0 0 1px var(--hairline-strong),
+    var(--focus-ring);
+}
+.input[aria-invalid] {
+  box-shadow:
+    var(--inset-shadow),
+    inset 0 0 0 1px var(--danger-ring);
+}
+
+.note {
+  margin: 0;
+  color: var(--text-3);
+  font-size: var(--text-sm);
+}
+.note[data-error] {
+  color: var(--text-danger);
+}

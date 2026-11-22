@@ -1,0 +1,9 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "script-without-windows-twin",
+      "file": "scripts/setup.sh"
+    }
+  ]
+}

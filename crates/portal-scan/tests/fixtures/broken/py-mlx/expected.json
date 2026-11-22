@@ -1,0 +1,17 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "mlx",
+      "file": "chat.py",
+      "line": 1,
+      "state": "blocker"
+    },
+    {
+      "rule": "mlx",
+      "file": "chat.py",
+      "line": 2,
+      "state": "blocker"
+    }
+  ]
+}

@@ -1,0 +1,176 @@
+/* Layers (in the window shell's stacking context):
+     halo  z 0  blurred bloom behind the window, visible outside its edge
+     (window z 1)
+     inner z 2  light washing in from the edge, clipped by the radius
+     ring  z 3  the crisp lit edge, masked to a hairline ring            */
+.root {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--win-radius);
+  pointer-events: none;
+}
+
+.halo,
+.ring,
+.inner {
+  position: absolute;
+  pointer-events: none;
+  /* Brightness is opacity on its own layer, never a repaint */
+  will-change: opacity;
+}
+
+/* The travelling light: a square layer (side = the box's diagonal, set by
+   the component) painted once with the comet and turned by a compositor
+   animation. Its parent's mask or blur shapes it; nothing repaints. */
+.spin {
+  position: absolute;
+  width: var(--glow-diag, 200%);
+  height: var(--glow-diag, 200%);
+  left: calc(50% - var(--glow-diag, 200%) / 2);
+  top: calc(50% - var(--glow-diag, 200%) / 2);
+  background: var(--glow-spin, none);
+  will-change: transform;
+}
+
+.ring {
+  z-index: 3;
+  /* The spinning layer is bigger than the ring: it must never add scrollable
+     overflow to the window (clip doesn't make a scroll container) */
+  overflow: clip;
+  inset: calc(var(--glow-ring-width) * -0.5);
+  padding: var(--glow-ring-width);
+  border-radius: calc(var(--win-radius) + var(--glow-ring-width) * 0.5);
+  background: var(--glow-paint, none);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+
+.halo {
+  z-index: 0;
+  inset: -3px;
+  border-radius: calc(var(--win-radius) + 3px);
+}
+.halo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--glow-paint, none);
+  filter: blur(var(--glow-halo-blur));
+  opacity: var(--glow-halo-strength);
+}
+.halo {
+  overflow: hidden;
+}
+.halo > .spin {
+  filter: blur(var(--glow-halo-blur));
+  opacity: var(--glow-halo-strength);
+}
+
+.inner {
+  z-index: 2;
+  inset: 0;
+  border-radius: var(--win-radius);
+  box-shadow:
+    inset 0 0 0 1px var(--glow-inner, transparent),
+    inset 0 0 34px -6px var(--glow-inner, transparent);
+}
+
+/* ---- Paint per mode ------------------------------------------------------ */
+
+/* A comet: bright blue head, warming to an orange tail (painted once; the
+   layer turns) */
+.root[data-mode='sending'] {
+  --glow-spin: conic-gradient(
+    from 0deg,
+    transparent 0deg 222deg,
+    color-mix(in srgb, var(--glow-tail) 55%, transparent) 262deg,
+    var(--glow-send) 322deg,
+    var(--glow-head) 354deg,
+    transparent 360deg
+  );
+  --glow-inner: var(--glow-inner-send);
+}
+
+/* Receiving: the same comet in the landing colours, mirrored so its head
+   leads as the layer turns the other way (Mission 05 §1.1) */
+.root[data-mode='receiving'] {
+  --glow-spin: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    var(--glow-land-tip) 6deg,
+    var(--glow-land) 38deg,
+    color-mix(in srgb, var(--glow-land) 55%, transparent) 98deg,
+    transparent 138deg 360deg
+  );
+  --glow-inner: var(--glow-inner-land);
+}
+
+/* Slow warm orbit while the receiver converts */
+.root[data-mode='working'] {
+  --glow-spin: conic-gradient(
+    from 0deg,
+    transparent 0deg 250deg,
+    color-mix(in srgb, var(--glow-land) 50%, transparent) 300deg,
+    var(--glow-land) 340deg,
+    var(--glow-land-tip) 356deg,
+    transparent 360deg
+  );
+  --glow-inner: var(--glow-inner-land);
+}
+
+/* Arrival: the whole edge lights at once */
+.flash {
+  --glow-spin: none;
+  --glow-paint: conic-gradient(
+    from 210deg,
+    var(--glow-land),
+    var(--glow-land-tip),
+    var(--glow-send),
+    var(--glow-land)
+  );
+  --glow-inner: var(--glow-inner-land);
+}
+.halo.flash {
+  inset: -6px;
+  border-radius: calc(var(--win-radius) + 6px);
+}
+.halo.flash::before {
+  filter: blur(calc(var(--glow-halo-blur) * 1.6));
+  opacity: 1;
+}
+.inner.flash {
+  box-shadow:
+    inset 0 0 0 1.5px var(--glow-land-tip),
+    inset 0 0 70px -12px var(--glow-inner-land);
+}
+
+/* ---- Reduced motion: no travel, a still lit edge whose brightness carries
+        the same information -------------------------------------------------- */
+.root[data-reduced] {
+  --glow-spin: none;
+}
+.root[data-reduced][data-mode='sending'] {
+  --glow-paint: linear-gradient(135deg, var(--glow-send), var(--glow-tail));
+}
+.root[data-reduced][data-mode='receiving'] {
+  --glow-paint: linear-gradient(135deg, var(--glow-land), var(--glow-send));
+}
+.root[data-reduced][data-mode='working'] {
+  --glow-paint: linear-gradient(135deg, var(--glow-land), var(--glow-land-tip));
+}
+
+/* Real OS window: nothing can be drawn outside it, so no halo, and the ring
+   sits just inside the edge instead of straddling it. */
+[data-native] .halo {
+  display: none;
+}
+[data-native] .ring {
+  inset: 0;
+  border-radius: var(--win-radius);
+}

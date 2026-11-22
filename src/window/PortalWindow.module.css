@@ -1,0 +1,359 @@
+/* ---- Paired device -------------------------------------------------------- */
+.peer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding-top: var(--space-1);
+}
+
+.peerTile {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-tile);
+  background: var(--surface-tile);
+  box-shadow: var(--shadow-tile);
+  color: var(--text-1);
+}
+.peerTile svg {
+  width: 26px;
+  height: 26px;
+}
+.peerTile [data-picture] {
+  width: 32px;
+  height: 32px;
+}
+
+.peerText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.peerName {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-heavy);
+  font-stretch: var(--stretch-display);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-tight);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.peerMeta {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.link {
+  display: inline-flex;
+  flex: none;
+  align-self: flex-start;
+  height: 30px;
+  margin-top: 6px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--surface-glass-strong);
+  box-shadow:
+    inset 0 1px 0 var(--highlight),
+    0 0 0 1px var(--hairline),
+    var(--shadow-1);
+}
+.linkInner {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 13px 0 11px;
+  color: var(--text-1);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+.linkInner svg {
+  width: 16px;
+  height: 16px;
+  color: var(--text-2);
+}
+
+/* ---- Mode ---------------------------------------------------------------------- */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+@media (max-width: 520px) {
+  .peer {
+    flex-wrap: wrap;
+    row-gap: var(--space-3);
+  }
+  .peerText {
+    min-width: 150px;
+  }
+  .peerName {
+    font-size: var(--text-xl);
+  }
+  .peerTile {
+    width: 42px;
+    height: 42px;
+  }
+  /* The link pill drops under the name rather than squeezing it */
+  .link {
+    margin-top: 0;
+    margin-left: calc(42px + var(--space-4));
+  }
+}
+
+/* The clipboard sync indicator: the link pill, as a button (never silent) */
+.link[data-sync] {
+  margin-top: 0;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+.link[data-sync]:focus-visible {
+  outline: 2px solid var(--focus, currentColor);
+  outline-offset: 2px;
+}
+
+/* ---- Several devices (Mission 04 §3): each with its status; ticked ones
+        are where files and the clipboard go -------------------------------- */
+/* The device strip and any notices. Shrinks (and scrolls) before the stage
+   does; the stage keeps its minimum. Room for focus rings inside. */
+.top {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-height: 0;
+  margin: -4px -4px -14px;
+  padding: 4px 4px 14px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* What scrolls fades out at the lower edge; with nothing to scroll the
+     fade only covers the empty padding */
+  -webkit-mask: linear-gradient(180deg, #000 calc(100% - 10px), transparent);
+  mask: linear-gradient(180deg, #000 calc(100% - 10px), transparent);
+}
+.top:empty {
+  display: none;
+}
+.top > * {
+  flex: none;
+}
+
+/* The tiles, the "+" beside them, and a word about one that isn't reachable */
+.stripArea {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.stripRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.stripRow > .strip {
+  flex: 1;
+  min-width: 0;
+}
+/* Mini mode on Windows: the title gives way to the keys and the caption buttons */
+@media (max-width: 359.98px) {
+  :global([class*='winTitle']) {
+    display: none;
+  }
+  :global([data-os='mac'] [class*='macTitle']) {
+    visibility: hidden;
+  }
+}
+
+/* The smallest windows keep the tiles' names whole: "+" gives way there
+   (Settings → Pair another computer still has it) */
+@media (max-width: 479.98px) {
+  .stripAdd {
+    display: none;
+  }
+}
+.stripNote {
+  margin: 0;
+  color: var(--text-3);
+  font-size: var(--text-sm);
+}
+.strip {
+  display: grid;
+  /* auto-fit: in a wide window the tiles share the whole width */
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  gap: var(--space-2);
+}
+
+.device {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  padding: 8px 12px 8px 9px;
+  border: 0;
+  border-radius: var(--radius-tile);
+  background: var(--surface-glass);
+  box-shadow:
+    inset 0 1px 0 var(--highlight),
+    0 0 0 1px var(--hairline);
+  color: var(--text-1);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.device[data-on] {
+  background: var(--surface-glass-strong);
+  box-shadow:
+    inset 0 1px 0 var(--highlight),
+    0 0 0 1.5px var(--send-ring-strong),
+    var(--shadow-1);
+}
+.device:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+.device > [data-picture] {
+  width: 22px;
+  height: 22px;
+}
+.device > svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--text-2);
+}
+
+.deviceTick {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-check);
+  box-shadow: inset 0 0 0 1.5px var(--hairline-strong);
+  color: var(--text-on-ink);
+}
+.device[data-on] .deviceTick {
+  background: var(--send);
+  box-shadow: none;
+}
+.deviceTick svg {
+  width: 11px;
+  height: 11px;
+}
+
+.deviceText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+/* A long name wraps: every name is read in full */
+.deviceName {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold, 600);
+  line-height: var(--leading-snug);
+  overflow-wrap: anywhere;
+}
+.deviceStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-2);
+  font-size: var(--text-xs);
+}
+
+/* A short window: each tile keeps to one line (name, then its dot), so the
+   transfers and lists below keep their room (Review 04). The words stay for
+   screen readers and in the tooltip. */
+@media (max-height: 700px) {
+  .strip {
+    grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+    gap: 6px;
+  }
+  .device {
+    gap: 7px;
+    padding: 5px 10px 5px 8px;
+  }
+  .device > svg,
+  .device > [data-picture] {
+    width: 17px;
+    height: 17px;
+  }
+  .deviceText {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+  }
+  .deviceName {
+    overflow: hidden;
+    overflow-wrap: normal;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .deviceStatus {
+    flex: none;
+    font-size: 0;
+  }
+}
+
+/* The status dot: still (never pulsing); its colour carries the state */
+.dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--text-3);
+}
+.device[data-status='connected'] .dot {
+  background: var(--send);
+}
+.device[data-status='connecting'] .dot {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--text-3);
+}
+.device[data-status='unreachable'] .dot,
+.device[data-status='incompatible'] .dot {
+  background: var(--land);
+}
+
+/* The title bar's keys: Shelf, Settings */
+.titleKeys {
+  display: inline-flex;
+  gap: 6px;
+}
+/* The words beside Clipboard and Shelf: from the normal window size up;
+   below it the icons alone (their names in the tooltip) */
+.titleWord {
+  display: none;
+}
+@media (min-width: 520px) {
+  .titleWord {
+    display: inline;
+  }
+}
+/* Without their words, the keys are square like the gear */
+@media (max-width: 519.98px) {
+  .titleKeys > button {
+    --px: 0px;
+    width: var(--h);
+  }
+}
+/* The Mac's title is centred, and the words would run into it below 640 px:
+   there the words win (the name is in the menu bar and the Dock anyway) */
+@media (min-width: 520px) and (max-width: 639.98px) {
+  :global([data-os='mac'] [class*='macTitle']) {
+    visibility: hidden;
+  }
+}

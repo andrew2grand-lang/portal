@@ -1,0 +1,17 @@
+{
+  "target": "macos",
+  "expect": [
+    {
+      "rule": "path-concat-backslash",
+      "file": "paths.py",
+      "line": 4,
+      "state": "willNeedAFix"
+    },
+    {
+      "rule": "path-concat-backslash",
+      "file": "paths.py",
+      "line": 5,
+      "state": "willNeedAFix"
+    }
+  ]
+}

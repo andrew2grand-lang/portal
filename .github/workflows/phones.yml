@@ -1,0 +1,55 @@
+# Mission 04 §6: portal-core stays phone-ready. It must compile for Android
+# and iOS (no phone app yet). Pushes to main and manual runs only (CI budget:
+# the iOS check needs a macOS runner).
+name: phones
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "crates/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - ".github/workflows/phones.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: phones-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android:
+    name: portal-core for Android (aarch64-linux-android)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: phones-android
+      - name: cargo check with the runner's NDK
+        shell: bash
+        run: |
+          NDK="${ANDROID_NDK_LATEST_HOME:-$ANDROID_NDK_HOME}"
+          BIN="$NDK/toolchains/llvm/prebuilt/linux-x86_64/bin"
+          export CC_aarch64_linux_android="$BIN/aarch64-linux-android24-clang"
+          export AR_aarch64_linux_android="$BIN/llvm-ar"
+          export CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER="$CC_aarch64_linux_android"
+          cargo check -p portal-core --target aarch64-linux-android --locked
+
+  ios:
+    name: portal-core for iOS (aarch64-apple-ios)
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-ios
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: phones-ios
+      - run: cargo check -p portal-core --target aarch64-apple-ios --locked

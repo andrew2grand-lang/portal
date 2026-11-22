@@ -1,0 +1,15 @@
+{
+  "name": "shop",
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "NODE_ENV=production vite build",
+    "start": "export PORT=3000 && node server.js",
+    "lint": "eslint 'src/**/*.ts'",
+    "deploy": "node deploy.js $TARGET",
+    "fine": "cross-env NODE_ENV=test vitest run"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}

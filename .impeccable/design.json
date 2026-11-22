@@ -1,0 +1,552 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-22T20:11:06.322537+00:00",
+  "title": "Design System: Portal",
+  "extensions": {
+    "colorMeta": {
+      "send-blue": {
+        "role": "primary",
+        "displayName": "Sending Blue",
+        "canonical": "#2f6bff",
+        "tonalRamp": [
+          "#0d1f4d",
+          "#14307a",
+          "#1f55e0",
+          "#2f6bff",
+          "#5e8fff",
+          "#93b4ff",
+          "#c9dbff",
+          "#eef3ff"
+        ]
+      },
+      "send-blue-deep": {
+        "role": "primary",
+        "displayName": "Sending Blue Deep",
+        "canonical": "#1f55e0"
+      },
+      "send-blue-pale": {
+        "role": "primary",
+        "displayName": "Pale Send (dark-theme text)",
+        "canonical": "#93b4ff"
+      },
+      "land-orange": {
+        "role": "secondary",
+        "displayName": "Landing Orange",
+        "canonical": "#ff7a2e",
+        "tonalRamp": [
+          "#3d2618",
+          "#6b3410",
+          "#b84a0c",
+          "#ff7a2e",
+          "#ff9452",
+          "#ffbf94",
+          "#ffe7d4",
+          "#fff3eb"
+        ]
+      },
+      "land-orange-glow": {
+        "role": "secondary",
+        "displayName": "Glow Orange (comet tail)",
+        "canonical": "#ff9452"
+      },
+      "land-orange-deep": {
+        "role": "secondary",
+        "displayName": "Landing Orange Deep",
+        "canonical": "#b84a0c"
+      },
+      "land-orange-pale": {
+        "role": "secondary",
+        "displayName": "Pale Land (dark-theme text)",
+        "canonical": "#ffbf94"
+      },
+      "gradient-midpoint-lilac": {
+        "role": "tertiary",
+        "displayName": "Midpoint Lilac",
+        "canonical": "#9b7cf0"
+      },
+      "danger-red": {
+        "role": "tertiary",
+        "displayName": "Danger Red",
+        "canonical": "#c22f35",
+        "tonalRamp": [
+          "oklch(15% 0.17 24)",
+          "oklch(26% 0.17 24)",
+          "oklch(38% 0.17 24)",
+          "oklch(50% 0.17 24)",
+          "oklch(62% 0.17 24)",
+          "oklch(74% 0.17 24)",
+          "oklch(85% 0.17 24)",
+          "oklch(95% 0.17 24)"
+        ]
+      },
+      "danger-red-dark": {
+        "role": "tertiary",
+        "displayName": "Danger Red (dark theme)",
+        "canonical": "#ff8a8e"
+      },
+      "ink-navy": {
+        "role": "neutral",
+        "displayName": "Ink Navy",
+        "canonical": "#141824",
+        "tonalRamp": [
+          "#141824",
+          "#3a404c",
+          "#4a5160",
+          "#737b8b",
+          "#98a0af",
+          "#bcc3cf",
+          "#e3e7ee",
+          "#fafbfc"
+        ]
+      },
+      "slate-text": {
+        "role": "neutral",
+        "displayName": "Slate Text",
+        "canonical": "#4a5160"
+      },
+      "muted-text": {
+        "role": "neutral",
+        "displayName": "Muted Text",
+        "canonical": "#656c7b"
+      },
+      "log-graphite": {
+        "role": "neutral",
+        "displayName": "Log Graphite",
+        "canonical": "#3a404c"
+      },
+      "canvas-mist": {
+        "role": "neutral",
+        "displayName": "Canvas Mist",
+        "canonical": "#e7e9ee"
+      },
+      "window-white": {
+        "role": "neutral",
+        "displayName": "Window White",
+        "canonical": "#f8f9fc"
+      },
+      "horizon-lilac": {
+        "role": "neutral",
+        "displayName": "Horizon Lilac",
+        "canonical": "#f2ecf4"
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "rgb(20 26 40 / 0.08)"
+      },
+      "frost-glass": {
+        "role": "neutral",
+        "displayName": "Frost Glass",
+        "canonical": "rgb(255 255 255 / 0.56)"
+      },
+      "frost-glass-strong": {
+        "role": "neutral",
+        "displayName": "Frost Glass Strong",
+        "canonical": "rgb(255 255 255 / 0.86)"
+      },
+      "canvas-void": {
+        "role": "neutral",
+        "displayName": "Canvas Void (dark)",
+        "canonical": "#030407",
+        "tonalRamp": [
+          "#030407",
+          "#080a11",
+          "#0c0f18",
+          "#11151f",
+          "#161b27",
+          "#1d2331",
+          "#283044",
+          "#3a4560"
+        ]
+      },
+      "window-navy": {
+        "role": "neutral",
+        "displayName": "Window Navy (dark)",
+        "canonical": "#0b0e17"
+      },
+      "navy-surface": {
+        "role": "neutral",
+        "displayName": "Navy Surface (dark solid glass)",
+        "canonical": "#11151f"
+      },
+      "frost-text": {
+        "role": "neutral",
+        "displayName": "Frost Text (dark text 1)",
+        "canonical": "#eceff5"
+      },
+      "frost-text-2": {
+        "role": "neutral",
+        "displayName": "Frost Text 2 (dark)",
+        "canonical": "#a3abbc"
+      },
+      "frost-text-3": {
+        "role": "neutral",
+        "displayName": "Frost Text 3 (dark)",
+        "canonical": "#808899"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The transfer percentage only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Paired device name in the window header."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Stage state titles."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Sentences, item names, checklist rows."
+      },
+      "body-small": {
+        "displayName": "Body small",
+        "purpose": "Metadata, sizes, rates, chips, link pill."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Keycaps and switch options."
+      },
+      "label-micro": {
+        "displayName": "Label micro",
+        "purpose": "The Paid pill only."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Details log, log peek, file paths, running command."
+      }
+    },
+    "shadows": [
+      {
+        "name": "window-shadow",
+        "value": "0 0 0 0.5px rgb(20 26 40 / 0.12), 0 1px 1px rgb(16 22 40 / 0.04), 0 14px 28px -10px rgb(16 22 40 / 0.14), 0 44px 90px -30px rgb(16 22 40 / 0.28)",
+        "purpose": "App window off the canvas (light; dark is deeper)."
+      },
+      {
+        "name": "shadow-stage",
+        "value": "0 1px 1px rgb(23 32 60 / 0.03), 0 18px 40px -22px rgb(23 32 60 / 0.22)",
+        "purpose": "Under the double-bezel stage shell."
+      },
+      {
+        "name": "shadow-1",
+        "value": "0 1px 2px rgb(23 32 60 / 0.06), 0 1px 1px rgb(23 32 60 / 0.03)",
+        "purpose": "Contact shadow for floating pills and the stage plate."
+      },
+      {
+        "name": "shadow-2",
+        "value": "0 1px 2px rgb(23 32 60 / 0.05), 0 10px 26px -12px rgb(23 32 60 / 0.16)",
+        "purpose": "Softer lift for floating panels."
+      },
+      {
+        "name": "shadow-tile",
+        "value": "inset 0 1px 0 rgb(255 255 255 / 0.95), 0 0 0 1px rgb(20 26 40 / 0.07), 0 2px 0 0 #dfe3ea, 0 6px 14px -6px rgb(20 30 60 / 0.18)",
+        "purpose": "Icon tiles: highlight, hairline, 2px lip, soft drop."
+      },
+      {
+        "name": "key-bevel",
+        "value": "inset 0 1px 0 rgb(255 255 255 / 1), inset 0 -1px 0 rgb(20 26 40 / 0.04), 0 0 0 1px rgb(20 26 40 / 0.07)",
+        "purpose": "Keycap face bevel."
+      },
+      {
+        "name": "key-drop",
+        "value": "0 3px 6px -1px rgb(20 30 60 / 0.16), 0 10px 18px -10px rgb(20 30 60 / 0.22)",
+        "purpose": "Keycap cast shadow; compresses on press."
+      },
+      {
+        "name": "key-drop-latched",
+        "value": "0 1px 2px rgb(20 30 60 / 0.14)",
+        "purpose": "Cast shadow of a latched (lit) key."
+      },
+      {
+        "name": "tray-shadow",
+        "value": "inset 0 1px 2px rgb(20 26 40 / 0.1), inset 0 0 0 1px rgb(20 26 40 / 0.05), 0 1px 0 rgb(255 255 255 / 0.85)",
+        "purpose": "Recessed wells: role tray, switch track."
+      },
+      {
+        "name": "inset-shadow",
+        "value": "inset 0 1px 2px rgb(20 26 40 / 0.07)",
+        "purpose": "Shallow recess: progress track, log terminal."
+      },
+      {
+        "name": "check-drop",
+        "value": "0 2px 4px -1px rgb(20 30 60 / 0.14)",
+        "purpose": "Checkbox cast shadow."
+      },
+      {
+        "name": "focus-inset",
+        "value": "inset 0 0 0 2px rgb(47 107 255 / 0.55)",
+        "purpose": "Focus on the drop zone, drawn inside the plate radius."
+      },
+      {
+        "name": "focus-ring",
+        "value": "0 0 0 2px var(--canvas), 0 0 0 4px rgb(47 107 255 / 0.7)",
+        "purpose": "Keyboard focus everywhere."
+      },
+      {
+        "name": "glass-blur",
+        "value": "blur(22px) saturate(160%)",
+        "purpose": "Backdrop filter for the stage plate; none under reduced transparency."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Default CSS easing."
+      },
+      {
+        "name": "ease-in-out",
+        "value": "cubic-bezier(0.65, 0, 0.35, 1)",
+        "purpose": "Breathing live dot."
+      },
+      {
+        "name": "dur-fast",
+        "value": "120ms",
+        "purpose": "Hover backgrounds."
+      },
+      {
+        "name": "dur-base",
+        "value": "200ms",
+        "purpose": "Colour and filter changes."
+      },
+      {
+        "name": "dur-slow",
+        "value": "360ms",
+        "purpose": "Tile lifts, caret, item state."
+      },
+      {
+        "name": "dur-glow",
+        "value": "600ms",
+        "purpose": "Backlight and glow fades, theme change."
+      },
+      {
+        "name": "spring-ui",
+        "value": "spring bounce 0, 0.42s",
+        "purpose": "Default interface spring (critically damped)."
+      },
+      {
+        "name": "spring-layout",
+        "value": "spring bounce 0.08, 0.45s",
+        "purpose": "Mode-switch thumb slide."
+      },
+      {
+        "name": "spring-press",
+        "value": "spring bounce 0, 0.1s",
+        "purpose": "Key cap travelling down."
+      },
+      {
+        "name": "spring-release",
+        "value": "spring bounce 0.45, 0.32s",
+        "purpose": "Key cap springing back."
+      },
+      {
+        "name": "materialize",
+        "value": "in: opacity 0, y 10px, blur 6px; out: opacity 0, y -6px, blur 4px",
+        "purpose": "Stage state changes; plain fade under reduced motion."
+      },
+      {
+        "name": "glow-lap-wifi",
+        "value": "2.8s",
+        "purpose": "Sending comet lap on Wi-Fi."
+      },
+      {
+        "name": "glow-lap-cable",
+        "value": "1.05s",
+        "purpose": "Sending comet lap on cable."
+      },
+      {
+        "name": "glow-lap-working",
+        "value": "3.6s",
+        "purpose": "Converting orbit lap."
+      },
+      {
+        "name": "arrival-flash",
+        "value": "1.9s (1.6s reduced)",
+        "purpose": "Edge lights once on delivery."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "stack-windows",
+        "value": "1240px"
+      },
+      {
+        "name": "compact-canvas",
+        "value": "600px"
+      },
+      {
+        "name": "narrow-window",
+        "value": "520px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Key (plain)",
+      "kind": "button",
+      "refersTo": "key-plain",
+      "description": "Default soft keycap for secondary actions and unselected role keys.",
+      "html": "<button class=\"ds-key\"><span class=\"ds-base\"></span><span class=\"ds-face\">Cancel</span></button>",
+      "css": ".ds-key{position:relative;display:inline-flex;height:42px;padding:0 0 2px;border:0;border-radius:var(--radius-key);background:none;cursor:pointer;font-family:var(--font-sans)}.ds-key .ds-base{position:absolute;inset:2px 0 0;border-radius:var(--radius-key);background:var(--key-skirt);box-shadow:var(--key-skirt-edge),var(--key-drop)}.ds-key .ds-face{position:relative;display:flex;align-items:center;gap:7px;height:40px;padding:0 16px;border-radius:var(--radius-key);background:var(--key-face);box-shadow:var(--key-bevel);color:var(--key-text);font-size:var(--text-sm);font-weight:var(--weight-semibold);font-stretch:104%;letter-spacing:-0.006em;line-height:1;transition:translate .1s,filter .2s var(--ease-out)}.ds-key:hover .ds-face{filter:var(--key-hover)}.ds-key:active .ds-face{translate:0 2px}.ds-key:focus-visible{outline:none}.ds-key:focus-visible .ds-face{box-shadow:var(--key-bevel),var(--focus-ring)}"
+    },
+    {
+      "name": "Key (ink)",
+      "kind": "button",
+      "refersTo": "key-ink",
+      "description": "High-contrast primary; one per action group.",
+      "html": "<button class=\"ds-key ds-key-ink\"><span class=\"ds-base\"></span><span class=\"ds-face\">Accept</span></button>",
+      "css": ".ds-key{position:relative;display:inline-flex;height:42px;padding:0 0 2px;border:0;border-radius:var(--radius-key);background:none;cursor:pointer;font-family:var(--font-sans)}.ds-key .ds-base{position:absolute;inset:2px 0 0;border-radius:var(--radius-key);background:var(--key-skirt);box-shadow:var(--key-skirt-edge),var(--key-drop)}.ds-key .ds-face{position:relative;display:flex;align-items:center;gap:7px;height:40px;padding:0 16px;border-radius:var(--radius-key);background:var(--key-face);box-shadow:var(--key-bevel);color:var(--key-text);font-size:var(--text-sm);font-weight:var(--weight-semibold);font-stretch:104%;letter-spacing:-0.006em;line-height:1;transition:translate .1s,filter .2s var(--ease-out)}.ds-key:hover .ds-face{filter:var(--key-hover)}.ds-key:active .ds-face{translate:0 2px}.ds-key:focus-visible{outline:none}.ds-key:focus-visible .ds-face{box-shadow:var(--key-bevel),var(--focus-ring)}.ds-key-ink{--key-face:var(--key-ink-face);--key-skirt:var(--key-ink-skirt);--key-bevel:var(--key-ink-bevel);--key-drop:var(--key-ink-drop);--key-text:var(--key-ink-text)}"
+    },
+    {
+      "name": "Key (lit, blue)",
+      "kind": "button",
+      "refersTo": "key-lit-blue",
+      "description": "Selected and latched: backlit from under the cap in the key's tone, LED on, seated 1.5px lower.",
+      "html": "<button class=\"ds-key ds-key-lit\"><span class=\"ds-glow\"></span><span class=\"ds-base\"></span><span class=\"ds-face\">Send<span class=\"ds-led\"></span></span></button>",
+      "css": ".ds-key{position:relative;display:inline-flex;height:42px;padding:0 0 2px;border:0;border-radius:var(--radius-key);background:none;cursor:pointer;font-family:var(--font-sans)}.ds-key .ds-base{position:absolute;inset:2px 0 0;border-radius:var(--radius-key);background:var(--key-skirt);box-shadow:var(--key-skirt-edge),var(--key-drop)}.ds-key .ds-face{position:relative;display:flex;align-items:center;gap:7px;height:40px;padding:0 16px;border-radius:var(--radius-key);background:var(--key-face);box-shadow:var(--key-bevel);color:var(--key-text);font-size:var(--text-sm);font-weight:var(--weight-semibold);font-stretch:104%;letter-spacing:-0.006em;line-height:1;transition:translate .1s,filter .2s var(--ease-out)}.ds-key:hover .ds-face{filter:var(--key-hover)}.ds-key:active .ds-face{translate:0 2px}.ds-key:focus-visible{outline:none}.ds-key:focus-visible .ds-face{box-shadow:var(--key-bevel),var(--focus-ring)}.ds-key-lit .ds-glow{position:absolute;inset:35% 8% -8px;z-index:-1;background:var(--key-lit-glow-blue);filter:blur(12px)}.ds-key-lit .ds-base{background:color-mix(in srgb,var(--key-skirt) 72%,var(--key-led-blue));box-shadow:var(--key-skirt-edge),var(--key-drop-latched)}.ds-key-lit .ds-face{background:var(--key-lit-face-blue);color:var(--key-lit-text-blue);translate:0 1.5px}.ds-key-lit .ds-led{position:absolute;top:5px;right:6px;width:4px;height:4px;border-radius:50%;background:var(--key-led-blue);box-shadow:0 0 6px 1px var(--key-led-blue)}"
+    },
+    {
+      "name": "Mode switch with Paid pill",
+      "kind": "nav",
+      "refersTo": "mode-switch-option",
+      "description": "Pill segmented switch in a recessed track; the Paid pill is the one gradient-outlined accent.",
+      "html": "<div class=\"ds-track\"><button class=\"ds-opt ds-on\">Files</button><button class=\"ds-opt\">Project <span class=\"ds-paid\">Paid</span></button></div>",
+      "css": ".ds-track{display:inline-flex;padding:4px;border-radius:var(--radius-pill);background:var(--switch-track);box-shadow:var(--tray-shadow);font-family:var(--font-sans)}.ds-opt{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 14px;border:0;border-radius:var(--radius-pill);background:none;color:var(--text-2);font-size:var(--text-sm);font-weight:var(--weight-semibold);font-stretch:104%;cursor:pointer;transition:color var(--dur-base) var(--ease-out)}.ds-opt:hover{color:var(--text-1)}.ds-opt:focus-visible{outline:none;box-shadow:var(--focus-ring)}.ds-on{background:var(--switch-thumb);box-shadow:var(--switch-thumb-shadow);color:var(--text-1)}.ds-paid{display:inline-flex;align-items:center;height:18px;padding:0 7px;border:1px solid transparent;border-radius:var(--radius-pill);background:linear-gradient(var(--surface-glass-strong),var(--surface-glass-strong)) padding-box,var(--gradient-outline) border-box;color:var(--text-2);font-size:var(--text-2xs);font-weight:var(--weight-semibold);letter-spacing:.01em;line-height:1}"
+    },
+    {
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip-neutral",
+      "description": "Pill tag for status and link type; send/land/danger tones use soft tints.",
+      "html": "<span class=\"ds-chip\">Wi-Fi</span> <span class=\"ds-chip ds-chip-send\">Sending</span> <span class=\"ds-chip ds-chip-land\">Receiving</span>",
+      "css": ".ds-chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px 0 10px;border-radius:var(--radius-pill);background:var(--surface-glass-strong);box-shadow:inset 0 1px 0 var(--highlight),0 0 0 1px var(--hairline),var(--shadow-1);color:var(--text-1);font-family:var(--font-sans);font-size:var(--text-sm);font-weight:var(--weight-medium);line-height:1}.ds-chip-send{background:var(--send-soft);box-shadow:inset 0 0 0 1px var(--send-ring);color:var(--text-send)}.ds-chip-land{background:var(--land-soft);box-shadow:inset 0 0 0 1px var(--land-ring);color:var(--text-land)}"
+    },
+    {
+      "name": "Stage (double bezel)",
+      "kind": "card",
+      "refersTo": "stage-plate",
+      "description": "Translucent shell holding a frosted plate; the one double-bezel surface.",
+      "html": "<div class=\"ds-shell\"><div class=\"ds-plate\"><h3 class=\"ds-title\">Sending to Desk PC</h3><p class=\"ds-sub\">Site photos and 2 more</p></div></div>",
+      "css": ".ds-shell{padding:var(--radius-stage-inset);border-radius:var(--radius-stage);background:var(--surface-shell);box-shadow:inset 0 0 0 1px var(--surface-shell-ring),var(--shadow-stage);font-family:var(--font-sans)}.ds-plate{padding:var(--space-7);border-radius:calc(var(--radius-stage) - var(--radius-stage-inset));background:var(--surface-glass);backdrop-filter:var(--glass-blur);box-shadow:inset 0 1px 0 var(--highlight),0 0 0 1px var(--hairline),var(--shadow-1)}.ds-title{margin:0;color:var(--text-1);font-size:var(--text-xl);font-weight:var(--weight-bold);font-stretch:var(--stretch-heading);letter-spacing:var(--tracking-heading);line-height:var(--leading-snug)}.ds-sub{margin:6px 0 0;color:var(--text-2);font-size:var(--text-base)}"
+    },
+    {
+      "name": "Progress readout",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Display percentage over a pill bar with the blue-lilac-orange fill.",
+      "html": "<div class=\"ds-prog\"><div class=\"ds-pct\">46<span>%</span></div><div class=\"ds-bar\"><div class=\"ds-fill\" style=\"width:46%\"></div></div></div>",
+      "css": ".ds-prog{display:flex;flex-direction:column;gap:12px;font-family:var(--font-sans);color:var(--text-1)}.ds-pct{font-size:var(--text-display);font-weight:var(--weight-heavy);font-stretch:var(--stretch-display);letter-spacing:var(--tracking-display);line-height:1;font-variant-numeric:tabular-nums}.ds-pct span{color:var(--text-3);font-size:var(--text-xl);font-weight:var(--weight-bold)}.ds-bar{position:relative;height:8px;border-radius:var(--radius-pill);background:var(--progress-track);box-shadow:var(--inset-shadow)}.ds-fill{position:absolute;inset:0 auto 0 0;border-radius:inherit;background:var(--progress-fill)}"
+    },
+    {
+      "name": "Details log",
+      "kind": "custom",
+      "refersTo": "log-terminal",
+      "description": "Mini terminal: recessed card, mono lines on a time/tag/text grid, toned by outcome.",
+      "html": "<div class=\"ds-log\"><div class=\"ds-line\"><span class=\"ds-t\">10:42:07</span><span class=\"ds-g\">link</span><span>wifi 5 GHz rtt 3 ms</span></div><div class=\"ds-line ds-ok\"><span class=\"ds-t\">10:42:09</span><span class=\"ds-g\">done</span><span>633 MB in 10.1 s</span></div></div>",
+      "css": ".ds-log{padding:12px 14px;border-radius:var(--radius-card);background:var(--log-bg);box-shadow:var(--inset-shadow),inset 0 0 0 1px var(--log-ring);color:var(--log-text);font-family:var(--font-mono);font-size:var(--text-xs);line-height:1.65}.ds-line{display:grid;grid-template-columns:8ch 7.5ch 1fr;column-gap:1.5ch}.ds-t{color:var(--log-time);font-variant-numeric:tabular-nums}.ds-g{color:var(--log-tag);font-weight:500}.ds-ok .ds-g,.ds-ok span:last-child{color:var(--log-ok)}"
+    },
+    {
+      "name": "Edge glow (sending, still)",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Signature: the window edge carries the transfer's light. Shown here as the reduced-motion still ring.",
+      "html": "<div class=\"ds-win\"><div class=\"ds-halo\"></div><div class=\"ds-pane\">Sending</div></div>",
+      "css": ".ds-win{position:relative;width:240px;height:140px;border-radius:var(--radius-window-mac);isolation:isolate}.ds-pane{position:relative;z-index:1;height:100%;display:grid;place-items:center;border-radius:inherit;background:var(--window-ground);box-shadow:var(--window-shadow),inset 0 0 0 var(--glow-ring-width) var(--glow-send),inset 0 0 34px -6px var(--glow-inner-send);color:var(--text-1);font-family:var(--font-sans);font-weight:var(--weight-bold)}.ds-halo{position:absolute;inset:-3px;border-radius:calc(var(--radius-window-mac) + 3px);background:linear-gradient(135deg,var(--glow-send),var(--glow-tail));filter:blur(var(--glow-halo-blur));opacity:.6}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Light Between Two Machines",
+    "overview": "A transfer is light passing from one window to the other. The window itself is the indicator: during a transfer its edge carries a blue comet out of the sender and fills the receiver with orange, ending in an arrival flash. Everything else stays quiet so that light reads: airy cool-white ground with a faint blue-to-orange wash settling into a rose-lilac horizon, a frosted white stage in a double bezel, ink-navy text, and soft mechanical keycaps sitting in a recessed tray.\n\nDark is the same world at night: a near-black canvas, deep-navy window ground with a blue horizon glow rising from the bottom edge, the same keys backlit more strongly, and the edge glow reading as real light. Density is calm desktop-utility: one window at 552px, one stage, a short header, a log that stays folded until asked for.\n\nEach window is native to its OS (traffic lights and centred title on macOS, left title with app mark and caption buttons on Windows; window radius and action order follow the OS) while the brand inside is identical.",
+    "keyCharacteristics": [
+      "Blue is the sending end, orange the receiving end; neutrals carry everything else.",
+      "The window edge is the progress indicator; the stage bar is the precise readout.",
+      "Buttons are softened keycaps with real travel, a skirt, a cast shadow and a backlight.",
+      "Wide-bold Mona Sans headings, normal-width body, Geist Mono only for machine output.",
+      "Frosted surfaces that go solid under reduced transparency; motion that becomes still light under reduced motion."
+    ],
+    "rules": [
+      {
+        "name": "The Two Ends Rule",
+        "body": "Blue means the sending end and orange means the receiving end, everywhere: keys, chips, tiles, glow, log lines. Never use either as decoration or as a generic \"primary\" colour. A screen with no transfer meaning should be almost entirely neutral.",
+        "section": "colors"
+      },
+      {
+        "name": "The Blend Is a Journey Rule",
+        "body": "The blue-to-orange gradient (via lilac) only appears where something travels from one end to the other: the progress fill, the edge-glow comet, the arrival flash, the brand mark's stroke, and the Paid pill's outline. It is never a background fill on a control.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Outline Rule",
+        "body": "Among controls and tags, exactly one element carries the gradient outline: the Paid pill. The window edge glow is light that marks state and only shows during a transfer; it does not count toward this rule and is not an excuse for a second gradient-bordered control.",
+        "section": "colors"
+      },
+      {
+        "name": "The Machine Voice Rule",
+        "body": "Geist Mono appears only for what the machine produced or will execute: log lines, paths, commands. Never for labels, numbers in the UI or decoration; UI numbers use Mona Sans with tabular figures.",
+        "section": "typography"
+      },
+      {
+        "name": "The Wide Means Heading Rule",
+        "body": "The width axis goes above 104% only for the three heading roles. Body text always sits at 100%.",
+        "section": "typography"
+      },
+      {
+        "name": "The Docked Actions Rule",
+        "body": "A state's actions stay docked below its scrolling body; content scrolls, the action row does not. Only centred short states keep actions inline with their content.",
+        "section": "layout"
+      },
+      {
+        "name": "The Native Order Rule",
+        "body": "Action groups are right-aligned on both OSes, passed primary-first: macOS places the primary key rightmost, Windows places it leftmost. Never hard-code one order.",
+        "section": "layout"
+      },
+      {
+        "name": "The Light Is Not a Shadow Rule",
+        "body": "Coloured glow is light from a source: under a lit key, around a window during a transfer, inside the drop portal. Never use a coloured box-shadow as general elevation.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Glass Goes Solid Rule",
+        "body": "Under `prefers-reduced-transparency`, glass and shell surfaces become solid (white/#f1f3f7 light, navy-800/navy-850 dark) and blur is removed. Any new frosted surface must read from `--surface-glass`/`--glass-blur` so it inherits this.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Nested Radius Rule",
+        "body": "An inner surface's radius equals its container's radius minus the gap between them. Never put a larger radius inside a smaller one.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Settled Spring Rule",
+        "body": "Interface motion uses critically damped springs (bounce 0, about 0.42s) and `cubic-bezier(0.16, 1, 0.3, 1)` easing. Overshoot is reserved for physical travel: a key's release springs back (bounce 0.45) because a press carries momentum, and the sliding switch thumb settles with a barely perceptible layout spring (bounce 0.08). Nothing else overshoots.",
+        "section": "components"
+      },
+      {
+        "name": "The Still Light Rule",
+        "body": "Under reduced motion every travelling or orbiting effect becomes a static state carrying the same information (still ring, breathing spinner, no live-dot pulse, stage states cross-fade without blur or rise); CSS transitions collapse to 1ms.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "**Do** change the look in `src/styles/tokens.css` and `src/styles/motion.ts`; components read semantic tokens only, including radii, tone rings and inset shadows. Add a token rather than a literal value in a module.",
+      "**Do** use blue for anything about the sending end and orange for anything about the receiving end, including log lines, chips and tile icons.",
+      "**Do** build every new button as a Key (plain, ink or lit) and give each action group at most one ink key.",
+      "**Do** order actions primary-first and let the OS decide which side the primary sits on; dock them below the scrolling pane body.",
+      "**Do** nest radii as container minus gap (stage 28px, plate 22px).",
+      "**Do** draw edges with 1px hairline rings and a top highlight instead of borders.",
+      "**Do** keep every frosted surface on `--surface-glass` and `--glass-blur` so it goes solid under reduced transparency.",
+      "**Do** give every travelling or orbiting effect a still equivalent under reduced motion."
+    ],
+    "donts": [
+      "**Don't** use blue or orange as decoration, or as a generic brand fill on a neutral control.",
+      "**Don't** add a second gradient-outlined control or tag; the Paid pill is the one.",
+      "**Don't** set UI labels, numbers or headings in Geist Mono; it is for logs, paths and commands only.",
+      "**Don't** use the width axis above 104% for body text.",
+      "**Don't** add overshoot beyond a key's release and the switch thumb's slight layout spring.",
+      "**Don't** use Apple or Windows logos, or any brand elements from reference material; the brand mark is the only identity asset.",
+      "**Don't** put a larger radius inside a smaller one, or make the stage anything other than the largest in-app radius."
+    ]
+  }
+}

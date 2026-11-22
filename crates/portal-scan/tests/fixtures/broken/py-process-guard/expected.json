@@ -1,0 +1,17 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "process-guard",
+      "file": "crunch.py",
+      "line": 6,
+      "state": "willNeedAFix"
+    },
+    {
+      "rule": "process-guard",
+      "file": "batch.py",
+      "line": 7,
+      "state": "willNeedAFix"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "python3-command",
+      "file": "package.json"
+    },
+    {
+      "rule": "make-on-windows",
+      "file": "Makefile"
+    }
+  ]
+}

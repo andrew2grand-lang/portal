@@ -1,0 +1,13 @@
+{
+  "executable": [
+    "run.sh"
+  ],
+  "sparse": {
+    ".venv/lib/python3.12/site-packages/torch/lib/libtorch_cpu.dylib": 1237319680,
+    ".venv/lib/python3.12/site-packages/onnxruntime/capi/libonnxruntime.dylib": 247463936,
+    ".venv/lib/python3.12/site-packages/chromadb/rust.abi3.so": 100663296,
+    ".venv/lib/python3.12/site-packages/numpy/core/_multiarray.so": 39845888,
+    "data/index/chroma.sqlite3": 222298112,
+    "app/__pycache__/main.cpython-312.pyc": 6144
+  }
+}

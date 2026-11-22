@@ -1,0 +1,48 @@
+/* The update notice: the link pill's material, as a short row under the
+   header. Calm: no colour, no motion beyond arriving. */
+.notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+  border-radius: var(--radius-card);
+  background: var(--surface-glass-strong);
+  box-shadow:
+    inset 0 1px 0 var(--highlight),
+    0 0 0 1px var(--hairline),
+    var(--shadow-1);
+}
+
+.icon {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  color: var(--text-2);
+}
+
+.text {
+  display: flex;
+  flex: 1 1 200px;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  color: var(--text-1);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.sub {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+
+.keys {
+  display: flex;
+  flex: none;
+  gap: var(--space-2);
+  margin-left: auto;
+}

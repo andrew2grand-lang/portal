@@ -1,0 +1,217 @@
+{
+  "aiUsage": {
+    "estimate": true,
+    "level": "rare",
+    "reason": "Every fix found follows a known pattern; the AI would step in only if a check failed."
+  },
+  "counts": {
+    "blocker": 0,
+    "couldntCheck": 0,
+    "info": 0,
+    "needsYou": 0,
+    "occurrences": 5,
+    "omitted": 0,
+    "willNeedAFix": 1
+  },
+  "durationMs": 0,
+  "ecosystems": [
+    {
+      "evidence": [
+        "package-lock.json",
+        "package.json"
+      ],
+      "files": 0,
+      "kind": "node",
+      "name": "JavaScript / TypeScript",
+      "support": "deep"
+    }
+  ],
+  "findings": [
+    {
+      "autoFixable": true,
+      "category": "scriptsLineEndings",
+      "evidence": "\"clean\": \"rm -rf dist\"",
+      "file": "package.json",
+      "fixPattern": "Use rimraf (or `node -e \"fs.rmSync(…)\"`) instead.",
+      "id": "npm-script-unix:package.json:5",
+      "line": 5,
+      "rule": "npm-script-unix",
+      "severity": "medium",
+      "state": "willNeedAFix",
+      "targets": [
+        "windows"
+      ],
+      "title": "npm script uses Unix shell features",
+      "why": "On Windows, npm runs scripts with cmd.exe, which has no `rm` command."
+    },
+    {
+      "autoFixable": true,
+      "category": "scriptsLineEndings",
+      "evidence": "\"build\": \"NODE_ENV=production vite build\"",
+      "file": "package.json",
+      "fixPattern": "Use cross-env: `cross-env NODE_ENV=production node server.js`.",
+      "id": "npm-script-unix:package.json:6",
+      "line": 6,
+      "rule": "npm-script-unix",
+      "severity": "medium",
+      "state": "willNeedAFix",
+      "targets": [
+        "windows"
+      ],
+      "title": "npm script uses Unix shell features",
+      "why": "On Windows, npm runs scripts with cmd.exe, which doesn't understand `VAR=value` in front of a command."
+    },
+    {
+      "autoFixable": true,
+      "category": "scriptsLineEndings",
+      "evidence": "\"start\": \"export PORT=3000 && node server.js\"",
+      "file": "package.json",
+      "fixPattern": "Use cross-env to set variables for one command, or a .env file loaded by the app.",
+      "id": "npm-script-unix:package.json:7",
+      "line": 7,
+      "rule": "npm-script-unix",
+      "severity": "medium",
+      "state": "willNeedAFix",
+      "targets": [
+        "windows"
+      ],
+      "title": "npm script uses Unix shell features",
+      "why": "On Windows, npm runs scripts with cmd.exe, which has no `export`."
+    },
+    {
+      "autoFixable": true,
+      "category": "scriptsLineEndings",
+      "evidence": "\"lint\": \"eslint 'src/**/*.ts'\"",
+      "file": "package.json",
+      "fixPattern": "Use double quotes (escaped as \\\" inside package.json).",
+      "id": "npm-script-unix:package.json:8",
+      "line": 8,
+      "rule": "npm-script-unix",
+      "severity": "medium",
+      "state": "willNeedAFix",
+      "targets": [
+        "windows"
+      ],
+      "title": "npm script uses Unix shell features",
+      "why": "On Windows, npm runs scripts with cmd.exe, which doesn't treat single quotes as quotes."
+    },
+    {
+      "autoFixable": true,
+      "category": "scriptsLineEndings",
+      "evidence": "\"deploy\": \"node deploy.js $TARGET\"",
+      "file": "package.json",
+      "fixPattern": "Use cross-env (which accepts $VAR on both), or read the variable inside the program.",
+      "id": "npm-script-unix:package.json:9",
+      "line": 9,
+      "rule": "npm-script-unix",
+      "severity": "medium",
+      "state": "willNeedAFix",
+      "targets": [
+        "windows"
+      ],
+      "title": "npm script uses Unix shell features",
+      "why": "On Windows, npm runs scripts with cmd.exe, which writes variables as %VAR%, not $VAR."
+    }
+  ],
+  "handoff": null,
+  "headline": "No blockers found. 1 thing will need a fix.",
+  "leftOut": {
+    "bytes": 0,
+    "files": 0,
+    "items": []
+  },
+  "network": {
+    "hosts": [],
+    "online": false
+  },
+  "notes": [
+    "Nothing in the project was run: no code, scripts, notebooks or package managers.",
+    "Offline: nothing was looked up on the internet."
+  ],
+  "packages": [
+    {
+      "declared": 1,
+      "installed": 0,
+      "items": [
+        {
+          "name": "vite",
+          "version": "^5.4.0"
+        }
+      ],
+      "kind": "node",
+      "lockfile": "package-lock.json",
+      "source": "package.json"
+    }
+  ],
+  "project": {
+    "name": "npm-scripts",
+    "path": "<root>"
+  },
+  "runCommands": [
+    {
+      "command": "NODE_ENV=production vite build",
+      "file": "package.json",
+      "kind": "npm-script",
+      "name": "build"
+    },
+    {
+      "command": "rm -rf dist",
+      "file": "package.json",
+      "kind": "npm-script",
+      "name": "clean"
+    },
+    {
+      "command": "node deploy.js $TARGET",
+      "file": "package.json",
+      "kind": "npm-script",
+      "name": "deploy"
+    },
+    {
+      "command": "cross-env NODE_ENV=test vitest run",
+      "file": "package.json",
+      "kind": "npm-script",
+      "name": "fine"
+    },
+    {
+      "command": "eslint 'src/**/*.ts'",
+      "file": "package.json",
+      "kind": "npm-script",
+      "name": "lint"
+    },
+    {
+      "command": "export PORT=3000 && node server.js",
+      "file": "package.json",
+      "kind": "npm-script",
+      "name": "start"
+    }
+  ],
+  "runtimes": [
+    {
+      "installedHere": null,
+      "kind": "node",
+      "requested": null,
+      "requestedFrom": null
+    }
+  ],
+  "scannedAt": "<time>",
+  "schemaVersion": 1,
+  "secrets": [],
+  "services": [],
+  "source": "other",
+  "stats": {
+    "bytes": 0,
+    "files": 2,
+    "parsedFiles": 0,
+    "skippedFiles": 0,
+    "unreadable": []
+  },
+  "target": "windows",
+  "tier": {
+    "reason": "Scripts: 6 npm scripts",
+    "tier": "scripts"
+  },
+  "tool": {
+    "name": "portal-scan",
+    "version": "<version>"
+  }
+}

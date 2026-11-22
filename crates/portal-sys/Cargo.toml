@@ -1,0 +1,43 @@
+[package]
+name = "portal-sys"
+description = "Small, safe wrappers over the OS APIs Portal needs (no-replace rename, DPAPI, keep-awake, firewall and network-profile probes)."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+png = "=0.18.1"
+
+[target.'cfg(unix)'.dependencies]
+libc.workspace = true
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "=0.6.5"
+objc2-foundation = { version = "=0.3.2", default-features = false, features = ["std", "NSProcessInfo", "NSString", "NSObject", "NSData", "NSArray", "NSDictionary", "NSEnumerator", "NSURL"] }
+objc2-app-kit = { version = "=0.3.2", default-features = false, features = ["std", "NSPasteboard", "NSPasteboardItem", "NSBitmapImageRep", "NSImageRep"] }
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "=0.62.2", features = [
+  "Win32_Foundation",
+  "Win32_Security_Cryptography",
+  "Win32_Storage_FileSystem",
+  "Win32_System_Com",
+  "Win32_System_Ole",
+  "Win32_System_Variant",
+  "Win32_System_Memory",
+  "Win32_NetworkManagement_WindowsFirewall",
+  "Win32_Networking_NetworkListManager",
+  "Win32_NetworkManagement_IpHelper",
+  "Win32_NetworkManagement_Ndis",
+  "Win32_Networking_WinSock",
+  "Win32_System_Registry",
+  "Win32_System_SystemInformation",
+  "Win32_System_Power",
+  "Win32_System_Threading",
+  "Win32_System_DataExchange",
+  "Win32_UI_WindowsAndMessaging",
+] }
+
+[dev-dependencies]
+tempfile.workspace = true

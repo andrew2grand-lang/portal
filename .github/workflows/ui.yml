@@ -1,0 +1,115 @@
+# Types, lint and unit tests for the app and the design lab, on Linux (the
+# cheapest runner), on every push. App builds run in build.yml.
+name: ui
+
+on:
+  push:
+  workflow_dispatch:
+
+concurrency:
+  group: ui-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ui:
+    name: Types, lint, unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx tsc -b
+      - run: npm run lint
+      - run: npx vitest run
+      - run: npm run check:bridge
+
+  # Heavy suites: main and manual runs only (Mission 04 §0, CI budget)
+  glow-chromium:
+    name: Glow on the compositor (Chromium, Linux)
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: node scripts/with-dev-server.mjs scripts/glow-trace.mjs
+
+  glow-edge:
+    name: Glow on the compositor (Edge on Windows, the WebView2 engine)
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: node scripts/with-dev-server.mjs scripts/glow-trace.mjs
+        env:
+          GLOW_CHANNEL: msedge
+
+  # Mission 04 §1.5: no text overlaps or is cut off, in any state, at the four
+  # sizes, with 1 and 6 devices. Each chrome in its own OS's engine.
+  overlap-mac:
+    name: No overlaps (Mac chrome, WebKit on macOS)
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install webkit
+      - run: node scripts/with-dev-server.mjs scripts/overlap.mjs --engine=webkit --os=mac --themes=light
+
+  overlap-win:
+    name: No overlaps (Windows chrome, Edge on Windows)
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: node scripts/with-dev-server.mjs scripts/overlap.mjs --engine=msedge --os=win --themes=light
+
+  # Mission 04 §4.3: which markers Firefox, Edge and Chrome put on copies, in
+  # normal and private windows (informational: it records, it doesn't judge).
+  browser-markers:
+    name: Clipboard markers browsers set (Windows)
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install firefox
+      - run: cargo build -p portal-sys --example clip_formats --locked
+      - run: node scripts/browser-markers.mjs
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: browser-markers
+          path: browser-markers.json

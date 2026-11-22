@@ -1,0 +1,47 @@
+{
+  "name": "portal",
+  "private": true,
+  "version": "0.5.0-beta.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "lab": "cargo build -q --release -p portal-scan --bin portal-scan && vite --config vite.lab.config.ts",
+    "lab:demos": "node design-lab/scripts/scan-demos.mjs",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "shots": "node scripts/shots.mjs",
+    "flow": "node scripts/flow.mjs",
+    "verify": "node scripts/verify.mjs",
+    "test": "vitest run",
+    "tauri": "tauri",
+    "check:bridge": "node scripts/check-bridge.mjs",
+    "release:publish": "node scripts/publish-release.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/geist-mono": "^5.3.0",
+    "@fontsource-variable/mona-sans": "^5.3.0",
+    "@phosphor-icons/react": "^2.1.10",
+    "@tauri-apps/api": "2.12.2",
+    "@tauri-apps/plugin-autostart": "2.7.0",
+    "@tauri-apps/plugin-dialog": "2.8.1",
+    "@tauri-apps/plugin-notification": "2.5.1",
+    "@tauri-apps/plugin-opener": "2.7.0",
+    "motion": "^14.6.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "thinking-orbs": "0.3.2"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.12.1",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "oxlint": "^1.88.0",
+    "playwright": "^1.64.1",
+    "typescript": "~6.0.3",
+    "vite": "^8.3.4",
+    "vitest": "5.0.3"
+  }
+}

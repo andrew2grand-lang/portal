@@ -1,0 +1,17 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "path-concat-slash",
+      "file": "paths.py",
+      "line": 4,
+      "state": "willNeedAFix"
+    },
+    {
+      "rule": "path-concat-slash",
+      "file": "paths.py",
+      "line": 5,
+      "state": "willNeedAFix"
+    }
+  ]
+}

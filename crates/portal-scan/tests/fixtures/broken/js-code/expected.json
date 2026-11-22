@@ -1,0 +1,30 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "absolute-path",
+      "file": "server.js",
+      "line": 3
+    },
+    {
+      "rule": "path-concat-slash",
+      "file": "server.js",
+      "line": 4
+    },
+    {
+      "rule": "path-concat-slash",
+      "file": "server.js",
+      "line": 5
+    },
+    {
+      "rule": "env-var",
+      "file": "server.js",
+      "line": 6
+    },
+    {
+      "rule": "shell-command",
+      "file": "server.js",
+      "line": 7
+    }
+  ]
+}

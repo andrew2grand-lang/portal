@@ -1,0 +1,27 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "absolute-path",
+      "file": "load.py",
+      "line": 2,
+      "state": "willNeedAFix"
+    },
+    {
+      "rule": "absolute-path",
+      "file": "load.py",
+      "line": 3,
+      "state": "willNeedAFix"
+    },
+    {
+      "rule": "absolute-path",
+      "file": "settings.yaml",
+      "line": 2
+    },
+    {
+      "rule": "absolute-path",
+      "file": "config.json",
+      "line": 3
+    }
+  ]
+}

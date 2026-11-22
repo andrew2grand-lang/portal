@@ -1,0 +1,15 @@
+{
+  "executable": [
+    "scripts/deploy.sh"
+  ],
+  "sparse": {
+    "node_modules/@esbuild/darwin-arm64/bin/esbuild": 10485760,
+    "node_modules/@rollup/rollup-darwin-arm64/rollup.darwin-arm64.node": 3145728,
+    "node_modules/typescript/lib/typescript.js": 9437184,
+    "node_modules/.vite/deps/react-dom.js": 2097152,
+    "node_modules/react-dom/cjs/react-dom.development.js": 1048576,
+    "node_modules/vite/dist/node/chunks/dep.js": 2097152,
+    "node_modules/.cache/eslint/cache.bin": 293601280,
+    "dist/assets/index.js": 1048576
+  }
+}

@@ -1,0 +1,218 @@
+/* Keycap. Geometry comes from --h / --px / --r; colour from the --key-*
+   tokens in tokens.css, swapped per variant and tone below. */
+.key {
+  --h: 40px;
+  --px: 16px;
+  --r: var(--radius-key);
+  --travel: 2px;
+  --fs: var(--text-sm);
+  --icon: 16px;
+
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  height: calc(var(--h) + var(--travel));
+  margin: 0;
+  padding: 0 0 var(--travel);
+  border: 0;
+  border-radius: var(--r);
+  background: none;
+  cursor: pointer;
+  isolation: isolate;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.key[data-size='sm'] {
+  --h: 32px;
+  --px: 12px;
+  --r: var(--radius-key-sm);
+  --icon: 15px;
+}
+.key[data-size='lg'] {
+  --h: 44px;
+  --px: 20px;
+  --fs: var(--text-base);
+}
+.key[data-icon-only] {
+  --px: 0px;
+  width: var(--h);
+}
+
+.glow,
+.drop,
+.base {
+  position: absolute;
+  inset: var(--travel) 0 0;
+  border-radius: var(--r);
+  pointer-events: none;
+}
+
+.glow {
+  z-index: -4;
+  inset: 35% 8% -8px;
+  background: var(--key-glow, transparent);
+  filter: blur(12px);
+  opacity: 0;
+  transition: opacity var(--dur-glow) var(--ease-out);
+}
+
+.drop {
+  z-index: -3;
+  box-shadow: var(--key-drop);
+}
+
+.base {
+  z-index: -2;
+  background: var(--key-skirt);
+  box-shadow: var(--key-skirt-edge);
+  transition: background-color var(--dur-glow) var(--ease-out);
+}
+
+.cap {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: var(--h);
+  border-radius: var(--r);
+}
+
+.face {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  height: 100%;
+  padding: 0 var(--px);
+  border-radius: var(--r);
+  background: var(--key-face);
+  box-shadow: var(--key-bevel);
+  color: var(--key-text);
+  font-size: var(--fs);
+  font-weight: var(--weight-semibold);
+  font-stretch: 104%;
+  letter-spacing: -0.006em;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    color var(--dur-slow) var(--ease-out),
+    translate var(--dur-base) var(--ease-out),
+    filter var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+}
+
+/* Backlight layer: fades in so a key "turns on" rather than snapping */
+.face::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--key-lit-face, transparent);
+  opacity: 0;
+  transition: opacity var(--dur-glow) var(--ease-out);
+}
+
+.icon,
+.label {
+  position: relative;
+  display: inline-flex;
+}
+.icon svg {
+  width: var(--icon);
+  height: var(--icon);
+}
+
+.led {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--key-led, transparent);
+  box-shadow: 0 0 6px 1px var(--key-led, transparent);
+  opacity: 0;
+  transition: opacity var(--dur-glow) var(--ease-out);
+}
+
+.key:hover .face {
+  filter: var(--key-hover);
+}
+
+.key:focus-visible {
+  box-shadow: none;
+}
+.key:focus-visible .face {
+  box-shadow: var(--key-bevel), var(--focus-ring);
+}
+
+/* ---- Variants ---------------------------------------------------------- */
+.key[data-variant='ink'] {
+  --key-face: var(--key-ink-face);
+  --key-skirt: var(--key-ink-skirt);
+  --key-bevel: var(--key-ink-bevel);
+  --key-drop: var(--key-ink-drop);
+  --key-text: var(--key-ink-text);
+}
+
+/* Removes things everywhere (Clear Shelf): the plain cap, its words in red */
+.key[data-variant='danger'] {
+  --key-text: var(--text-danger);
+}
+
+.key[data-tone='blue'] {
+  --key-lit-face: var(--key-lit-face-blue);
+  --key-glow: var(--key-lit-glow-blue);
+  --key-led: var(--key-led-blue);
+  --key-lit-text: var(--key-lit-text-blue);
+}
+.key[data-tone='orange'] {
+  --key-lit-face: var(--key-lit-face-orange);
+  --key-glow: var(--key-lit-glow-orange);
+  --key-led: var(--key-led-orange);
+  --key-lit-text: var(--key-lit-text-orange);
+}
+.key[data-tone='dual'] {
+  --key-lit-face: var(--key-lit-face-dual);
+  --key-glow: var(--key-lit-glow-dual);
+  --key-led: var(--key-led-blue);
+  --key-lit-text: var(--key-lit-text-dual);
+}
+
+/* A selected key latches: it stays seated lower than its neighbours */
+.key[data-variant='lit'] .face {
+  color: var(--key-lit-text);
+  translate: 0 1.5px;
+}
+.key[data-variant='lit'] .drop {
+  box-shadow: var(--key-drop-latched, var(--key-drop));
+}
+.key[data-variant='lit'] .face::before,
+.key[data-variant='lit'] .glow,
+.key[data-variant='lit'] .led {
+  opacity: 1;
+}
+/* The skirt picks up the backlight, like light leaking from under a cap */
+.key[data-variant='lit'] .base {
+  background: color-mix(in srgb, var(--key-skirt) 72%, var(--key-led));
+}
+.key[data-variant='lit'][data-tone='dual'] .led {
+  background: linear-gradient(90deg, var(--key-led-blue), var(--key-led-orange));
+  box-shadow:
+    -2px 0 6px var(--key-led-blue),
+    2px 0 6px var(--key-led-orange);
+}
+
+/* ---- Disabled ------------------------------------------------------------ */
+.key:disabled {
+  cursor: not-allowed;
+}
+.key:disabled .face {
+  color: var(--text-3);
+  filter: saturate(0.4);
+}
+.key:disabled .drop {
+  opacity: 0.4;
+}

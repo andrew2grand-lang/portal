@@ -1,0 +1,9 @@
+{
+  "device_name": "Fixture PC",
+  "receive_dir": "/var/folders/g4/btqy3ym110l20f_swq6l47vw0000gp/T/.tmpgePOTA/Received",
+  "skip_junk": true,
+  "auto_update": true,
+  "clipboard_sync": false,
+  "clipboard_sync_at": 0,
+  "clipboard_shortcut": null
+}

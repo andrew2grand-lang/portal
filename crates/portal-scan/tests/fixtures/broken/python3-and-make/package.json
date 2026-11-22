@@ -1,0 +1,6 @@
+{
+  "name": "ml",
+  "scripts": {
+    "train": "python3 train.py --epochs 3"
+  }
+}

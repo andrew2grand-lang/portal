@@ -1,0 +1,23 @@
+{
+  "target": "macos",
+  "expect": [
+    {
+      "rule": "windows-module",
+      "file": "settings.py",
+      "line": 1,
+      "state": "blocker"
+    },
+    {
+      "rule": "windows-module",
+      "file": "settings.py",
+      "line": 2,
+      "state": "blocker"
+    },
+    {
+      "rule": "windows-module",
+      "file": "settings.py",
+      "line": 5,
+      "state": "willNeedAFix"
+    }
+  ]
+}

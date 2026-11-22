@@ -1,0 +1,902 @@
+/* ==========================================================================
+   Project Send parts. Same tokens, radii and depth as the app's stage
+   (src/window/stage/Stage.module.css); only the parts that don't exist yet.
+   ========================================================================== */
+
+/* ---- Status dots: one per honest state -------------------------------------- */
+.dot {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--surface-sunken);
+  color: var(--text-2);
+}
+.dot svg {
+  width: 12px;
+  height: 12px;
+}
+.dot[data-tone='blocker'],
+.dot[data-tone='failed'] {
+  background: var(--danger-soft);
+  color: var(--text-danger);
+}
+/* A fix lands on the receiving end: orange, like the conversion checklist */
+.dot[data-tone='willNeedAFix'] {
+  background: var(--land-soft);
+  color: var(--text-land);
+}
+/* Only you can do it: the ink of the primary key */
+.dot[data-tone='needsYou'] {
+  background: var(--text-1);
+  color: var(--text-on-ink);
+}
+.dot[data-tone='info'] {
+  color: var(--text-3);
+}
+.dot[data-tone='proved'] {
+  background: var(--send-soft);
+  color: var(--text-send);
+}
+.dot[data-tone='pending'] {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--hairline-strong);
+}
+.dot[data-tone='running'] {
+  background: transparent;
+  color: var(--text-land);
+}
+.dot[data-size='sm'] {
+  width: 18px;
+  height: 18px;
+}
+.dot[data-size='sm'] svg {
+  width: 10px;
+  height: 10px;
+}
+
+/* ---- Tier + estimate ------------------------------------------------------- */
+.verdict {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
+.verdictText {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+.estimate {
+  color: var(--text-3);
+  font-size: var(--text-sm);
+}
+.estimate strong {
+  color: var(--text-2);
+  font-weight: var(--weight-semibold);
+}
+
+/* ---- Finding groups --------------------------------------------------------- */
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.groupHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+}
+.groupCount {
+  color: var(--text-3);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+.groupNote {
+  margin: -2px 0 6px 32px;
+  color: var(--text-3);
+  font-size: var(--text-sm);
+}
+
+.findings {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 0 32px;
+  padding: 0;
+  list-style: none;
+}
+.finding + .finding {
+  box-shadow: 0 -1px 0 var(--hairline);
+}
+.findingHead {
+  display: grid;
+  grid-template-columns: 1fr auto 16px;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 0;
+  border: 0;
+  background: none;
+  color: var(--text-1);
+  font: inherit;
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--radius-focus);
+}
+.findingHead:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+.findingMeta {
+  color: var(--text-3);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-regular);
+  white-space: nowrap;
+}
+.caret {
+  width: 14px;
+  height: 14px;
+  color: var(--text-3);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.caret[data-open] {
+  transform: rotate(180deg);
+}
+.findingBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 0 14px;
+  overflow: hidden;
+}
+.why {
+  max-width: 52ch;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  text-wrap: pretty;
+}
+.fix {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: 8px;
+  max-width: 52ch;
+  color: var(--text-1);
+  font-size: var(--text-sm);
+  text-wrap: pretty;
+}
+.fix svg {
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  color: var(--text-3);
+}
+.fixable {
+  color: var(--text-3);
+  font-size: var(--text-xs);
+}
+
+/* Places: file:line and the line itself, in the machine's voice */
+.places {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  border-radius: var(--radius-tile);
+  background: var(--log-bg);
+  box-shadow:
+    var(--inset-shadow),
+    inset 0 0 0 1px var(--log-ring);
+}
+.places li {
+  display: grid;
+  gap: 2px;
+  padding: 6px 12px;
+  min-width: 0;
+}
+.places li + li {
+  box-shadow: 0 -1px 0 var(--log-ring);
+}
+.where {
+  color: var(--log-time);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+.code {
+  overflow: hidden;
+  color: var(--log-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.55;
+  white-space: pre;
+  text-overflow: ellipsis;
+}
+.more {
+  color: var(--text-3);
+  font-size: var(--text-xs);
+}
+
+/* ---- Rows with a tile: won't be sent, secrets, hand-off -------------------------- */
+.note {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 4px 12px;
+  align-items: start;
+}
+.noteTile {
+  display: grid;
+  grid-row: span 2;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-tile-sm);
+  background: var(--surface-tile);
+  box-shadow: var(--shadow-tile);
+  color: var(--text-2);
+}
+.noteTile svg {
+  width: 18px;
+  height: 18px;
+}
+.noteTitle {
+  padding-top: 1px;
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+}
+.noteText {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  text-wrap: pretty;
+}
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+}
+.sizes {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.sizes li {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+.sizes li > span:last-child {
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* A thin rule between report sections, like settings sections */
+.rule {
+  height: 1px;
+  margin: 2px 0;
+  background: var(--hairline);
+}
+
+/* ---- Pro call to action ------------------------------------------------------- */
+.pro {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: var(--radius-card);
+  background: var(--surface-sunken);
+}
+.proTitle {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+}
+.proText {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  text-wrap: pretty;
+}
+
+/* ---- Step list with counts (scanning, pipeline) ------------------------------ */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.step {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  align-items: start;
+  column-gap: 11px;
+  row-gap: 3px;
+}
+.step > .dot {
+  grid-row: span 2;
+}
+.stepLabel {
+  line-height: 22px;
+  font-size: var(--text-base);
+}
+.step[data-state='pending'] .stepLabel {
+  color: var(--text-3);
+}
+.step[data-state='running'] .stepLabel {
+  font-weight: var(--weight-semibold);
+}
+.stepCount {
+  line-height: 22px;
+  color: var(--text-3);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.stepDetail {
+  grid-column: 2 / 4;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+.current {
+  display: block;
+  overflow: hidden;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.elapsed {
+  color: var(--text-3);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Conversion pipeline: seven steps in one row ------------------------------ */
+.stepper {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.stepper li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+/* The track between steps: a hairline, solid once walked */
+.stepper li + li::before {
+  content: '';
+  position: absolute;
+  top: 8.5px;
+  right: calc(50% + 13px);
+  left: calc(-50% + 13px);
+  height: 1px;
+  background: var(--hairline-strong);
+}
+.stepper li[data-state='done'] + li::before,
+.stepper li[data-state='running'] + li[data-state='running']::before {
+  background: var(--text-3);
+}
+.stepper li[data-optional]::before {
+  background: repeating-linear-gradient(90deg, var(--hairline-strong) 0 3px, transparent 3px 6px);
+}
+.stepperLabel {
+  overflow: hidden;
+  max-width: 100%;
+  color: var(--text-3);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.stepper li[data-state='done'] .stepperLabel {
+  color: var(--text-2);
+}
+.stepper li[data-state='running'] .stepperLabel {
+  color: var(--text-1);
+  font-weight: var(--weight-bold);
+}
+
+/* ---- Diffs ---------------------------------------------------------------------- */
+.changes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.change {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.changeHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+}
+.changeToggle {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 4px 0;
+  border: 0;
+  border-radius: var(--radius-focus);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.changeToggle:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+.inlineKey {
+  align-self: flex-start;
+}
+.changeText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.changeFile {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-1);
+}
+.changeSummary {
+  flex: 1;
+  min-width: 12ch;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+.change[data-undone] .diff,
+.change[data-undone] .changeSummary {
+  opacity: 0.45;
+}
+
+.diff {
+  margin: 0;
+  padding: 6px 0;
+  overflow-x: auto;
+  border-radius: var(--radius-tile);
+  background: var(--log-bg);
+  box-shadow:
+    var(--inset-shadow),
+    inset 0 0 0 1px var(--log-ring);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.6;
+  list-style: none;
+}
+.diff li {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  padding-right: 12px;
+  color: var(--log-text);
+  white-space: pre;
+}
+.diff li::before {
+  content: ' ';
+  text-align: center;
+  color: var(--log-time);
+}
+/* Added lines are the fix landing: the receiving end's orange */
+.diff li[data-kind='add'] {
+  background: var(--land-soft);
+  color: var(--text-1);
+}
+.diff li[data-kind='add']::before {
+  content: '+';
+  color: var(--text-land);
+}
+.diff li[data-kind='del'] {
+  color: var(--text-3);
+}
+.diff li[data-kind='del']::before {
+  content: '−';
+}
+.diff li[data-kind='del'] .diffText {
+  text-decoration: line-through;
+  text-decoration-color: var(--text-3);
+}
+
+/* ---- AI activity -------------------------------------------------------------------- */
+.ai {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--radius-card);
+  background: var(--surface-sunken);
+}
+.aiHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.aiTitle {
+  flex: 1;
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+}
+.aiAttempt {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+.aiTrying {
+  font-size: var(--text-base);
+  text-wrap: pretty;
+}
+.earlier {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.earlier li {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 2px 9px;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+.earlier li > span:last-child {
+  grid-column: 2;
+  color: var(--text-3);
+}
+
+/* ---- Usage meter -------------------------------------------------------------- */
+.meter {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.meterRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+.meterRow strong {
+  color: var(--text-1);
+  font-weight: var(--weight-semibold);
+}
+.track {
+  position: relative;
+  height: 6px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--progress-track);
+  box-shadow: var(--inset-shadow);
+}
+/* Usage isn't a journey: a neutral fill, red only when the cap is reached */
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: var(--text-2);
+}
+.fill[data-full] {
+  background: var(--text-danger);
+}
+.gift {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: var(--hairline-strong);
+}
+
+/* ---- Results (final report) -------------------------------------------------------- */
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.result {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  column-gap: 11px;
+  row-gap: 2px;
+}
+.result > .dot {
+  grid-row: span 2;
+}
+.resultTitle {
+  font-weight: var(--weight-semibold);
+  line-height: 22px;
+}
+.resultState {
+  line-height: 22px;
+  color: var(--text-3);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+.resultText {
+  grid-column: 2 / 4;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  text-wrap: pretty;
+}
+
+/* ---- Lists of files (consent) ------------------------------------------------- */
+.files {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  border-radius: var(--radius-tile);
+  background: var(--log-bg);
+  box-shadow:
+    var(--inset-shadow),
+    inset 0 0 0 1px var(--log-ring);
+}
+.files li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 5px 12px;
+  color: var(--log-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.files li > span:last-child {
+  color: var(--log-time);
+  white-space: nowrap;
+}
+.never {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+/* A command inside a heading: the machine's voice, set smaller than the words */
+.command {
+  padding: 0 0.22em;
+  border-radius: 6px;
+  background: var(--surface-sunken);
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  font-weight: var(--weight-medium);
+  letter-spacing: -0.01em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.meterBox {
+  width: 100%;
+  max-width: 360px;
+}
+
+/* ---- Plans ---------------------------------------------------------------------------- */
+.plans {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.plan {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 16px;
+  align-items: center;
+  padding: 14px 0;
+}
+.plan + .plan {
+  box-shadow: 0 -1px 0 var(--hairline);
+}
+.planName {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+}
+.planPrice {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+.planText {
+  grid-column: 1;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  text-wrap: pretty;
+}
+.planAction {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+.planCurrent {
+  color: var(--text-3);
+  font-size: var(--text-sm);
+}
+
+/* ---- Account ---------------------------------------------------------------------- */
+.who {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 2px 14px;
+  align-items: center;
+}
+.avatar {
+  display: grid;
+  grid-row: span 2;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--surface-tile);
+  box-shadow: var(--shadow-tile);
+  color: var(--text-2);
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+}
+.whoName {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+}
+.whoMeta {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-3);
+  font-size: var(--text-sm);
+}
+.or::before,
+.or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--hairline);
+}
+
+/* ---- Plan document (hand-off / migration) ------------------------------------------- */
+.planSteps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+.planSteps li {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 2px 11px;
+  counter-increment: step;
+}
+.planSteps li::before {
+  content: counter(step);
+  display: grid;
+  grid-row: span 2;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--surface-sunken);
+  color: var(--text-2);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+.planSteps strong {
+  line-height: 22px;
+  font-weight: var(--weight-semibold);
+}
+.planSteps span {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  text-wrap: pretty;
+}
+
+.keeps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.keeps li {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 9px;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+.keeps svg {
+  width: 13px;
+  height: 13px;
+  margin-top: 3px;
+  color: var(--text-3);
+}
+
+/* ---- Free vs Pro on the drop zone ------------------------------------------------ */
+.tiers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin: 0 var(--space-6) var(--space-6);
+  border-radius: var(--radius-card);
+  background: var(--surface-sunken);
+}
+.tiers > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 13px 16px 14px;
+}
+.tiers > div + div {
+  box-shadow: -1px 0 0 var(--hairline);
+}
+.tiers strong {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+.tiers span {
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.subhead {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+}
+
+@media (max-width: 520px) {
+  .findings,
+  .groupNote {
+    margin-left: 0;
+  }
+  .tiers {
+    grid-template-columns: 1fr;
+    margin: 0 var(--space-4) var(--space-4);
+  }
+  .tiers > div + div {
+    box-shadow: 0 -1px 0 var(--hairline);
+  }
+}

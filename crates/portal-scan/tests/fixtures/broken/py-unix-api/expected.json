@@ -1,0 +1,30 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "unix-api",
+      "file": "daemon.py",
+      "line": 3
+    },
+    {
+      "rule": "unix-api",
+      "file": "daemon.py",
+      "line": 5
+    },
+    {
+      "rule": "unix-api",
+      "file": "daemon.py",
+      "line": 6
+    },
+    {
+      "rule": "unix-signal",
+      "file": "daemon.py",
+      "line": 7
+    },
+    {
+      "rule": "unix-signal",
+      "file": "daemon.py",
+      "line": 8
+    }
+  ]
+}

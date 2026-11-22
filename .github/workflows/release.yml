@@ -1,0 +1,147 @@
+# A release: push a tag vX.Y.Z (the app's version; docs/RELEASING.md), or
+# vX.Y.Z-beta.N for a test build (a pre-release and the beta feed only; the
+# stable feed is never touched).
+# Builds macOS (universal) and Windows, signs the update packages with the
+# updater key, and publishes installers, update packages and latest.json to
+# the public repo andrew2grand-lang/seamdrop-releases, which installed apps
+# read for updates. Publishing needs the RELEASES_TOKEN secret (a token that
+# can write to that one repo); until it exists the builds still run and
+# `npm run release:publish -- vX.Y.Z` publishes them from a Mac.
+name: release
+
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+", "v[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Version and notes
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: The tag matches the app's version, and CHANGELOG.md has its notes
+        run: node scripts/version.mjs --check "${GITHUB_REF_NAME#v}"
+
+  app:
+    name: ${{ matrix.name }}
+    needs: check
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - name: macOS (universal)
+            runner: macos-latest
+            args: --target universal-apple-darwin --bundles app,dmg
+            rust-targets: aarch64-apple-darwin,x86_64-apple-darwin
+            artifact: release-macos
+            files: |
+              target/universal-apple-darwin/release/bundle/dmg/*.dmg
+              target/universal-apple-darwin/release/bundle/macos/SeamDrop.app.tar.gz
+              target/universal-apple-darwin/release/bundle/macos/SeamDrop.app.tar.gz.sig
+          - name: Windows x64
+            runner: windows-latest
+            args: --bundles nsis
+            rust-targets: ""
+            artifact: release-windows
+            files: |
+              target/release/bundle/nsis/*-setup.exe
+              target/release/bundle/nsis/*-setup.exe.sig
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    env:
+      TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+      TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust-targets }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: build
+      - run: npm ci
+      - name: Code signing, when its secrets exist (docs/SIGNING.md)
+        shell: bash
+        env:
+          S_APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          S_APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          S_APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          S_APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+          S_APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+          S_APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}
+          S_APPLE_ID: ${{ secrets.APPLE_ID }}
+          S_APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          S_APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          S_AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          S_AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          S_AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          S_AZURE_SIGNING_ENDPOINT: ${{ secrets.AZURE_SIGNING_ENDPOINT }}
+          S_AZURE_SIGNING_ACCOUNT: ${{ secrets.AZURE_SIGNING_ACCOUNT }}
+          S_AZURE_CERT_PROFILE: ${{ secrets.AZURE_CERT_PROFILE }}
+          S_WINDOWS_SIGN_COMMAND: ${{ secrets.WINDOWS_SIGN_COMMAND }}
+          S_WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
+          S_WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+          S_WINDOWS_TIMESTAMP_URL: ${{ secrets.WINDOWS_TIMESTAMP_URL }}
+        run: node scripts/ci-signing.mjs
+      - name: Azure Artifact Signing tool
+        if: env.SEAMDROP_SIGNED == 'azure'
+        run: cargo install artifact-signing-cli --version 0.11.0 --locked
+      - name: Build, bundle and sign the update package
+        uses: tauri-apps/tauri-action@v1
+        with:
+          tauriScript: npx tauri
+          args: ${{ matrix.args }} ${{ env.SIGN_ARGS }}
+      - name: Check the Windows installer's signature (when signing is set up)
+        if: runner.os == 'Windows' && env.SEAMDROP_SIGNED != ''
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem target/release/bundle/nsis/*-setup.exe | Select-Object -First 1
+          $sig = Get-AuthenticodeSignature $exe.FullName
+          $sig | Format-List Status, SignerCertificate
+          if ($sig.Status -ne 'Valid') { throw "The installer isn't validly signed: $($sig.Status)" }
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.files }}
+          if-no-files-found: error
+
+  publish:
+    name: Publish to seamdrop-releases
+    needs: app
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      HAS_TOKEN: ${{ secrets.RELEASES_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - uses: actions/download-artifact@v8
+        with:
+          path: release-files
+      - name: Publish
+        if: env.HAS_TOKEN == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.RELEASES_TOKEN }}
+        run: node scripts/publish-release.mjs "$GITHUB_REF_NAME" --dir release-files
+      - name: No RELEASES_TOKEN yet
+        if: env.HAS_TOKEN != 'true'
+        run: |
+          node scripts/publish-release.mjs "$GITHUB_REF_NAME" --dir release-files --dry-run
+          echo "::notice::Built and signed, not published: add the RELEASES_TOKEN secret, or run 'npm run release:publish -- $GITHUB_REF_NAME' on a Mac (docs/RELEASING.md)."

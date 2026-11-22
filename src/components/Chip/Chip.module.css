@@ -1,0 +1,49 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  height: 28px;
+  padding: 0 12px 0 10px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-glass-strong);
+  box-shadow:
+    inset 0 1px 0 var(--highlight),
+    0 0 0 1px var(--hairline),
+    var(--shadow-1);
+  color: var(--text-1);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.icon {
+  display: inline-flex;
+  color: var(--text-2);
+}
+.icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.chip[data-tone='send'] {
+  background: var(--send-soft);
+  box-shadow: inset 0 0 0 1px var(--send-ring);
+  color: var(--text-send);
+}
+.chip[data-tone='land'] {
+  background: var(--land-soft);
+  box-shadow: inset 0 0 0 1px var(--land-ring);
+  color: var(--text-land);
+}
+.chip[data-tone='danger'] {
+  background: var(--danger-soft);
+  box-shadow: inset 0 0 0 1px var(--danger-ring);
+  color: var(--text-danger);
+}
+.chip[data-tone='send'] .icon,
+.chip[data-tone='land'] .icon,
+.chip[data-tone='danger'] .icon {
+  color: inherit;
+}

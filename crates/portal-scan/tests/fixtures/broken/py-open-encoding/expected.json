@@ -1,0 +1,25 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "open-encoding",
+      "file": "io_bits.py",
+      "line": 3
+    },
+    {
+      "rule": "open-encoding",
+      "file": "io_bits.py",
+      "line": 5
+    },
+    {
+      "rule": "open-encoding",
+      "file": "io_bits.py",
+      "line": 9
+    },
+    {
+      "rule": "open-encoding",
+      "file": "io_bits.py",
+      "line": 11
+    }
+  ]
+}

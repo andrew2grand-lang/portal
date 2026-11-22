@@ -1,0 +1,10 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "native-apple",
+      "file": "Notes.xcodeproj",
+      "state": "blocker"
+    }
+  ]
+}

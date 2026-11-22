@@ -1,0 +1,30 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "npm-script-unix",
+      "file": "package.json",
+      "line": 5
+    },
+    {
+      "rule": "npm-script-unix",
+      "file": "package.json",
+      "line": 6
+    },
+    {
+      "rule": "npm-script-unix",
+      "file": "package.json",
+      "line": 7
+    },
+    {
+      "rule": "npm-script-unix",
+      "file": "package.json",
+      "line": 8
+    },
+    {
+      "rule": "npm-script-unix",
+      "file": "package.json",
+      "line": 9
+    }
+  ]
+}

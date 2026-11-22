@@ -1,0 +1,15 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "shell-command",
+      "file": "tidy.py",
+      "line": 4
+    },
+    {
+      "rule": "shell-command",
+      "file": "tidy.py",
+      "line": 5
+    }
+  ]
+}

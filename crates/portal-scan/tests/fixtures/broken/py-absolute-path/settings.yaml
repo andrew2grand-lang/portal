@@ -1,0 +1,3 @@
+app:
+  data_dir: /Users/ana/projects/sales/data
+  port: 8000

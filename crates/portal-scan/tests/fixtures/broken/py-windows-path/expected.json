@@ -1,0 +1,17 @@
+{
+  "target": "macos",
+  "expect": [
+    {
+      "rule": "absolute-path",
+      "file": "export.py",
+      "line": 1,
+      "state": "willNeedAFix"
+    },
+    {
+      "rule": "absolute-path",
+      "file": "export.py",
+      "line": 2,
+      "state": "willNeedAFix"
+    }
+  ]
+}

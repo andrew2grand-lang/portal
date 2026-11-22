@@ -1,0 +1,10 @@
+{
+  "target": "macos",
+  "expect": [
+    {
+      "rule": "system-path",
+      "file": "sysinfo.py",
+      "line": 1
+    }
+  ]
+}

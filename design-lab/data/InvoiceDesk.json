@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "portal-scan",
+    "version": "0.3.0"
+  },
+  "scannedAt": "2026-10-28T09:41:00Z",
+  "project": {
+    "name": "InvoiceDesk",
+    "path": "C:\\Users\\sam\\source\\repos\\InvoiceDesk"
+  },
+  "source": "windows",
+  "target": "macos",
+  "network": {
+    "online": false,
+    "hosts": []
+  },
+  "durationMs": 3,
+  "stats": {
+    "files": 10,
+    "bytes": 2785,
+    "parsedFiles": 0,
+    "skippedFiles": 0,
+    "unreadable": []
+  },
+  "tier": {
+    "tier": "native",
+    "reason": "Native: a WPF desktop app for Windows, built for one OS"
+  },
+  "headline": "This needs a rebuild for macOS: it's a WPF desktop app for Windows.",
+  "counts": {
+    "blocker": 1,
+    "willNeedAFix": 0,
+    "needsYou": 0,
+    "couldntCheck": 0,
+    "info": 0,
+    "occurrences": 1,
+    "omitted": 0
+  },
+  "aiUsage": {
+    "level": "planOnly",
+    "estimate": true,
+    "reason": "A rebuild isn't a conversion: the AI would draft the migration plan, not change the code."
+  },
+  "ecosystems": [
+    {
+      "kind": "dotnet",
+      "name": "C# / .NET",
+      "evidence": [],
+      "files": 9,
+      "support": "summary"
+    }
+  ],
+  "runtimes": [],
+  "packages": [],
+  "runCommands": [],
+  "leftOut": {
+    "bytes": 3145728,
+    "files": 2,
+    "items": [
+      {
+        "path": "InvoiceDesk/bin",
+        "kind": "buildOutput",
+        "bytes": 2097152,
+        "files": 1,
+        "rebuildable": true
+      },
+      {
+        "path": "InvoiceDesk/obj",
+        "kind": "buildOutput",
+        "bytes": 1048576,
+        "files": 1,
+        "rebuildable": true
+      }
+    ]
+  },
+  "secrets": [],
+  "services": [],
+  "findings": [
+    {
+      "id": "native-windows:InvoiceDesk/InvoiceDesk.csproj:-",
+      "rule": "native-windows",
+      "title": "Windows desktop app (WPF)",
+      "category": "nativeApps",
+      "state": "blocker",
+      "severity": "high",
+      "file": "InvoiceDesk/InvoiceDesk.csproj",
+      "line": null,
+      "evidence": "InvoiceDesk/InvoiceDesk.csproj",
+      "why": "WPF apps only build and run on Windows.",
+      "fixPattern": "Rebuild the interface with a cross-platform toolkit (Avalonia, .NET MAUI) and keep the rest. The hand-off note lists the steps.",
+      "autoFixable": false,
+      "targets": [
+        "macos"
+      ]
+    }
+  ],
+  "handoff": "# Moving InvoiceDesk to macOS\n\nWritten by SeamDrop's scanner, which read the project and ran nothing. Everything below is what it found, not a promise that anything works.\n\n## What this project is\n\n- Native: a WPF desktop app for Windows, built for one OS\n- Languages and tools: C# / .NET (9 files)\n\n## What blocks it on macOS\n\n- **Windows desktop app (WPF)** (`InvoiceDesk/InvoiceDesk.csproj`): WPF apps only build and run on Windows. Suggested fix: Rebuild the interface with a cross-platform toolkit (Avalonia, .NET MAUI) and keep the rest. The hand-off note lists the steps.\n\n## Suggested steps\n\n1. Separate what doesn't depend on the OS (data models, networking, business logic) from the interface.\n2. Choose an interface toolkit that runs on macOS (for example .NET MAUI, Avalonia, Flutter or a web UI) and rebuild the screens one by one.\n3. Replace OS-only services (keychain, notifications, file pickers, menus) with macOS equivalents.\n4. Port the tests first, so each step can be checked.\n\n3.1 MB of rebuildable or ignored files weren't included.\n",
+  "notes": [
+    "Nothing in the project was run: no code, scripts, notebooks or package managers.",
+    "Offline: nothing was looked up on the internet."
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "system-path",
+      "file": "sysinfo.py",
+      "line": 3
+    },
+    {
+      "rule": "system-path",
+      "file": "sysinfo.py",
+      "line": 5
+    },
+    {
+      "rule": "system-path",
+      "file": "sysinfo.py",
+      "line": 6
+    }
+  ]
+}

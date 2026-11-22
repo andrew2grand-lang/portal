@@ -1,0 +1,11 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "executable-bit",
+      "file": "tool.sh",
+      "state": "info",
+      "unix": true
+    }
+  ]
+}

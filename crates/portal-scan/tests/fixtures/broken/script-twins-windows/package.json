@@ -1,0 +1,7 @@
+{
+  "name": "app",
+  "scripts": {
+    "setup": "./scripts/setup.sh",
+    "build": "bash scripts/build.sh"
+  }
+}

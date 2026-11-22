@@ -1,0 +1,9 @@
+{
+  "sparse": {
+    "InvoiceDesk/bin/Debug/net8.0-windows/InvoiceDesk.dll": 2097152,
+    "InvoiceDesk/obj/project.assets.json": 1048576
+  },
+  "renames": {
+    "InvoiceDesk.sln.stored": "InvoiceDesk.sln"
+  }
+}

@@ -1,0 +1,66 @@
+.canvas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, var(--window-width)));
+  align-items: stretch;
+  justify-content: center;
+  justify-items: center;
+  gap: var(--canvas-gap);
+  min-height: 100dvh;
+  padding: var(--space-14) var(--space-10);
+  align-content: center;
+}
+
+/* Windows stack when there isn't room for both */
+@media (max-width: 1240px) {
+  .canvas {
+    grid-template-columns: minmax(0, var(--window-width));
+    gap: var(--space-12);
+    align-content: start;
+  }
+}
+
+@media (max-width: 600px) {
+  .canvas {
+    gap: var(--space-8);
+    padding: var(--space-6) var(--space-4);
+  }
+}
+
+/* Inside the app the window is the whole view */
+.app {
+  height: 100dvh;
+  /* clip, not hidden: never a scroll container, so focusing something can't
+     shift the whole window */
+  overflow: clip;
+}
+
+/* Dev server only: the list of window states (/) */
+.index {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--space-10) var(--space-4);
+  color: var(--text-1);
+  font-size: var(--text-base);
+}
+.index h1 {
+  margin-bottom: var(--space-2);
+  font-size: var(--text-xl);
+}
+.index p {
+  margin-bottom: var(--space-6);
+  color: var(--text-2);
+}
+.index ul {
+  display: grid;
+  gap: var(--space-1);
+  padding: 0;
+  list-style: none;
+}
+.index li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: var(--space-3);
+}
+.index a {
+  color: var(--text-send);
+}

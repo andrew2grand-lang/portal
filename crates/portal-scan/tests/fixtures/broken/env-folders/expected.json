@@ -1,0 +1,23 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "env-folder",
+      "file": ".venv",
+      "state": "info"
+    },
+    {
+      "rule": "env-folder",
+      "file": "node_modules",
+      "state": "info"
+    },
+    {
+      "rule": "no-lockfile",
+      "state": "info"
+    },
+    {
+      "rule": "wheels-unchecked",
+      "state": "couldntCheck"
+    }
+  ]
+}

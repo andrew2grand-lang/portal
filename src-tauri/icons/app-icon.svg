@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="ring" x1="292" y1="292" x2="732" y2="732" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2f6bff"/>
+      <stop offset="0.55" stop-color="#9b7cf0"/>
+      <stop offset="1" stop-color="#ff7a2e"/>
+    </linearGradient>
+    <linearGradient id="plate" x1="512" y1="100" x2="512" y2="924" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#232a3b"/>
+      <stop offset="1" stop-color="#11141d"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="512" cy="512" r="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0.55" stop-color="#9b7cf0" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#9b7cf0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="100" y="100" width="824" height="824" rx="186" fill="url(#plate)"/>
+  <rect x="100.5" y="100.5" width="823" height="823" rx="185.5" fill="none" stroke="#ffffff" stroke-opacity="0.08"/>
+  <circle cx="512" cy="512" r="300" fill="url(#glow)"/>
+  <rect x="300" y="300" width="424" height="424" rx="142" fill="none" stroke="url(#ring)" stroke-width="88"/>
+</svg>

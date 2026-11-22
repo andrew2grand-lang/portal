@@ -1,0 +1,76 @@
+.track {
+  display: inline-flex;
+  /* Hugs its options wherever it sits (Mission 05 §1.7) */
+  align-self: flex-start;
+  width: fit-content;
+  max-width: 100%;
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--switch-track);
+  box-shadow: var(--tray-shadow);
+}
+
+.option {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  font-stretch: 104%;
+  cursor: pointer;
+  transition: color var(--dur-base) var(--ease-out);
+}
+.option[aria-checked='true'] {
+  color: var(--text-1);
+}
+.option:not([aria-checked='true']):hover {
+  color: var(--text-1);
+}
+.option:focus-visible {
+  border-radius: var(--radius-pill);
+}
+.track[data-locked] .option {
+  cursor: not-allowed;
+}
+.track[data-locked] .option:not([aria-checked='true']) {
+  color: var(--text-3);
+}
+
+.thumb {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--switch-thumb);
+  box-shadow: var(--switch-thumb-shadow);
+}
+
+.label,
+.paid {
+  position: relative;
+}
+
+/* The one gradient-outlined accent: marks the paid tier */
+.paid {
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  padding: 0 7px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background:
+    linear-gradient(var(--surface-glass-strong), var(--surface-glass-strong)) padding-box,
+    var(--gradient-outline) border-box;
+  color: var(--text-2);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  font-stretch: 100%;
+  letter-spacing: 0.01em;
+  line-height: 1;
+}

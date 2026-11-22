@@ -1,0 +1,93 @@
+/* Mini mode (Mission 05 §5): the drop icon, where files go, Send clipboard */
+.mini,
+.note {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  min-height: 0;
+  padding: var(--space-4);
+}
+
+.drop {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  padding: 0;
+  border: 0;
+  border-radius: 28px;
+  background: var(--surface-tile);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.6) inset,
+    0 8px 24px rgb(20 26 40 / 0.12);
+  color: var(--text-1);
+  cursor: pointer;
+}
+.drop > svg:not(.ring) {
+  width: 40px;
+  height: 40px;
+}
+.drop:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+.drop[data-over] {
+  transform: scale(1.04);
+}
+
+/* The progress ring sits just outside the tile */
+.ring {
+  position: absolute;
+  inset: -8px;
+  width: calc(100% + 16px);
+  height: calc(100% + 16px);
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
+.track,
+.arc {
+  fill: none;
+  stroke-width: 3;
+}
+.track {
+  stroke: var(--progress-track);
+}
+.arc {
+  stroke: var(--send);
+  stroke-linecap: round;
+}
+.drop[data-paused] .arc {
+  stroke: var(--text-3);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.target {
+  display: inline-grid;
+  place-items: center;
+}
+.target [data-picture] {
+  width: 30px;
+  height: 30px;
+}
+
+.note p {
+  margin: 0;
+  max-width: 24ch;
+  color: var(--text-1);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+.keys {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+}

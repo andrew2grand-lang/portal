@@ -1,0 +1,46 @@
+# Fast feedback for Windows-specific Rust code (the Mac runs the same tests
+# locally). Windows minutes count double on private repos; macOS is in build.yml.
+name: check
+
+on:
+  push:
+    paths:
+      - "crates/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - ".github/workflows/check.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows-core:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: check
+      - name: Test core crates (incl. the doctor's Windows probes)
+        run: cargo test -p portal-sys -p portal-core --locked -- --nocapture
+      - name: Clippy
+        run: cargo clippy -p portal-sys -p portal-core --all-targets --locked -- -D warnings
+      - name: mDNS between two daemons next to Windows' own mDNS (informational)
+        continue-on-error: true
+        run: cargo test -p portal-core --test discovery --locked -- --ignored --nocapture
+      - name: The real Windows clipboard (text, RTF, HTML, images, private markers)
+        run: cargo test -p portal-sys --lib --locked -- --ignored real_clipboard --nocapture
+      - name: The firewall "Fix it" script on real Windows Firewall rules
+        run: cargo test -p portal-sys --lib --locked -- --ignored real_firewall_fix --nocapture
+      # Heavy suites: main and manual runs only (Mission 04 §0, CI budget)
+      - name: Two apps opened together connect within 5 s (two peer.rs processes, loopback)
+        if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+        run: |
+          cargo build -p portal-core --example peer --locked
+          cargo test -p portal-core --test launch --locked -- --ignored --nocapture

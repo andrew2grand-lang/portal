@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "portal-scan",
+    "version": "0.3.0"
+  },
+  "scannedAt": "2026-10-28T09:41:00Z",
+  "project": {
+    "name": "Handbook",
+    "path": "~/Documents/Handbook"
+  },
+  "source": "macos",
+  "target": "windows",
+  "network": {
+    "online": false,
+    "hosts": []
+  },
+  "durationMs": 1,
+  "stats": {
+    "files": 12,
+    "bytes": 11534855,
+    "parsedFiles": 0,
+    "skippedFiles": 0,
+    "unreadable": []
+  },
+  "tier": {
+    "tier": "static",
+    "reason": "Static: documents, data, images and a small website; nothing to run"
+  },
+  "headline": "No problems found for Windows.",
+  "counts": {
+    "blocker": 0,
+    "willNeedAFix": 0,
+    "needsYou": 0,
+    "couldntCheck": 0,
+    "info": 0,
+    "occurrences": 0,
+    "omitted": 0
+  },
+  "aiUsage": {
+    "level": "none",
+    "estimate": true,
+    "reason": "Nothing to change, so no AI should be needed."
+  },
+  "ecosystems": [],
+  "runtimes": [],
+  "packages": [],
+  "runCommands": [],
+  "leftOut": {
+    "bytes": 6148,
+    "files": 1,
+    "items": [
+      {
+        "path": "OS clutter (.DS_Store, Thumbs.db…)",
+        "kind": "osJunk",
+        "bytes": 6148,
+        "files": 1,
+        "rebuildable": false
+      }
+    ]
+  },
+  "secrets": [],
+  "services": [],
+  "findings": [],
+  "handoff": null,
+  "notes": [
+    "Nothing in the project was run: no code, scripts, notebooks or package managers.",
+    "Offline: nothing was looked up on the internet."
+  ]
+}

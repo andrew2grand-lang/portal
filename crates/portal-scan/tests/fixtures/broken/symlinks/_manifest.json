@@ -1,0 +1,6 @@
+{
+  "symlinks": {
+    "latest": "releases/v2",
+    "shared": "../outside-the-project"
+  }
+}

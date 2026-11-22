@@ -1,0 +1,29 @@
+{
+  "name": "shop-web",
+  "version": "1.8.2",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "NODE_ENV=development vite",
+    "build": "rm -rf dist && vite build && cp -r public/fonts dist/fonts",
+    "start": "node server/index.js",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "deploy": "./scripts/deploy.sh",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "express": "4.21.2",
+    "compression": "1.7.5",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "vite": "6.0.7",
+    "vitest": "2.1.8",
+    "eslint": "9.17.0",
+    "typescript": "5.7.2"
+  }
+}

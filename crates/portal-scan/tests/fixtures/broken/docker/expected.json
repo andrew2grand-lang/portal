@@ -1,0 +1,31 @@
+{
+  "target": "macos",
+  "expect": [
+    {
+      "rule": "docker-needed",
+      "state": "needsYou"
+    },
+    {
+      "rule": "docker-arm64",
+      "file": "docker-compose.yml",
+      "line": 5,
+      "state": "couldntCheck"
+    },
+    {
+      "rule": "docker-amd64",
+      "file": "docker-compose.yml",
+      "line": 7,
+      "state": "willNeedAFix"
+    },
+    {
+      "rule": "service",
+      "state": "needsYou"
+    },
+    {
+      "rule": "docker-arm64",
+      "file": "Dockerfile.worker",
+      "line": 1,
+      "state": "couldntCheck"
+    }
+  ]
+}

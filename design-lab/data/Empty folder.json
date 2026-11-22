@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "portal-scan",
+    "version": "0.3.0"
+  },
+  "scannedAt": "2026-10-28T09:41:00Z",
+  "project": {
+    "name": "Empty folder",
+    "path": "~/Desktop/Empty folder"
+  },
+  "source": "macos",
+  "target": "windows",
+  "network": {
+    "online": false,
+    "hosts": []
+  },
+  "durationMs": 0,
+  "stats": {
+    "files": 0,
+    "bytes": 0,
+    "parsedFiles": 0,
+    "skippedFiles": 0,
+    "unreadable": []
+  },
+  "tier": {
+    "tier": "static",
+    "reason": "Static: an empty folder"
+  },
+  "headline": "This folder is empty, so there was nothing to check.",
+  "counts": {
+    "blocker": 0,
+    "willNeedAFix": 0,
+    "needsYou": 0,
+    "couldntCheck": 0,
+    "info": 0,
+    "occurrences": 0,
+    "omitted": 0
+  },
+  "aiUsage": {
+    "level": "none",
+    "estimate": true,
+    "reason": "Nothing to change, so no AI should be needed."
+  },
+  "ecosystems": [],
+  "runtimes": [],
+  "packages": [],
+  "runCommands": [],
+  "leftOut": {
+    "bytes": 0,
+    "files": 0,
+    "items": []
+  },
+  "secrets": [],
+  "services": [],
+  "findings": [],
+  "handoff": null,
+  "notes": [
+    "Nothing in the project was run: no code, scripts, notebooks or package managers.",
+    "Offline: nothing was looked up on the internet."
+  ]
+}

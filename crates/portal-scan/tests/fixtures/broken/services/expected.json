@@ -1,0 +1,13 @@
+{
+  "target": "windows",
+  "expect": [
+    {
+      "rule": "service-client",
+      "state": "info"
+    },
+    {
+      "rule": "service",
+      "state": "needsYou"
+    }
+  ]
+}
