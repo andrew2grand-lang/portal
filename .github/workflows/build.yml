@@ -129,7 +129,8 @@ jobs:
           APP=target/universal-apple-darwin/release/bundle/macos/SeamDrop.app
           /usr/libexec/PlistBuddy -c "Print :NSLocalNetworkUsageDescription" "$APP/Contents/Info.plist"
           services=$(/usr/libexec/PlistBuddy -c "Print :NSBonjourServices" "$APP/Contents/Info.plist"); echo "$services"; grep -q "_seamdrop._tcp" <<<"$services"
-          grep -q "_portal._tcp" <<<"$services"
+          # Mission 05 dropped the old Portal service (decision 268)
+          if grep -q "_portal._tcp" <<<"$services"; then echo "::error::the old _portal._tcp service is still declared"; exit 1; fi
           test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/Contents/Info.plist")" = "com.seamdrop.desktop"
           if [ -n "$SEAMDROP_SIGNED" ]; then
             codesign --verify --deep --strict "$APP"
