@@ -22,6 +22,28 @@ const HIDDEN_ARG: &str = "--hidden";
 /// (support and the end-to-end update test; the same as pressing Restart).
 const UPDATE_NOW_ARG: &str = "--update-now";
 
+/// The main window, from its entry in tauri.conf.json ("create": false), built
+/// here so automation can reach its WebView2 on Windows: Edge's WebDriver asks
+/// for a debugging port through WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS, and
+/// wry's own browser arguments would otherwise win (e2e, beta.2). Without
+/// that variable the window is exactly the configured one.
+fn main_window(app: &mut tauri::App) -> tauri::Result<()> {
+    let Some(config) = app.config().app.windows.iter().find(|w| w.label == "main").cloned() else {
+        return Ok(());
+    };
+    #[allow(unused_mut)]
+    let mut builder = tauri::WebviewWindowBuilder::from_config(app.handle(), &config)?;
+    #[cfg(windows)]
+    if let Ok(extra) = std::env::var("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS") {
+        // wry's defaults, then what the driver asked for
+        builder = builder.additional_browser_args(&format!(
+            "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection {extra}"
+        ));
+    }
+    builder.build()?;
+    Ok(())
+}
+
 fn start_core(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     if let Ok(dir) = app.path().app_log_dir() {
         init_logging(&dir);
@@ -152,6 +174,7 @@ pub fn run() {
             }
         })
         .setup(|app| {
+            main_window(app)?;
             start_core(app)?;
             tray::build(app.handle())?;
             updates::start(app.handle());
