@@ -3,7 +3,7 @@ resolver = "3"
 members = ["crates/portal-core", "crates/portal-sys", "crates/portal-scan", "src-tauri"]
 
 [workspace.package]
-version = "0.5.0-beta.1"
+version = "0.5.0-beta.2"
 edition = "2024"
 license = "UNLICENSED"
 publish = false

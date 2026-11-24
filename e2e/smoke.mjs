@@ -111,6 +111,12 @@ async function check(name, fn) {
   }
 }
 const me = async () => (await snap()).me
+/** Settings showing, whatever is open now (its key toggles, so don't just press it) */
+async function openSettings() {
+  const open = await exec(`return !!${inPage('//h2[normalize-space(.)="Settings"]')}`)
+  if (!open) await click(button('Settings'))
+  await find(`//h2[normalize-space(.)="Settings"]`)
+}
 
 try {
   await until('the window rendered', async () => (await pageText()).length > 20, 30000)
@@ -221,20 +227,20 @@ try {
     await click(button('Connection check'))
     await find(`//h2[normalize-space(.)="Connection check"]`)
     await until('the core listed its checks', async () => (await snap()).doctor?.length > 0)
-    await click(button('Settings'))
   })
   await check('Connect by IP (an address that doesn’t answer is said)', async () => {
-    await click(button('Settings'))
+    await openSettings()
     await click(button('Connect by IP'))
     await typeInto(field('The other computer’s IP address'), '127.0.0.1:9\uE007')
     await until('the window said it didn’t answer', async () => /answer|reach|couldn/i.test(await pageText()), 20000)
   })
   await check('Save technical log', async () => {
-    await click(button('Settings'))
+    await openSettings()
     await click(button('Save technical log'))
     await until('the window said where it went', async () => /technical log/i.test(await pageText()))
   })
   await check('Help (Settings → Help)', async () => {
+    await openSettings()
     await click(button('Help'))
     await find(`//h2[normalize-space(.)="Help"]`)
   })

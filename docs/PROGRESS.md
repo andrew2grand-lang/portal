@@ -1,5 +1,17 @@
 # Progress
 
+# 0.5.0-beta.2: the Settings hotfix (2026-11-24)
+
+**Why:** in beta.1 Settings did nothing in the real app (decision 300). **Fixed, and guarded:**
+- Settings save again (`SettingsPatch` fields all optional). A **UI ↔ Rust contract test** puts every invoke the window sends (98, all 54 commands, one partial patch per Settings field) through the real Rust types; it failed on 24 calls before the fix (decision 300). CI runs it on Windows.
+- **No silent failures:** a failed action says so in the window and adds a line to Details (decision 301).
+- **No false update error** while only test builds exist: "No updates yet." / "You're on the latest test build." (decision 302).
+- **End-to-end test of the real built app** on Windows and Linux runners (tauri-driver): 30 controls in Settings, the Shelf and Details, each checked against the real core; 30 of 30 on Linux, 29 of 30 then fixed on Windows. What one computer can't exercise is listed (decision 305).
+- **Found on the way:** no Help in Settings; the macOS and Windows window configs never got the 300 × 360 minimum (mini mode was unreachable) (decision 306); the main window is built by setup so Edge's WebDriver reaches it (decision 307); the first CI runs since Mission 05 fixed (decision 308).
+- **The drop area** says where files go and keeps its rings and glowing icon; meaning put back on five screens §6 cut too far (decisions 303–304).
+
+**Tested:** CI on real macOS and Windows (check, ui, build, release) and Linux (e2e); here: every Rust test (404), clippy, fmt, 110 UI tests, the layout check. Installed on this Mac (local build). **The 5-minute Settings check** is at the top of `docs/MANUAL-TESTS.md`.
+
 # Mission 05: clear, calm, and a real Shelf
 
 Plan: `docs/PLAN-05.md`. Spec: `MISSION-05-clear-calm-and-the-shelf.md`. Work happens on branch `mission-05` (cheap checks on push) and goes to `main` at the three CI milestones (heavy suites). Started 2026-11-21 15:49 GMT.
