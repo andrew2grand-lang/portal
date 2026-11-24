@@ -388,6 +388,10 @@ async function run(job) {
   }
   for (const [w, h] of SIZES) {
     await page.setViewportSize({ width: w, height: h })
+    // Mini mode below 360 × 480: wait until the window has switched (WebKit
+    // can land the switch after the first settled frame)
+    const mini = w < 360 || h < 480 ? '1' : '0'
+    await page.waitForFunction((m) => document.documentElement.dataset.mini === m, mini, { timeout: 5000 }).catch(() => {})
     await settled(page)
     // A page that throws (or reloads) mid-measure is a problem for this
     // layout, said with the error, not the end of the whole run

@@ -18,5 +18,9 @@ export function useMini(): boolean {
       window.removeEventListener('resize', on)
     }
   }, [])
+  // Said on the page once the window has switched, so checks can wait for it
+  useEffect(() => {
+    document.documentElement.dataset.mini = mini ? '1' : '0'
+  }, [mini])
   return mini
 }

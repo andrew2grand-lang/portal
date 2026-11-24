@@ -327,6 +327,12 @@ mod tests {
     #[ignore = "uses the real clipboard"]
     fn real_clipboard_held_by_another_app_reads_as_busy() {
         put_as_another_app(&[(13, wide("copied in a browser"))]);
+        match super::super::read() {
+            Read::Contents { contents, .. } => {
+                assert_eq!(contents.text.as_deref(), Some("copied in a browser"), "it landed")
+            }
+            other => panic!("the copy didn't land: {other:?}"),
+        }
         let (held, release) = (std::sync::mpsc::channel::<()>(), std::sync::mpsc::channel::<()>());
         // The holder opens it through a window of its own, as another app
         // does: opened with no window, Windows lets anyone in this process
