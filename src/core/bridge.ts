@@ -355,6 +355,7 @@ export type CoreUpdateState =
   | { state: 'idle' }
   | { state: 'checking' }
   | { state: 'upToDate' }
+  | { state: 'nothingYet' }
   | { state: 'available' }
   | { state: 'downloading'; percent: number }
   | { state: 'ready' }

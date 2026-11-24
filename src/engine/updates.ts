@@ -55,10 +55,15 @@ export function updateLine(u: UpdateInfo): string {
     case 'checking':
       return 'Checking for updates…'
     case 'upToDate': {
-      if (!u.checkedAt) return 'Up to date.'
+      // With test builds on, the beta feed answered: say so (beta.2)
+      const what = u.testBuilds ? 'You’re on the latest test build.' : 'Up to date.'
+      if (!u.checkedAt) return what
       const d = new Date(u.checkedAt)
-      return `Up to date. Checked at ${pad(d.getHours())}:${pad(d.getMinutes())}.`
+      return `${what} Checked at ${pad(d.getHours())}:${pad(d.getMinutes())}.`
     }
+    case 'nothingYet':
+      // Nothing published on the feeds checked yet: not an error (beta.2)
+      return 'No updates yet.'
     case 'available':
       return `${next} is available.`
     case 'downloading':

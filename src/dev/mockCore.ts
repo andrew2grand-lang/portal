@@ -720,6 +720,8 @@ export function installMockCore(scenario: string, os: Os) {
     (cmd, args) => {
       const a = (args ?? {}) as Record<string, unknown>
       const tid = String(a.transferId ?? '')
+      // `&fail=portal_save_settings`: that command fails, as beta.1's Settings did
+      if (params.get('fail')?.split(',').includes(cmd)) throw `invalid args \`patch\` for command \`${cmd}\`: missing field \`clearReceiveNote\``
       switch (cmd) {
         case 'portal_snapshot':
           return snap

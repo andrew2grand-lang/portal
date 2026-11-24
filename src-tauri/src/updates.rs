@@ -40,6 +40,9 @@ pub enum State {
     Idle,
     Checking,
     UpToDate,
+    /// No feed has published anything yet (beta.2: before the first stable
+    /// release the stable feed is empty, which isn't an error).
+    NothingYet,
     /// Install automatically is off: offered, not downloaded yet.
     Available,
     Downloading {
@@ -91,20 +94,34 @@ pub struct Updates(Mutex<Inner>);
 /// What a check found.
 pub enum Found {
     UpToDate,
+    /// Every feed checked is empty: nothing has been published there yet.
+    NothingYet,
     /// Offered, not downloaded (install automatically is off).
     Available(Update),
     /// Downloaded and its signature checked.
     Ready(Update, Vec<u8>),
 }
 
+/// What the feeds said, together.
+pub enum Newest {
+    Update(Box<Update>),
+    /// A feed answered and nothing in it is newer.
+    UpToDate,
+    /// No feed has anything published yet.
+    NothingYet,
+}
+
 /// Checks every feed and keeps the highest version on offer. Each check
 /// uses the updater's default comparator (only a version newer than the
 /// running one counts), so turning test builds off never goes back: a beta
-/// stays until a stable release passes it. A feed that can't be read
-/// doesn't hide an update another one has; with no update anywhere, the
-/// first failure is said.
-pub async fn newest(updaters: &[Updater]) -> Result<Option<Update>, Error> {
+/// stays until a stable release passes it. A feed that isn't there yet (the
+/// stable feed before the first stable release: the updater's
+/// `ReleaseNotFound`, from a 404) is empty, not an error. A feed that can't
+/// be read (no network, a broken file) doesn't hide an update another one
+/// has; with no update anywhere, that failure is said.
+pub async fn newest(updaters: &[Updater]) -> Result<Newest, Error> {
     let mut best: Option<Update> = None;
+    let mut answered = false;
     let mut failed = None;
     for updater in updaters {
         match updater.check().await {
@@ -113,16 +130,18 @@ pub async fn newest(updaters: &[Updater]) -> Result<Option<Update>, Error> {
                     best = Some(u);
                 }
             }
-            Ok(None) => {}
+            Ok(None) => answered = true,
+            Err(Error::ReleaseNotFound) => {}
             Err(e) => {
                 failed.get_or_insert(e);
             }
         }
     }
     match (best, failed) {
-        (Some(u), _) => Ok(Some(u)),
+        (Some(u), _) => Ok(Newest::Update(Box::new(u))),
         (None, Some(e)) => Err(e),
-        (None, None) => Ok(None),
+        (None, None) if answered => Ok(Newest::UpToDate),
+        (None, None) => Ok(Newest::NothingYet),
     }
 }
 
@@ -144,8 +163,9 @@ pub async fn fetch(
     mut on_percent: impl FnMut(u8),
 ) -> Result<Found, String> {
     let update = match newest(updaters).await {
-        Ok(None) => return Ok(Found::UpToDate),
-        Ok(Some(u)) => u,
+        Ok(Newest::UpToDate) => return Ok(Found::UpToDate),
+        Ok(Newest::NothingYet) => return Ok(Found::NothingYet),
+        Ok(Newest::Update(u)) => *u,
         Err(e) => return Err(plain(&e, current)),
     };
     if !download {
@@ -283,6 +303,11 @@ pub async fn check(app: &AppHandle) {
         match found {
             Ok(Found::UpToDate) => {
                 i.view.state = State::UpToDate;
+                i.view.version = None;
+                i.view.notes = None;
+            }
+            Ok(Found::NothingYet) => {
+                i.view.state = State::NothingYet;
                 i.view.version = None;
                 i.view.notes = None;
             }

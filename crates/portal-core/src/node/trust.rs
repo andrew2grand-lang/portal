@@ -21,7 +21,10 @@ const REMOTE_DISCONNECTED_WAIT: Duration = Duration::from_secs(60);
 
 /// Partial settings change from the UI.
 #[derive(Clone, Debug, Default, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
+// Every field may be left out: the window sends only what changed. Without
+// this, the one plain bool (clear_receive_note) made every other patch fail
+// to deserialize, so Settings did nothing in 0.5.0-beta.1.
+#[serde(rename_all = "camelCase", default)]
 pub struct SettingsPatch {
     pub device_name: Option<String>,
     pub receive_dir: Option<std::path::PathBuf>,

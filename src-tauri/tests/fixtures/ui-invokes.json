@@ -1,0 +1,668 @@
+[
+ {
+  "cmd": "portal_snapshot",
+  "args": {}
+ },
+ {
+  "cmd": "portal_logs",
+  "args": {}
+ },
+ {
+  "cmd": "portal_connect",
+  "args": {
+   "address": "192.168.1.20"
+  }
+ },
+ {
+  "cmd": "portal_retry",
+  "args": {}
+ },
+ {
+  "cmd": "portal_pair",
+  "args": {
+   "peerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+ },
+ {
+  "cmd": "portal_pairing",
+  "args": {
+   "action": {
+    "type": "showCode"
+   }
+  }
+ },
+ {
+  "cmd": "portal_pairing",
+  "args": {
+   "action": {
+    "type": "ignore"
+   }
+  }
+ },
+ {
+  "cmd": "portal_pairing",
+  "args": {
+   "action": {
+    "type": "code",
+    "code": "048213"
+   }
+  }
+ },
+ {
+  "cmd": "portal_pairing",
+  "args": {
+   "action": {
+    "type": "cancel"
+   }
+  }
+ },
+ {
+  "cmd": "portal_pairing",
+  "args": {
+   "action": {
+    "type": "dismiss"
+   }
+  }
+ },
+ {
+  "cmd": "portal_pairing",
+  "args": {
+   "action": {
+    "type": "allowAgain"
+   }
+  }
+ },
+ {
+  "cmd": "portal_remove_peer",
+  "args": {
+   "peerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+ },
+ {
+  "cmd": "portal_rename_peer",
+  "args": {
+   "peerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "name": "Desk PC"
+  }
+ },
+ {
+  "cmd": "portal_set_incoming",
+  "args": {
+   "peerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "value": "ask"
+  }
+ },
+ {
+  "cmd": "portal_set_incoming",
+  "args": {
+   "peerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "value": "always"
+  }
+ },
+ {
+  "cmd": "portal_set_incoming",
+  "args": {
+   "peerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "value": "never"
+  }
+ },
+ {
+  "cmd": "portal_set_connected",
+  "args": {
+   "peerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "value": true
+  }
+ },
+ {
+  "cmd": "portal_set_connected",
+  "args": {
+   "peerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "value": false
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {}
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "deviceName": "Desk PC"
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "receiveDir": "/Users/sam/Downloads"
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "skipJunk": true
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "skipJunk": false
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "autoUpdate": true
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "autoUpdate": false
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "testBuilds": true
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "testBuilds": false
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "clipboardSync": true
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "clipboardSync": false
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "sendTo": [
+     "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    ]
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "sendTo": []
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "appearance": "system"
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "appearance": "light"
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "appearance": "dark"
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "folderPerDevice": true
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "folderPerDevice": false
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "receiveMode": "loose"
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "receiveMode": "app_folder"
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "receiveMode": "numbered"
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "keepDates": true
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "keepDates": false
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "clearReceiveNote": true
+   }
+  }
+ },
+ {
+  "cmd": "portal_save_settings",
+  "args": {
+   "patch": {
+    "receiveMode": "app_folder",
+    "folderPerDevice": true
+   }
+  }
+ },
+ {
+  "cmd": "portal_send",
+  "args": {
+   "peerIds": [
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+   ],
+   "paths": [
+    "/Users/sam/Desktop/Site photos",
+    "/Users/sam/Desktop/plan.pdf"
+   ]
+  }
+ },
+ {
+  "cmd": "portal_describe",
+  "args": {
+   "paths": [
+    "/Users/sam/Desktop/plan.pdf"
+   ]
+  }
+ },
+ {
+  "cmd": "portal_accept",
+  "args": {
+   "transferId": "0000000000a1b2c3",
+   "always": false
+  }
+ },
+ {
+  "cmd": "portal_accept",
+  "args": {
+   "transferId": "0000000000a1b2c3",
+   "always": true
+  }
+ },
+ {
+  "cmd": "portal_decline",
+  "args": {
+   "transferId": "0000000000a1b2c3"
+  }
+ },
+ {
+  "cmd": "portal_cancel",
+  "args": {
+   "transferId": "0000000000a1b2c3"
+  }
+ },
+ {
+  "cmd": "portal_continue",
+  "args": {
+   "transferId": "0000000000a1b2c3"
+  }
+ },
+ {
+  "cmd": "portal_open_file",
+  "args": {
+   "path": "/Users/sam/Downloads/plan.pdf"
+  }
+ },
+ {
+  "cmd": "portal_send_again",
+  "args": {
+   "transferId": "0000000000a1b2c3"
+  }
+ },
+ {
+  "cmd": "portal_fix_firewall",
+  "args": {}
+ },
+ {
+  "cmd": "portal_dismiss",
+  "args": {
+   "transferId": "0000000000a1b2c3"
+  }
+ },
+ {
+  "cmd": "portal_update_status",
+  "args": {}
+ },
+ {
+  "cmd": "portal_update_check",
+  "args": {}
+ },
+ {
+  "cmd": "portal_update_restart",
+  "args": {}
+ },
+ {
+  "cmd": "portal_update_later",
+  "args": {}
+ },
+ {
+  "cmd": "portal_send_text",
+  "args": {
+   "peerIds": [
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+   ],
+   "text": "hello",
+   "private": false
+  }
+ },
+ {
+  "cmd": "portal_send_text",
+  "args": {
+   "peerIds": null,
+   "text": "sk_test_123",
+   "private": true
+  }
+ },
+ {
+  "cmd": "portal_send_clipboard",
+  "args": {
+   "peerIds": [
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+   ]
+  }
+ },
+ {
+  "cmd": "portal_send_clipboard",
+  "args": {
+   "peerIds": null
+  }
+ },
+ {
+  "cmd": "portal_set_clip_sync",
+  "args": {
+   "peerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "on": true
+  }
+ },
+ {
+  "cmd": "portal_set_clip_sync",
+  "args": {
+   "peerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "on": false
+  }
+ },
+ {
+  "cmd": "portal_clip_sync_off",
+  "args": {}
+ },
+ {
+  "cmd": "portal_pause_clip_sync",
+  "args": {
+   "minutes": 60
+  }
+ },
+ {
+  "cmd": "portal_pause_clip_sync",
+  "args": {
+   "minutes": null
+  }
+ },
+ {
+  "cmd": "portal_resume_clip_sync",
+  "args": {}
+ },
+ {
+  "cmd": "portal_set_clip_to",
+  "args": {
+   "peerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "to": "clipboard"
+  }
+ },
+ {
+  "cmd": "portal_set_clip_to",
+  "args": {
+   "peerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "to": "shelf"
+  }
+ },
+ {
+  "cmd": "portal_copy_clip",
+  "args": {
+   "id": 1
+  }
+ },
+ {
+  "cmd": "portal_copy_technical_log",
+  "args": {}
+ },
+ {
+  "cmd": "portal_open_received",
+  "args": {}
+ },
+ {
+  "cmd": "portal_save_technical_log",
+  "args": {}
+ },
+ {
+  "cmd": "portal_clear_clips",
+  "args": {}
+ },
+ {
+  "cmd": "portal_remove_clip",
+  "args": {
+   "id": 1
+  }
+ },
+ {
+  "cmd": "portal_shelf_add",
+  "args": {
+   "name": "Wi-Fi password",
+   "text": "correct horse",
+   "private": true
+  }
+ },
+ {
+  "cmd": "portal_shelf_add",
+  "args": {
+   "name": "",
+   "text": "text",
+   "private": false
+  }
+ },
+ {
+  "cmd": "portal_shelf_edit",
+  "args": {
+   "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "name": "New name",
+   "text": null
+  }
+ },
+ {
+  "cmd": "portal_shelf_edit",
+  "args": {
+   "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "name": null,
+   "text": "new text"
+  }
+ },
+ {
+  "cmd": "portal_shelf_remove",
+  "args": {
+   "ids": [
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+   ]
+  }
+ },
+ {
+  "cmd": "portal_shelf_remove",
+  "args": {
+   "ids": null
+  }
+ },
+ {
+  "cmd": "portal_shelf_undo",
+  "args": {}
+ },
+ {
+  "cmd": "portal_shelf_copy",
+  "args": {
+   "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+ },
+ {
+  "cmd": "portal_shelf_reveal",
+  "args": {
+   "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+ },
+ {
+  "cmd": "portal_set_shelf_share",
+  "args": {
+   "peer": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "on": true
+  }
+ },
+ {
+  "cmd": "portal_set_shelf_share",
+  "args": {
+   "peer": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "on": false
+  }
+ },
+ {
+  "cmd": "portal_set_picture",
+  "args": {
+   "picture": {
+    "kind": "mark",
+    "color": 5204973,
+    "icon": "laptop"
+   }
+  }
+ },
+ {
+  "cmd": "portal_set_picture",
+  "args": {
+   "picture": {
+    "kind": "photo",
+    "png": "iVBORw0KGgo="
+   }
+  }
+ },
+ {
+  "cmd": "portal_set_picture",
+  "args": {
+   "picture": null
+  }
+ },
+ {
+  "cmd": "portal_shelf_put_marked",
+  "args": {
+   "count": 3
+  }
+ },
+ {
+  "cmd": "portal_shelf_put_received",
+  "args": {
+   "id": 1
+  }
+ },
+ {
+  "cmd": "portal_save_clip_image",
+  "args": {
+   "id": 1,
+   "name": "Clipboard image 2026-11-24 10.00.00"
+  }
+ },
+ {
+  "cmd": "portal_dismiss_clip_notice",
+  "args": {}
+ },
+ {
+  "cmd": "portal_unqueue_next",
+  "args": {
+   "id": 1
+  }
+ },
+ {
+  "cmd": "portal_continue_next",
+  "args": {
+   "peer": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+ },
+ {
+  "cmd": "portal_shortcut",
+  "args": {}
+ },
+ {
+  "cmd": "portal_set_shortcut",
+  "args": {
+   "shortcut": "CommandOrControl+Alt+Shift+C"
+  }
+ }
+]

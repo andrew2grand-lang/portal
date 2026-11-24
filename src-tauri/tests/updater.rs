@@ -144,7 +144,7 @@ async fn no_network_is_said_in_plain_words() {
 async fn offered(updaters: &[Updater], current: &str) -> Option<String> {
     match fetch(updaters, false, current, |_| {}).await {
         Ok(Found::Available(u)) => Some(u.version),
-        Ok(Found::UpToDate) => None,
+        Ok(Found::UpToDate | Found::NothingYet) => None,
         Ok(Found::Ready(..)) => panic!("nothing should download"),
         Err(e) => panic!("{e}"),
     }
@@ -197,4 +197,56 @@ fn the_beta_feed_is_read_only_with_test_builds_on() {
     assert_eq!(conf["plugins"]["updater"]["endpoints"], serde_json::json!([STABLE_FEED]));
     assert_eq!(feeds(false), [STABLE_FEED]);
     assert_eq!(feeds(true), [STABLE_FEED, BETA_FEED]);
+}
+
+/// A feed that isn't published yet: 404, as GitHub answers
+/// `releases/latest/download/latest.json` before the first stable release.
+async fn empty_feed() -> String {
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let addr: SocketAddr = listener.local_addr().unwrap();
+    tokio::spawn(async move {
+        loop {
+            let Ok((mut stream, _)) = listener.accept().await else { return };
+            tokio::spawn(async move {
+                let mut buf = vec![0u8; 4096];
+                let _ = stream.read(&mut buf).await;
+                let _ = stream
+                    .write_all(b"HTTP/1.1 404 Not Found\r\nContent-Length: 9\r\nConnection: close\r\n\r\nNot Found")
+                    .await;
+            });
+        }
+    });
+    format!("http://{addr}/latest.json")
+}
+
+/// beta.2: with no stable release yet, the stable feed is empty, and that
+/// isn't "the update information couldn't be read".
+#[tokio::test]
+async fn an_empty_stable_feed_is_nothing_yet_not_an_error() {
+    let (_a, stable) = updater(&empty_feed().await);
+    assert!(matches!(fetch(&[stable], false, "0.1.0", |_| {}).await, Ok(Found::NothingYet)));
+}
+
+/// Test builds on, the stable feed empty, the beta feed on this version:
+/// up to date ("You're on the latest test build").
+#[tokio::test]
+async fn an_empty_stable_feed_beside_the_beta_one_is_up_to_date() {
+    let (_a, stable) = updater_at("0.3.0-beta.1", &empty_feed().await);
+    let (_b, beta) = updater_at("0.3.0-beta.1", &feed("0.3.0-beta.1", &read("update.bin.sig")).await);
+    assert!(matches!(fetch(&[stable, beta], false, "0.3.0-beta.1", |_| {}).await, Ok(Found::UpToDate)));
+    // …and a newer beta beside an empty stable feed is offered
+    let (_c, stable) = updater_at("0.3.0-beta.1", &empty_feed().await);
+    let (_d, beta) = updater_at("0.3.0-beta.1", &feed("0.3.0-beta.2", &read("update.bin.sig")).await);
+    assert!(
+        matches!(fetch(&[stable, beta], false, "0.3.0-beta.1", |_| {}).await, Ok(Found::Available(u)) if u.version == "0.3.0-beta.2")
+    );
+}
+
+/// A real failure is still one: nothing listening beside an empty feed.
+#[tokio::test]
+async fn a_feed_that_cant_be_reached_is_still_an_error() {
+    let closed = std::net::TcpListener::bind("127.0.0.1:0").unwrap().local_addr().unwrap();
+    let (_a, stable) = updater(&empty_feed().await);
+    let (_b, beta) = updater(&format!("http://{closed}/beta.json"));
+    assert!(fetch(&[stable, beta], false, "0.1.0", |_| {}).await.is_err());
 }

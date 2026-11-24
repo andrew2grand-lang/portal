@@ -287,6 +287,8 @@ export type UpdateState =
   | 'idle'
   | 'checking'
   | 'upToDate'
+  /** No feed has anything published yet (before the first stable release) */
+  | 'nothingYet'
   | 'available'
   | 'downloading'
   | 'ready'

@@ -6,6 +6,8 @@ on:
   push:
     paths:
       - "crates/**"
+      - "src-tauri/**"
+      - "src/core/bridge.ts"
       - "Cargo.toml"
       - "Cargo.lock"
       - ".github/workflows/check.yml"
@@ -31,6 +33,10 @@ jobs:
         run: cargo test -p portal-sys -p portal-core --locked -- --nocapture
       - name: Clippy
         run: cargo clippy -p portal-sys -p portal-core --all-targets --locked -- -D warnings
+      # beta.2: every invoke the window sends goes through the real Rust
+      # argument types (fixture recorded by src/core/contract.test.ts)
+      - name: UI ↔ Rust contract and the updater feeds (the app's own tests)
+        run: cargo test -p portal-app --locked --test contract --test updater
       - name: mDNS between two daemons next to Windows' own mDNS (informational)
         continue-on-error: true
         run: cargo test -p portal-core --test discovery --locked -- --ignored --nocapture

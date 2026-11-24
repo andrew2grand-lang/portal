@@ -15,7 +15,7 @@
     "verify": "node scripts/verify.mjs",
     "test": "vitest run",
     "tauri": "tauri",
-    "check:bridge": "node scripts/check-bridge.mjs",
+    "check:bridge": "node scripts/check-bridge.mjs && node scripts/contract.mjs --check",
     "release:publish": "node scripts/publish-release.mjs"
   },
   "dependencies": {

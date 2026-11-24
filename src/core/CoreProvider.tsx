@@ -25,6 +25,52 @@ import { moment, startClock } from './moment'
 import type { Shown } from './moment'
 
 const MAX_LOG = 300
+
+/** What the window says when an action fails: short, plain, what to do */
+const SETTING = 'Couldn’t save that setting. Try again.'
+const failWords: Partial<Record<Action['type'], string>> = {
+  saveSettings: SETTING,
+  setTarget: SETTING,
+  setAppearance: SETTING,
+  setOpenAtLogin: 'Couldn’t change Open at login. Try again.',
+  setPeerIncoming: SETTING,
+  setConnected: SETTING,
+  renamePeer: 'Couldn’t rename that computer. Try again.',
+  removePeer: 'Couldn’t remove that computer. Try again.',
+  setPicture: 'Couldn’t save that picture. Try again.',
+  setShortcut: SETTING,
+  setClipTo: SETTING,
+  setClipSync: SETTING,
+  clipSyncOff: SETTING,
+  pauseClipSync: SETTING,
+  resumeClipSync: SETTING,
+  setShelfShare: SETTING,
+  chooseReceiveDir: 'Couldn’t change the folder. Try again.',
+  openReceived: 'Couldn’t open the folder. Try again.',
+  openFile: 'Couldn’t open that file. Try again.',
+  reveal: 'Couldn’t show that in its folder. Try again.',
+  openUrl: 'Couldn’t open the link.',
+  pickFiles: 'Couldn’t open the file picker. Try again.',
+  checkUpdates: 'Couldn’t check for updates. Try again.',
+  restartToUpdate: 'Couldn’t start the update. Try again.',
+  updateLater: 'Couldn’t put the update off. Try again.',
+  pair: 'Couldn’t start pairing. Try again.',
+  pairing: 'Pairing didn’t go through. Try again.',
+  pairCode: 'Pairing didn’t go through. Try again.',
+  retrySearch: 'Couldn’t look again. Try again.',
+  shelfAdd: 'Couldn’t change the Shelf. Try again.',
+  shelfRename: 'Couldn’t change the Shelf. Try again.',
+  shelfRemove: 'Couldn’t change the Shelf. Try again.',
+  shelfUndo: 'Couldn’t change the Shelf. Try again.',
+  clearClips: 'Couldn’t clear that. Try again.',
+  removeClip: 'Couldn’t remove that. Try again.',
+  dismissClipNotice: 'Couldn’t dismiss that. Try again.',
+  copyTechnicalLog: 'Couldn’t copy the technical log. Try again.',
+  saveTechnicalLog: 'Couldn’t save the technical log. Try again.',
+  sendFeedback: 'Couldn’t save the technical log. Try again.',
+  fixFirewall: 'Couldn’t fix the firewall rule. Try again.',
+}
+const errText = (e: unknown) => (e instanceof Error ? e.message : typeof e === 'string' ? e : JSON.stringify(e))
 const WORKING_OUT = etaWords({ kind: 'working_out' })
 
 function systemTheme(): 'light' | 'dark' {
@@ -61,6 +107,17 @@ export function CoreProvider({ children }: { children: ReactNode }) {
   const patchUi = useCallback((p: Partial<CoreUi>) => setUi((u) => ({ ...u, ...p })), [])
   // What Send clipboard said, shown for a few seconds
   const clipTimer = useRef(0)
+  /** A failure, said where it's seen: the window's foot line, a line in
+      Details (with the technical reason), and the console (beta.2: Settings
+      failed only in the console in beta.1) */
+  const fail = useCallback((text: string, what: string, e: unknown) => {
+    console.error(what, e)
+    const at = Date.now()
+    patchUi({ clipResult: { ok: false, text, at } })
+    window.clearTimeout(clipTimer.current)
+    clipTimer.current = window.setTimeout(() => setUi((u) => (u.clipResult?.at === at ? { ...u, clipResult: undefined } : u)), 8000)
+    setLogs((l) => appendLog(l, { atMs: at, tag: 'error', text, detail: `${what}: ${errText(e)}`, tone: 'err' }, MAX_LOG))
+  }, [patchUi])
   const sayClip = useCallback(
     (ok: boolean, text: string, files?: string[]) => {
       const at = Date.now()
@@ -132,20 +189,20 @@ export function CoreProvider({ children }: { children: ReactNode }) {
       }
     })
     const unlistenUpdate = listen<CoreUpdate>(UPDATE_EVENT, ({ payload }) => alive && patchUi({ update: payload }))
-    core.updateStatus().then((u) => alive && u && patchUi({ update: u }), () => {})
-    core.shortcut().then((k) => alive && patchUi({ shortcut: k }), () => {})
-    core.snapshot().then((s) => alive && accept(s), console.error)
+    core.updateStatus().then((u) => alive && u && patchUi({ update: u }), (e) => fail('Couldn’t read the update state.', 'updateStatus', e))
+    core.shortcut().then((k) => alive && patchUi({ shortcut: k }), (e) => fail('Couldn’t read the clipboard shortcut.', 'shortcut', e))
+    core.snapshot().then((s) => alive && accept(s), (e) => fail('SeamDrop couldn’t start properly. Quit and open it again.', 'snapshot', e))
     core.logs().then(
       (history) => alive && setLogs((cur) => [...history.reduce((runs: LogRun[], l) => appendLog(runs, l, MAX_LOG), []), ...cur].slice(-MAX_LOG)),
-      console.error,
+      (e) => fail('Couldn’t read what happened so far.', 'logs', e),
     )
-    isEnabled().then((v) => alive && patchUi({ openAtLogin: v }), () => {})
+    isEnabled().then((v) => alive && patchUi({ openAtLogin: v }), (e) => fail('Couldn’t read Open at login.', 'openAtLogin', e))
     return () => {
       alive = false
       void unlisten.then((f) => f())
       void unlistenUpdate.then((f) => f())
     }
-  }, [patchUi, sayClip, live])
+  }, [patchUi, sayClip, live, fail])
 
   // Follow the system appearance unless the dev panel picks one
   useEffect(() => {
@@ -266,13 +323,13 @@ export function CoreProvider({ children }: { children: ReactNode }) {
               : { ...q, kind: 'file', unusable: true }
           }),
         })),
-      (e: unknown) => console.error('describe', e),
+      (e: unknown) => fail('Couldn’t read what was added. Try again.', 'describe', e),
     )
-  }, [])
+  }, [fail])
 
   const dispatch = useCallback(
     (a: Action) => {
-      const report = (e: unknown) => console.error(a.type, e)
+      const report = (e: unknown) => fail(failWords[a.type] ?? 'That didn’t work. Try again.', a.type, e)
       switch (a.type) {
         case 'setMode':
           patchUi({ mode: a.mode })
@@ -430,7 +487,7 @@ export function CoreProvider({ children }: { children: ReactNode }) {
           const saved = a.withLog || !mail ? core.saveTechnicalLog() : Promise.resolve('')
           saved.then(
             (path) => {
-              if (path) void revealItemInDir(path).catch(() => {})
+              if (path) void revealItemInDir(path).catch(report)
               if (mail) void openUrl(mail).catch(report)
               else sayClip(true, `Feedback by email isn’t set up yet. The technical log is saved in Downloads${path ? `: ${path.split(/[\\/]/).pop()}` : ''}.`)
             },
@@ -611,7 +668,7 @@ export function CoreProvider({ children }: { children: ReactNode }) {
           return
       }
     },
-    [patchUi, sendPaths, queuePaths, sayClip],
+    [patchUi, sendPaths, queuePaths, sayClip, fail],
   )
 
   // Native drag and drop: hover state for the drop zone; dropped paths join the send list

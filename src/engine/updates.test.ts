@@ -68,3 +68,17 @@ describe('the restart key', () => {
     expect(restartLabel(u({ state: 'available', version: '0.4.0' }))).toBe('Update and restart SeamDrop')
   })
 })
+
+describe('About when nothing is published yet (beta.2)', () => {
+  it('says "No updates yet", never that the information couldn’t be read', () => {
+    expect(updateLine(u({ state: 'nothingYet' }))).toBe('No updates yet.')
+    expect(noticeFor(u({ state: 'nothingYet' }))).toBeNull()
+  })
+  it('with test builds on and nothing newer: on the latest test build', () => {
+    expect(updateLine(u({ state: 'upToDate', testBuilds: true }))).toBe('You’re on the latest test build.')
+    expect(updateLine(u({ state: 'upToDate', testBuilds: false }))).toBe('Up to date.')
+  })
+  it('a newer beta is offered as any update is', () => {
+    expect(updateLine(u({ state: 'available', version: '0.5.0-beta.2', testBuilds: true }))).toContain('0.5.0-beta.2 is available')
+  })
+})

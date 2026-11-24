@@ -1,7 +1,7 @@
 //! Thin Tauri bridge over `portal-core`: commands in, events out, plus the
 //! desktop shell (windows, tray, notifications).
 
-mod bridge;
+pub mod bridge;
 mod clipboard;
 mod legacy;
 #[cfg(target_os = "macos")]
