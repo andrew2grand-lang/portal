@@ -2,6 +2,11 @@
 
 Each version's notes appear in the app's update notice ("What's new: …") and on its release page, so keep them short and in plain words.
 
+## 0.5.0-beta.2
+- Settings work again: Appearance, Get test builds and the other switches now save.
+- If something doesn't work, the window says so, and Details says why.
+- The drop area says where files go again, and About no longer shows an error while there are only test builds.
+
 ## 0.5.0-beta.1
 - A test build. Update all your computers: 0.5 can't talk to 0.3.
 - Pair by typing a code, send to several computers at once, and keep text on the Shelf, shared with the computers you choose.

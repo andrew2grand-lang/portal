@@ -16,6 +16,9 @@ if (!app) {
   process.exit(2)
 }
 const EL = 'element-6066-11e4-a23d-4f5a6e4b5b33'
+/** An element reference as every driver reads it (WebKitWebDriver answered
+    with another key than the W3C one) */
+const ref = (id) => ({ [EL]: id, ELEMENT: id })
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
 async function wd(method, path, body) {
@@ -52,7 +55,7 @@ async function find(xpath, timeout = 8000) {
   const until = Date.now() + timeout
   for (;;) {
     const found = await wd('POST', S('/elements'), { using: 'xpath', value: xpath })
-    if (found.length) return found[0][EL]
+    if (found.length) return found[0][EL] ?? found[0].ELEMENT ?? Object.values(found[0])[0]
     if (Date.now() > until) throw new Error(`not on screen: ${xpath}`)
     await sleep(200)
   }
@@ -63,12 +66,12 @@ async function click(xpath) {
     await wd('POST', S(`/element/${el}/click`), {})
   } catch {
     // Hidden or covered (the window may start hidden): click it as a script would
-    await exec('arguments[0].click()', [{ [EL]: el }])
+    await exec('arguments[0].click()', [ref(el)])
   }
 }
 async function typeInto(xpath, text) {
   const el = await find(xpath)
-  await exec('arguments[0].focus(); arguments[0].select && arguments[0].select()', [{ [EL]: el }])
+  await exec('arguments[0].focus(); arguments[0].select && arguments[0].select()', [ref(el)])
   await wd('POST', S(`/element/${el}/clear`), {}).catch(() => {})
   await wd('POST', S(`/element/${el}/value`), { text })
 }

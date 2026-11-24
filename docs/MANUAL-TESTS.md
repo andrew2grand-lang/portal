@@ -11,6 +11,19 @@ Everything here needs your real Mac and PC. Each test says what to do, what you 
 2. The log file: macOS `~/Library/Logs/com.seamdrop.desktop/seamdrop.log` (Finder → Go → Go to Folder…), Windows `%LOCALAPPDATA%\com.seamdrop.desktop\logs\seamdrop.log` (paste into the Explorer address bar).
 3. For anything network-related: on the PC, the output of `ipconfig`, `Get-NetConnectionProfile` and `Get-NetFirewallRule -DisplayName SeamDrop | Format-List DisplayName,Enabled,Action,Profile` in PowerShell; on the Mac, `ifconfig en0` in Terminal.
 
+## beta.2: the 5-minute Settings check
+
+On each computer with 0.5.0-beta.2, Settings (the gear, top right). Every change should stick when you quit SeamDrop and open it again. If anything doesn't work, the window now says so at the bottom: send a screenshot of **Details** (bottom left).
+
+1. **About:** it says "SeamDrop 0.5.0-beta.2". Tick **Get test builds**: the line under the version says "You're on the latest test build." (never that the update information couldn't be read).
+2. **Appearance:** Dark, then Light, then System. The window changes at once each time.
+3. **Name:** type a new name and press Enter. The other computer shows it within a few seconds.
+4. **Picture:** pick a colour, then an icon: the picture in the window's header changes, and on the other computer too. **Choose photo…** and pick a photo: it shows in a circle. Then **Default**.
+5. **Received files:** **SeamDrop folder**, tick **A folder for each computer**, then **New folder each time**, then **Straight in**. The line under them changes each time.
+6. **Keep original dates**, **Skip system files**, **Open at login**, **Install updates automatically**: tick and untick each. Quit SeamDrop (menu bar or tray → Quit), open it: they're as you left them.
+7. **Send clipboard shortcut → Change…**, press a new combination: it shows the new one. Copy some text and press it: it arrives on the other computer.
+8. **Paired devices → Files from <the other computer> → Always accept**, then send a file from the other computer: it arrives without asking.
+
 ## Mission 05: the 25-minute check
 
 Ordered by what matters most. **All three computers need 0.5.0-beta.1** (it can't talk to 0.3): this Mac already has it; the PC and Sam's MacBook Air get it by hand from the pre-release page once it's published (PROGRESS → Needs the owner). In each step, the Mac is this Mac (MacBook Pro), the PC is Den_PC, and the Air is Sam's MacBook Air.

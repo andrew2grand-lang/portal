@@ -78,16 +78,16 @@ jobs:
         if: runner.os == 'Windows'
         shell: bash
         run: |
-          APP=$(ls target/debug/SeamDrop.exe target/debug/portal-app.exe 2>/dev/null | head -1)
-          echo "app: $APP"
+          APP=target/debug/SeamDrop.exe
+          ls -l "$APP"
           tauri-driver --native-driver "$PWD/edgedriver/msedgedriver.exe" &
           sleep 3
           node e2e/smoke.mjs "$PWD/$APP" "$PWD/e2e-photo.png"
       - name: Drive it (Linux)
         if: runner.os == 'Linux'
         run: |
-          APP=$(ls target/debug/SeamDrop target/debug/portal-app 2>/dev/null | head -1)
-          echo "app: $APP"
+          APP=target/debug/SeamDrop
+          ls -l "$APP"
           xvfb-run -a bash -c "tauri-driver & sleep 3; node e2e/smoke.mjs '$PWD/$APP' '$PWD/e2e-photo.png'"
       - uses: actions/upload-artifact@v7
         if: always()
