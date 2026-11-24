@@ -21,6 +21,10 @@ jobs:
         with:
           node-version: 24
           cache: npm
+      # check:bridge formats the generated contract test with rustfmt
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
       - run: npm ci
       - run: npx tsc -b
       - run: npm run lint
