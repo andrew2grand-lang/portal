@@ -1,0 +1,97 @@
+# beta.2: the real built app, driven end to end through WebDriver
+# (tauri-driver), on Windows (WebView2 + msedgedriver) and Linux (WebKitGTK +
+# WebKitWebDriver). Every control in Settings, the Shelf and the home screen
+# that one computer can use is clicked, and the real core's state is checked
+# after each (e2e/smoke.mjs). macOS has no WebDriver for its WebView.
+name: e2e
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "src-tauri/**"
+      - "crates/portal-core/**"
+      - "crates/portal-sys/**"
+      - "e2e/**"
+      - "package.json"
+      - "package-lock.json"
+      - "Cargo.lock"
+      - ".github/workflows/e2e.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Real app, every control (${{ matrix.name }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows
+            runner: windows-latest
+          - name: Linux
+            runner: ubuntu-24.04
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: e2e
+      - name: Linux packages (Tauri's, the WebDriver, a virtual display)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev \
+            libayatana-appindicator3-dev librsvg2-dev webkit2gtk-driver xvfb
+      - run: npm ci
+      - name: Build the app (debug, no installer)
+        run: npx tauri build --debug --no-bundle
+      - name: tauri-driver
+        run: cargo install tauri-driver --locked
+      - name: The Edge WebDriver that matches this runner's WebView2
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $key = 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}'
+          $v = (Get-ItemProperty $key -ErrorAction SilentlyContinue).pv
+          if (-not $v) { $v = (Get-Item "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe").VersionInfo.ProductVersion }
+          Write-Host "WebView2 $v"
+          Invoke-WebRequest "https://msedgedriver.microsoft.com/$v/edgedriver_win64.zip" -OutFile edgedriver.zip
+          Expand-Archive edgedriver.zip -DestinationPath edgedriver
+      - name: A picture to choose
+        shell: bash
+        run: node -e "require('fs').writeFileSync('e2e-photo.png', Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64'))"
+      - name: Drive it (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          APP=$(ls target/debug/SeamDrop.exe target/debug/portal-app.exe 2>/dev/null | head -1)
+          echo "app: $APP"
+          tauri-driver --native-driver "$PWD/edgedriver/msedgedriver.exe" &
+          sleep 3
+          node e2e/smoke.mjs "$PWD/$APP" "$PWD/e2e-photo.png"
+      - name: Drive it (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          APP=$(ls target/debug/SeamDrop target/debug/portal-app 2>/dev/null | head -1)
+          echo "app: $APP"
+          xvfb-run -a bash -c "tauri-driver & sleep 3; node e2e/smoke.mjs '$PWD/$APP' '$PWD/e2e-photo.png'"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: e2e-results-${{ matrix.name }}
+          path: e2e-results.json
+          if-no-files-found: ignore

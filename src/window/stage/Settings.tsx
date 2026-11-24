@@ -1,6 +1,6 @@
 import { PictureChooser } from '../picture/PictureChooser'
 import { useEffect, useState } from 'react'
-import { FolderOpenIcon, GlobeSimpleIcon, PlusIcon } from '@phosphor-icons/react'
+import { FolderOpenIcon, GlobeSimpleIcon, PlusIcon, QuestionIcon } from '@phosphor-icons/react'
 import { Checkbox } from '../../components/Checkbox/Checkbox'
 import { Choice } from '../../components/Choice/Choice'
 import { Key } from '../../components/Key/Key'
@@ -228,6 +228,12 @@ function AboutSection({ update: u }: { update: UpdateInfo }) {
       </Checkbox>
       <Website />
       <FeedbackKeys />
+      {/* Help lives in Settings too, not only behind the Clipboard and Shelf links (decision 285) */}
+      <div>
+        <Key size="sm" icon={<QuestionIcon />} onClick={() => dispatch({ type: 'openPanel', panel: 'help' })}>
+          Help
+        </Key>
+      </div>
     </Section>
   )
 }
