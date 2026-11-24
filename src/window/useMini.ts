@@ -7,10 +7,16 @@ export function useMini(): boolean {
   const [mini, setMini] = useState(() => typeof window !== 'undefined' && window.matchMedia(MINI_QUERY).matches)
   useEffect(() => {
     const m = window.matchMedia(MINI_QUERY)
-    const on = () => setMini(m.matches)
+    const on = () => setMini(window.matchMedia(MINI_QUERY).matches)
     on()
+    // The query's own change event, and every resize too: WebKit doesn't
+    // always send the change event when the window is resized (seen in CI)
     m.addEventListener('change', on)
-    return () => m.removeEventListener('change', on)
+    window.addEventListener('resize', on)
+    return () => {
+      m.removeEventListener('change', on)
+      window.removeEventListener('resize', on)
+    }
   }, [])
   return mini
 }

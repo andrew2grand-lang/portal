@@ -328,10 +328,33 @@ mod tests {
     fn real_clipboard_held_by_another_app_reads_as_busy() {
         put_as_another_app(&[(13, wide("copied in a browser"))]);
         let (held, release) = (std::sync::mpsc::channel::<()>(), std::sync::mpsc::channel::<()>());
+        // The holder opens it through a window of its own, as another app
+        // does: opened with no window, Windows lets anyone in this process
+        // in too (seen on the real runner), so it wouldn't be held at all.
         let holder = std::thread::spawn(move || {
-            let _open = Open::new(None).unwrap();
-            held.0.send(()).unwrap();
-            let _ = release.1.recv_timeout(Duration::from_secs(3));
+            let window = unsafe {
+                CreateWindowExW(
+                    WINDOW_EX_STYLE(0),
+                    w!("STATIC"),
+                    w!(""),
+                    WINDOW_STYLE(0),
+                    0,
+                    0,
+                    0,
+                    0,
+                    Some(HWND_MESSAGE),
+                    None,
+                    None,
+                    None,
+                )
+            }
+            .unwrap();
+            {
+                let _open = Open::new(Some(window)).unwrap();
+                held.0.send(()).unwrap();
+                let _ = release.1.recv_timeout(Duration::from_secs(3));
+            }
+            let _ = unsafe { DestroyWindow(window) };
         });
         held.1.recv().unwrap();
         assert_eq!(super::super::read(), Read::Busy, "held open by another thread past the half-second retry");
