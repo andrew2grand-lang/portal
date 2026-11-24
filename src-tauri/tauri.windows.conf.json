@@ -3,11 +3,12 @@
     "windows": [
       {
         "label": "main",
+        "create": false,
         "title": "SeamDrop",
         "width": 552,
         "height": 780,
-        "minWidth": 420,
-        "minHeight": 640,
+        "minWidth": 300,
+        "minHeight": 360,
         "center": true,
         "visible": false,
         "dragDropEnabled": true,
