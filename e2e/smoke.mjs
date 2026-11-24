@@ -16,9 +16,6 @@ if (!app) {
   process.exit(2)
 }
 const EL = 'element-6066-11e4-a23d-4f5a6e4b5b33'
-/** An element reference as every driver reads it (WebKitWebDriver answered
-    with another key than the W3C one) */
-const ref = (id) => ({ [EL]: id, ELEMENT: id })
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
 async function wd(method, path, body) {
@@ -60,18 +57,23 @@ async function find(xpath, timeout = 8000) {
     await sleep(200)
   }
 }
+/** The node itself, found again inside the page (WebKitWebDriver doesn't
+    pass element references into scripts) */
+const inPage = (xpath) => `document.evaluate(${JSON.stringify(xpath)}, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue`
 async function click(xpath) {
   const el = await find(xpath)
+  await exec(`const n = ${inPage(xpath)}; if (n) n.scrollIntoView({ block: 'center' })`)
   try {
     await wd('POST', S(`/element/${el}/click`), {})
   } catch {
-    // Hidden or covered (the window may start hidden): click it as a script would
-    await exec('arguments[0].click()', [ref(el)])
+    // Hidden or covered (a visually hidden checkbox, a window that starts
+    // hidden): click it as a script would; React sees the same events
+    await exec(`${inPage(xpath)}.click()`)
   }
 }
 async function typeInto(xpath, text) {
   const el = await find(xpath)
-  await exec('arguments[0].focus(); arguments[0].select && arguments[0].select()', [ref(el)])
+  await exec(`const n = ${inPage(xpath)}; n.scrollIntoView({ block: 'center' }); n.focus(); if (n.select) n.select()`)
   await wd('POST', S(`/element/${el}/clear`), {}).catch(() => {})
   await wd('POST', S(`/element/${el}/value`), { text })
 }
@@ -204,13 +206,13 @@ try {
     await until('a new check finished', async () => ((await invoke('portal_update_status'))?.checkedMs ?? 0) > before, 30000)
   })
   await check('Send clipboard shortcut: Change…', async () => {
-    const was = (await invoke('portal_shortcut'))?.accelerator
+    const was = (await invoke('portal_shortcut'))?.shortcut
     await click(`//button[normalize-space(.)="Change…"][ancestor::*[.//text()[normalize-space(.)="Send clipboard shortcut"]]][1]`)
     await exec(
       "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'K', code: 'KeyK', ctrlKey: true, altKey: true, shiftKey: true, bubbles: true }))",
     )
     await until('the core has a new shortcut', async () => {
-      const now = (await invoke('portal_shortcut'))?.accelerator
+      const now = (await invoke('portal_shortcut'))?.shortcut
       return now && now !== was
     })
   })

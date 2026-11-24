@@ -89,6 +89,21 @@ jobs:
           APP=target/debug/SeamDrop
           ls -l "$APP"
           xvfb-run -a bash -c "tauri-driver & sleep 3; node e2e/smoke.mjs '$PWD/$APP' '$PWD/e2e-photo.png'"
+      # When Edge's driver can't reach the app: the app's own log, and whether
+      # its WebView opens a debugging port when asked to
+      - name: Why Windows couldn't drive it (on failure)
+        if: failure() && runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Get-Process | Where-Object { $_.ProcessName -match 'SeamDrop|msedge' } | Format-Table ProcessName, Id
+          $log = "$env:LOCALAPPDATA\com.seamdrop.desktop\logs\seamdrop.log"
+          if (Test-Path $log) { Get-Content $log -Tail 40 } else { "no app log at $log" }
+          $env:WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS = '--remote-debugging-port=9222'
+          $p = Start-Process -FilePath target\debug\SeamDrop.exe -PassThru
+          Start-Sleep 15
+          try { (Invoke-WebRequest http://127.0.0.1:9222/json/version -UseBasicParsing).Content } catch { "no DevTools on 9222: $_" }
+          Get-ChildItem -Recurse "$env:LOCALAPPDATA" -Filter DevToolsActivePort -ErrorAction SilentlyContinue | Select-Object FullName
+          if (-not $p.HasExited) { Stop-Process -Id $p.Id -Force } else { "the app exited with $($p.ExitCode)" }
       - uses: actions/upload-artifact@v7
         if: always()
         with:
