@@ -218,7 +218,11 @@ function AboutSection({ update: u }: { update: UpdateInfo }) {
       <Checkbox checked={u.auto} onChange={(autoUpdate) => dispatch({ type: 'saveSettings', patch: { autoUpdate } })}>
         Install updates automatically
       </Checkbox>
-      {!u.auto && <p className={s.aside}>It still checks, and asks before downloading.</p>}
+      {/* What the check does, in one line (beta.2: cut in Mission 05 §6, but it's about trust) */}
+      <p className={s.aside}>
+        {`Checks for updates when ${APP_NAME} opens and every 4 hours, sending nothing about you; installs only updates signed by ${APP_NAME}.`}
+        {!u.auto && ' With this off, it asks before downloading.'}
+      </p>
       <Checkbox checked={u.testBuilds} onChange={(testBuilds) => dispatch({ type: 'saveSettings', patch: { testBuilds } })}>
         Get test builds
       </Checkbox>

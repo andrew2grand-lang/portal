@@ -367,10 +367,11 @@ function peersFor(s: Scenario, os: Os): CorePeer[] {
       ]
     case 'disconnected':
       return [p({ paired: true, link: null, via: null, disconnected: true, clip: pairedClip })]
+    // Usually a paired computer that hasn't been updated yet
     case 'incompatible':
-      return [p({ incompatible: 1 })]
+      return [p({ incompatible: 1, paired: true })]
     case 'incompatible-self':
-      return [p({ incompatible: 4 })]
+      return [p({ incompatible: 4, paired: true })]
     case 'blocked-peer':
       return [p(connected({ accepts: 'never' }))]
     case 'add-device':

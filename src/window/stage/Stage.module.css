@@ -348,6 +348,26 @@
   width: 32px;
   height: 32px;
 }
+/* The file icon glows (beta.2): a soft halo of the portal's light, just
+   behind the tile, stronger when something is dragged over */
+.dropTile::before {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  z-index: -1;
+  border-radius: 50%;
+  background: var(--portal-glow);
+  filter: blur(14px);
+  opacity: 0.75;
+  transition: opacity var(--dur-glow) var(--ease-out);
+}
+.drop:hover .dropTile::before,
+.drop[data-over] .dropTile::before {
+  opacity: 1;
+}
+.drop[data-muted] .dropTile::before {
+  opacity: 0.25;
+}
 .drop:hover .dropTile {
   translate: 0 -2px;
 }
@@ -370,6 +390,9 @@
   color: var(--text-2);
   font-size: var(--text-base);
   text-wrap: balance;
+}
+.dropSub:empty {
+  display: none;
 }
 
 .drop[data-muted] .dropTile {
@@ -1127,16 +1150,22 @@
 }
 
 /* Mission 05 §5: helper text goes first, the drop icon last */
+/* As the drop area gets shorter (beta.2): the rings and glow shrink before
+   anything goes; then the where-line, then the title; the glowing icon and
+   its rings stay to the end (Mission 05 §5) */
 @container idle (max-height: 430px) {
-  .rings,
-  .dropSub {
-    display: none;
+  .dropMark {
+    scale: 0.82;
+    margin-block: -8px var(--space-1);
   }
 }
 @container idle (max-height: 330px) {
-  .dropHint,
-  .dropTitle {
+  .dropSub:not([data-why]) {
     display: none;
+  }
+  .dropMark {
+    scale: 0.7;
+    margin-block: -14px 0;
   }
   .drop {
     padding-block: var(--space-4);

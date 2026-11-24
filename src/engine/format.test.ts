@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { dropLine } from './views'
 import { doneTiming, etaWords, formatSpeed } from './format'
 
 describe('speed and time left (the core decides; these only word them)', () => {
@@ -31,5 +32,21 @@ describe('the finished line (Review 04: the speed counts only what moved this ti
   })
   it('without a time, only the size', () => {
     expect(doneTiming(633_000_000, 0, undefined, 'sent')).toBe('633 MB')
+  })
+})
+
+
+describe('the drop zone says where files go (beta.2)', () => {
+  it('one computer, with how it is connected', () => {
+    expect(dropLine([{ name: 'macbook one', link: 'wifi' }])).toBe('To macbook one · over Wi-Fi')
+    expect(dropLine([{ name: 'Desk PC', link: 'ethernet' }])).toBe('To Desk PC · over Ethernet')
+  })
+  it('several: named, with the link only when they share it', () => {
+    expect(dropLine([{ name: 'Desk PC', link: 'wifi' }, { name: 'MacBook Air', link: 'wifi' }])).toBe('To Desk PC and MacBook Air · over Wi-Fi')
+    expect(dropLine([{ name: 'A', link: 'wifi' }, { name: 'B', link: 'ethernet' }])).toBe('To A and B')
+    expect(dropLine(['A', 'B', 'C', 'D'].map((name) => ({ name, link: 'wifi' as const })))).toBe('To 4 computers · over Wi-Fi')
+  })
+  it('nowhere: nothing', () => {
+    expect(dropLine([])).toBe('')
   })
 })

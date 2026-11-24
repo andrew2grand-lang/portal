@@ -8,7 +8,7 @@ import { names } from '../../engine/words'
 import { Actions, Head, ItemTile, Pane, StateTile } from './parts'
 import { SendErrors } from './Clipboard'
 import { targets } from './where'
-import { sendListTitle } from '../../engine/views'
+import { dropLine, sendListTitle } from '../../engine/views'
 import s from './Stage.module.css'
 
 /** Idle: the whole stage is the drop zone; files collect, then Send. One
@@ -41,8 +41,11 @@ export function IdleView() {
             <FilesIcon weight="light" />
           </span>
         </span>
-        <span className={s.dropTitle}>Drop files here</span>
-        {why && <span className={s.dropSub}>{why}</span>}
+        <span className={s.dropTitle}>Drop files or folders</span>
+        {/* Where they go, in one line; or why nothing ticked can take them (beta.2) */}
+        <span className={s.dropSub} data-why={why ? '' : undefined}>
+          {why ?? dropLine(to)}
+        </span>
       </button>
       <div className={s.idleFoot}>
         <SendErrors />

@@ -138,6 +138,7 @@ function StoppedHere({ session }: { session: Session }) {
 }
 
 function PausedWaiting({ session }: { session: Session }) {
+  const { world } = usePortal()
   const { progress } = useLive(session.id)
   const other = usePeer(session.peer)
   const out = session.direction === 'out'
@@ -170,6 +171,12 @@ function PausedWaiting({ session }: { session: Session }) {
         checking={session.resuming}
         orb={out ? 'working' : 'weaving'}
       />
+      {/* What's safe and for how long (beta.2: cut in Mission 05 §6; a reviewer had praised it) */}
+      <p className={s.aside}>
+        {out
+          ? `Your files are safe on ${world.me.self}. If it can’t finish within 24 hours, the part on ${other.name} is removed.`
+          : 'What arrived is kept for 24 hours and checked again before it continues.'}
+      </p>
       <NextList peer={session.peer} />
       <ItemList items={p.items} />
       {cancel}

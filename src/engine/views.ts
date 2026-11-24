@@ -1,3 +1,4 @@
+import { linkLabel } from './format'
 import { names } from './words'
 import type { Peer, Session, World } from './types'
 
@@ -145,3 +146,15 @@ export function listTitle(sessions: Session[]): string {
       .join(' · ') || 'Transfers'
   )
 }
+
+/** The drop zone's one line (beta.2): where dropped files go, and over what
+    ("To Desk PC · over Wi-Fi", "To Desk PC and MacBook Air", "To 4 computers") */
+export function dropLine(to: Pick<Peer, 'name' | 'link'>[]): string {
+  if (!to.length) return ''
+  const who = to.length > 3 ? `${to.length} computers` : names(to.map((p) => p.name))
+  const links = new Set(to.map((p) => p.link))
+  const [only] = [...links]
+  const over = links.size === 1 && only && only !== 'other' ? ` · over ${linkLabel[only]}` : ''
+  return `To ${who}${over}`
+}
+

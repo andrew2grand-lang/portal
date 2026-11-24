@@ -238,7 +238,7 @@ export function PairingView() {
         <StateTile tone="send">
           <CheckIcon weight="bold" />
         </StateTile>
-        <Head title={`Paired with ${peer.name}`} sub="Files and the clipboard can go between them now." />
+        <Head title={`Paired with ${peer.name}`} sub={`Files and the clipboard can go between ${world.me.self} and ${peer.name} now.`} />
         <Actions>
           <Key
             variant="ink"
@@ -265,7 +265,7 @@ export function PairingView() {
           </StateTile>
           <Head
             title={`${peer.name} wants to pair`}
-            sub={`From ${p.peerAddr}. Show a code only if it’s you pairing.`}
+            sub={`From ${p.peerAddr}. Show a code only if it’s you pairing: once paired, it can offer you files and send its clipboard.`}
           />
           <Countdown at={p.expiresAt}>{(left) => `The request goes away in ${left} if nobody answers.`}</Countdown>
           <Actions>
@@ -461,8 +461,8 @@ export function IncompatibleView() {
         title={`Update ${APP_NAME} on ${here ? me.self : peer.name}`}
         sub={
           here
-            ? `${peer.name} runs a newer version. Update ${me.self}; you stay paired.`
-            : `It runs an older version. Update ${APP_NAME} there; you stay paired.`
+            ? `${peer.name} runs a newer version that can’t talk to this one. Update ${me.self}; you stay paired.`
+            : `It runs an older version that can’t talk to this one. Update ${APP_NAME} there; you stay paired.`
         }
       />
       <Actions>
